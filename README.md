@@ -1,15 +1,19 @@
+# Application Launcher
 
-# Starter Config
+setup
 
-if suggestions don't work, first make sure
-you have TypeScript LSP working in your editor
+```bash
+mkdir -p ~/.config/ags
+git clone https://github.com/Aylur/ags.git /tmp/ags
+cp -r /tmp/ags/example/applauncher/* ~/.config/ags
 
-if you do not want typechecking only suggestions
-
-```json
-// tsconfig.json
-"checkJs": false
+# optionally setup types
+ags --init -c ~/.config/ags/config.js
 ```
 
-types are symlinked to:
-/usr/share/com.github.Aylur.ags/types
+running
+
+```bash
+ags -c ~/.config/ags/config.js &
+ags -t applauncher
+```
