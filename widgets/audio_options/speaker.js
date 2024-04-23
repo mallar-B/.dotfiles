@@ -1,4 +1,5 @@
 const audio = await Service.import("audio")
+const hyprland = await Service.import("hyprland")
 
 const icons = {
     101: "overamplified",
@@ -16,6 +17,7 @@ function getIcon() {
 }
 
 const icon = Widget.Icon({
+    class_name: "audio-icon",
     icon: Utils.watch(getIcon(), audio.speaker, getIcon),
 })
 
@@ -49,7 +51,7 @@ const Speaker = Widget.EventBox({
         else audio.speaker.volume -= 0.03;
     },
     onMiddleClick: () =>{ audio.speaker.is_muted = !audio.speaker.is_muted },
-    onPrimaryClick: () => { Utils.execAsync('pavucontrol').catch(err => console.log(err)) },
+    onPrimaryClick: () => { hyprland.messageAsync(`dispatch exec [ float; size 50% ] pavucontrol`) },
     onSecondaryClick: () => { Utils.execAsync(['pkill', 'pavucontrol']).catch(err => console.log(err)) }
 })
 

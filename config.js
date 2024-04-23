@@ -5,9 +5,11 @@ import { Date } from "./widgets/date/date.js"
 import { Media } from "./widgets/media/media.js"
 import { SysTray } from "./widgets/systray/sysTray.js"
 import { AudioOptions } from "./widgets/audio_options/audioOptions.js"
+import { PowerButton } from "./widgets/powerbutton/powerbutton.js"
+import { PowerMenu } from "./widgets/powerbutton/powermenu.js"
 
 // import { applauncher } from "./applauncher.js"
-import toReveal from "./widgets/audio_options/audioPopUp.js"
+// import toReveal from "./widgets/audio_options/audioPopUp.js"
 
 
 // layout of the bar
@@ -20,7 +22,6 @@ function Left() {
         ],
     })
 }
-
 function Center() {
     return Widget.Box({
         spacing: 8,
@@ -36,8 +37,9 @@ function Right() {
         spacing: 8,
         children: [
             Media(),
-            AudioOptions(),
             SysTray(),
+            AudioOptions(),
+            PowerButton(),
         ],
     })
 }
@@ -62,8 +64,7 @@ App.config({
     windows: [
         Bar(),
         NotificationPopups(),
-        // applauncher,
-        toReveal,
+        PowerMenu(),
     ],
 })
 

@@ -1,11 +1,14 @@
 const audio = await Service.import("audio")
+const hyprland = await Service.import("hyprland")
 
 //debug function
 const mtest = () => { 
     print(`${audio.microphone.volume}`)
 }
 
-const icon = Widget.Icon().hook(audio.microphone, self =>{
+const icon = Widget.Icon({
+    class_name: "audio-icon",
+}).hook(audio.microphone, self =>{
     const icons = {
         on: "audio-input-microphone-symbolic",
         off: "microphone-disabled-symbolic",
@@ -14,7 +17,7 @@ const icon = Widget.Icon().hook(audio.microphone, self =>{
 })
 
 const micLabel = Widget.Label().hook(audio.microphone,self => {
-    self.label = " " + Math.round(audio.microphone.volume * 100).toString() + "%"
+    self.label = " " + Math.round(audio.microphone.volume * 100).toString() + "%";
 })
 
 const micIndicator = Widget.Box({
@@ -30,7 +33,7 @@ const Mic = Widget.EventBox({
     child: micIndicator,
     onScrollUp: () =>{audio.microphone.volume += 0.03},
     onScrollDown: () => {audio.microphone.volume -= 0.03},
-    onPrimaryClick: () => { Utils.execAsync('pavucontrol').catch(err => console.log(err)) },
+    onPrimaryClick: () => { hyprland.messageAsync(`dispatch exec [ float; size 50% ] pavucontrol`) },
     onSecondaryClick: () => { Utils.execAsync(['pkill', 'pavucontrol']).catch(err => console.log(err)) }
 })
 export default Mic

@@ -1,49 +1,66 @@
-window.bar {
-    background-color: @theme_bg_color;
-    color: @theme_fg_color;
+/* Overall */
+window {
+    background-color: rgba(0, 0, 0, 0.11);
+    color: white;
+    /* text-shadow: 0 0 3px #000000; */
 }
-
 button {
     min-width: 0;
     padding-top: 0;
     padding-bottom: 0;
     background-color: transparent;
 }
-
 button:active {
-    background-color: @theme_selected_bg_color;
+    color: black;
 }
-
 button:hover {
-    border-bottom: 3px solid @theme_fg_color;
+    background-color: rgba(255,255,255,0.2);
 }
-
 label {
     font-weight: bold;
 }
-
-.workspaces button.focused {
-    border-bottom: 3px solid @theme_selected_bg_color;
-}
-
-.client-title {
-    color: @theme_selected_bg_color;
-}
-
-.media{ 
-    border: none;
-    background-color: transparent;
-}
-
-.todo{
-    background-color: red;
-}
-
 levelbar block,
 highlight {
     min-height: 10px;
 }
 
+/* Workspaces */
+.workspaces button.focused {
+    background-color: rgba(255,255,255,0.2);
+}
+
+/* App title */
+.client-title {
+    color: white;
+    text-shadow: 0 0 3px #000055;
+    font-family: monospace;
+}
+
+/* Media Player */
+.media-button{ 
+    border: none;
+    background-color: transparent;
+}
+
+/* Power Menu */
+.power-button-icon {
+    color: rgb(255, 30, 0);
+}
+.power-menu-button{
+    min-width: 100px;
+    min-height: 100px;
+}
+.power-menu-button:hover{
+    min-width: 150px;
+    min-height: 150px;
+}
+.power-menu-icon{
+    font-size: 38px;
+}
+.power-menu-button:hover .power-menu-icon {
+    font-size: 60px;
+    color: rgb(153, 39, 39);
+}
 
 
 window.notification-popups box.notifications {
@@ -103,3 +120,4 @@ window.notification-popups box.notifications {
 .actions .action-button:last-child {
     margin-right: 0;
 }
+
