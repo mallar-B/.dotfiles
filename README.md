@@ -14,3 +14,9 @@
   - calander
 
   - hyprlock
+
+  - notification bug fix
+
+## Screenshots
+
+![alt text](https://github.com/mallar-B/ags_personal/blob/main/.Screenshots/2024-04-23-130048_hyprshot.png)
