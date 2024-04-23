@@ -1,19 +1,16 @@
-# Application Launcher
+# Most minimal ags setup for pc (Hyprland)
+## Installation
+  - follow the instructions [here](https://aylur.github.io/ags-docs/config/installation/)
+  
+  - `git clone https://github.com/mallar-B/ags_personal.git`
+  
+  - `cp ./ags_personal/. ~/.config/ags`
 
-setup
+## TODOs
+  - application launcher
 
-```bash
-mkdir -p ~/.config/ags
-git clone https://github.com/Aylur/ags.git /tmp/ags
-cp -r /tmp/ags/example/applauncher/* ~/.config/ags
+  - quick tools
 
-# optionally setup types
-ags --init -c ~/.config/ags/config.js
-```
+  - calander
 
-running
-
-```bash
-ags -c ~/.config/ags/config.js &
-ags -t applauncher
-```
+  - hyprlock
