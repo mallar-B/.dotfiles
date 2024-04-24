@@ -1,11 +1,6 @@
 const audio = await Service.import("audio")
 const hyprland = await Service.import("hyprland")
 
-//debug function
-const mtest = () => { 
-    print(`${audio.microphone.volume}`)
-}
-
 const icon = Widget.Icon({
     class_name: "audio-icon",
 }).hook(audio.microphone, self =>{
@@ -21,7 +16,8 @@ const micLabel = Widget.Label().hook(audio.microphone,self => {
 })
 
 const micIndicator = Widget.Box({
-    css: 'margin-left: 2px',
+    css:"margin-left: 5px",
+    class_name: "audiobox",
     children: [icon, micLabel],
 }).hook(audio.speaker, self =>{
     self.tooltip_text = audio.microphone.name;
@@ -29,7 +25,6 @@ const micIndicator = Widget.Box({
 
 
 const Mic = Widget.EventBox({
-    class_name: "audiobox",
     child: micIndicator,
     onScrollUp: () =>{audio.microphone.volume += 0.03},
     onScrollDown: () => {audio.microphone.volume -= 0.03},

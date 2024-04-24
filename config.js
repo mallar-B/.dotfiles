@@ -7,6 +7,7 @@ import { SysTray } from "./widgets/systray/sysTray.js"
 import { AudioOptions } from "./widgets/audio_options/audioOptions.js"
 import { PowerButton } from "./widgets/powerbutton/powerbutton.js"
 import { PowerMenu } from "./widgets/powerbutton/powermenu.js"
+import { AppLauncher } from "./widgets/applauncher/applauncher_example.js" 
 
 // import { applauncher } from "./applauncher.js"
 // import toReveal from "./widgets/audio_options/audioPopUp.js"
@@ -65,6 +66,7 @@ App.config({
         Bar(),
         NotificationPopups(),
         PowerMenu(),
+        AppLauncher,
     ],
 })
 

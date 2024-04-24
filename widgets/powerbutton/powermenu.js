@@ -6,7 +6,7 @@ const getIcon = (iconName) =>{
         "system-shutdown-symbolic": "poweroff",
         "system-reboot-symbolic": "reboot",
         "system-log-out-symbolic": "pkill -u user",
-        // "system-lock-screen-symbolic": "hyprlock",
+        "system-lock-screen-symbolic": "hyprlock",
         "weather-clear-night-symbolic": "systemctl suspend",
     }
 
@@ -14,38 +14,44 @@ const getIcon = (iconName) =>{
     return Widget.Button({
         class_name: "power-menu-button",
         onPrimaryClick: () =>{
+            if(action[iconName] === "systemctl suspend") {Utils.execAsync("hyprlock")}
             App.closeWindow("powermenu");
             Utils.execAsync(`${action[iconName]}`).catch(err => console.log(err));},
         child: Widget.Icon({
             class_name: "power-menu-icon",
             icon: `${iconName}`,
+            
         })
     })
 }
 
 
+
 export const PowerMenu = () => Widget.Window({
     name: "powermenu",
-    // anchor: ["left", "right",],
+    class_name: "power-menu-window",
+    anchor: ["left", "right","top","bottom"],
     visible: false,
     layer: "top",
     widthRequest: 50,
-    keymode: "on-demand",
+    keymode: "exclusive",
     child: Widget.Box({
-        class_name: "powermenu",
-        css: "  padding: 10px",
-        expand: true,
-        children: [ 
+        vertical:true,
+        children: [
+            Widget.Box({expand: true}), // vertical expander
+            Widget.Box({
+                children: [ 
+                    Widget.Box({expand: true}), // horizontal expander
                     getIcon('system-shutdown-symbolic'),
-                    Widget.Box({expand: true}),
                     getIcon('system-reboot-symbolic'),
-                    Widget.Box({expand: true}),
                     getIcon('system-log-out-symbolic'),
-                    Widget.Box({expand: true}),
                     getIcon('system-lock-screen-symbolic'),
-                    Widget.Box({expand: true}),
                     getIcon('weather-clear-night-symbolic'),
+                    Widget.Box({expand: true}), // horizontal expander
                 ],
-        }),
+            }),
+            Widget.Box({expand: true})], // vertical expander
+        })
+
     }).keybind("Escape", () => App.closeWindow("powermenu"))
 

@@ -26,6 +26,7 @@ const volumeLabel = Widget.Label().hook(audio.speaker, self =>{
 })
 
 const volumeIndicator = Widget.Box({
+    class_name: "audiobox",
     children: [icon, volumeLabel,]
 }).hook(audio.speaker, self =>{
     self.tooltip_text = audio.speaker.name;
@@ -38,7 +39,6 @@ const volumeUp = () =>{
 }
 
 const Speaker = Widget.EventBox({
-    css: "min-width: 180px",
     child: volumeIndicator,
     onScrollUp: () =>{
         if (!audio.speaker) return;

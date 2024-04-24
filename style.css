@@ -24,6 +24,7 @@ highlight {
     min-height: 10px;
 }
 
+
 /* Workspaces */
 .workspaces button.focused {
     background-color: rgba(255,255,255,0.2);
@@ -59,7 +60,10 @@ highlight {
 }
 .power-menu-button:hover .power-menu-icon {
     font-size: 60px;
-    color: rgb(153, 39, 39);
+    color: red;
+}
+.power-menu-window{
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 
