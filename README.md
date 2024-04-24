@@ -13,8 +13,6 @@
 
   - calander
 
-  - hyprlock
-
   - notification bug fix
 
 ## Screenshots
