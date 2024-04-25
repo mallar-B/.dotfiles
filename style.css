@@ -66,6 +66,19 @@ highlight {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
+/* App Launcher */
+.app-entry{
+    background-color: rgba(255, 255, 255, 0.11);
+}
+.app-launcher-box{
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 10px;
+}
+.app-title{
+    text-shadow: 0 0 3px black;
+    font-family: monospace;
+}
 
 window.notification-popups box.notifications {
     padding: .5em;

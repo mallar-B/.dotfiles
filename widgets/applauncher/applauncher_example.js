@@ -1,18 +1,6 @@
 const { query } = await Service.import("applications")
 const WINDOW_NAME = "applauncher"
 
-// /** @param {import('resource:///com/github/Aylur/ags/service/applications.js').Application} app */
-
-// const DebugFn = (app) =>{
-//     console.log(app.name + "/n")
-// }
-
-// while(query("")){
-//     DebugFn(query(""))
-// }
-
-
-
 const AppItem = app => Widget.Button({
     on_clicked: () => {
         App.closeWindow(WINDOW_NAME)
@@ -23,10 +11,10 @@ const AppItem = app => Widget.Button({
         children: [
             Widget.Icon({
                 icon: app.icon_name || "folder-open-symbolic",
-                size: 30,
+                size: 24,
             }),
             Widget.Label({
-                class_name: "title",
+                class_name: "app-title",
                 label: "  " + app.name,
                 xalign: 0,
                 vpack: "center",
@@ -36,7 +24,7 @@ const AppItem = app => Widget.Button({
     }),
 })
 
-const Applauncher = ({ width = 500, height = 500, spacing = 12 }) => {
+const Applauncher = ({ width, height, spacing }) => {
     // list of application buttons
     let applications = query("").map(AppItem)
 
@@ -55,6 +43,7 @@ const Applauncher = ({ width = 500, height = 500, spacing = 12 }) => {
 
     // search entry
     const entry = Widget.Entry({
+        class_name: "app-entry",
         hexpand: true,
         css: `margin-bottom: ${spacing}px;`,
 
@@ -76,7 +65,7 @@ const Applauncher = ({ width = 500, height = 500, spacing = 12 }) => {
 
     return Widget.Box({
         vertical: true,
-        css: `margin: ${spacing * 2}px;`,
+        class_name: "app-launcher-box",
         children: [
             entry,
 
@@ -109,11 +98,11 @@ export const AppLauncher = Widget.Window({
         App.closeWindow(WINDOW_NAME)
     }),
     visible: true,
-    layer: "bottom",
-    keymode: "on-demand",
+    layer: "top",
+    keymode: "exclusive",
     child: Applauncher({
         width: 500,
-        height: 500,
+        height: 281, // 16: 9
         spacing: 12,
     }),
 })
