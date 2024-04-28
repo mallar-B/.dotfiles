@@ -14,11 +14,14 @@
 
 ## TODOs
 
-  - quick tools
-
-  - calander
-
-  - notification bug fix
+  - [x] power menu
+    - [x] enhancements 
+  - [x] applauncher
+    - [ ] enhancements   
+  - [ ] quick tools
+    - [ ] idle inhibitor
+  - [ ] calander
+  - [ ] notification bug fix
 
 ## Screenshots
 
