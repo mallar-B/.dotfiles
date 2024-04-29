@@ -22,6 +22,7 @@
     - [ ] idle inhibitor
   - [ ] calander
   - [ ] notification bug fix
+  - [ ] volume indicator
 
 ## Screenshots
 
