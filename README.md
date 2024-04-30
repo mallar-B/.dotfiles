@@ -14,13 +14,17 @@
 
 ## TODOs
 
-  - quick tools
-
-  - calander
-
-  - notification bug fix
+  - [x] power menu
+    - [x] enhancements 
+  - [x] applauncher
+    - [ ] enhancements   
+  - [ ] quick tools
+    - [ ] idle inhibitor
+  - [ ] calander
+  - [ ] notification bug fix
+  - [ ] volume indicator
 
 ## Screenshots
 
-![screenshot 1](https://github.com/mallar-B/ags_personal/blob/main/.Screenshots/2024-04-23-130048_hyprshot.png)
+![screenshot 1](https://github.com/mallar-B/ags_personal/blob/main/.Screenshots/2024-04-25-151357_hyprshot.png)
 ![screenshot 2](https://github.com/mallar-B/ags_personal/blob/main/.Screenshots/2024-04-23-131450_hyprshot.png)
