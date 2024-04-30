@@ -27,7 +27,7 @@ function NotificationIcon({ app_entry, app_icon, image }) {
 function Notification(n) {
     const icon = Widget.Box({
         vpack: "start",
-        class_name: "icon",
+        class_name: "notification-icon",
         child: NotificationIcon(n),
     })
 

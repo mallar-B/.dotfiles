@@ -16,6 +16,10 @@ export const Media = () => Widget.Box({
             on_primary_click: () => mpris.getPlayer("")?.playPause(),
             on_scroll_up: () => mpris.getPlayer("")?.next(),
             on_scroll_down: () => mpris.getPlayer("")?.previous(),
-            child: Widget.Label({ label }),
+            child: Widget.Label({
+                label: label,
+                truncate: "end",
+                maxWidthChars: 30,
+            }),
         }),
     })

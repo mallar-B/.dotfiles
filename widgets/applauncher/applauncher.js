@@ -1,51 +1,108 @@
-// const application = await Service.import("applications")
+const { query } = await Service.import("applications")
+const WINDOW_NAME = "applauncher"
 
+const AppItem = app => Widget.Button({
+    on_clicked: () => {
+        App.closeWindow(WINDOW_NAME)
+        app.launch()
+    },
+    attribute: { app },
+    child: Widget.Box({
+        children: [
+            Widget.Icon({
+                icon: app.icon_name || "folder-open-symbolic",
+                size: 24,
+            }),
+            Widget.Label({
+                class_name: "app-title",
+                label: "  " + app.name,
+                xalign: 0,
+                vpack: "center",
+                truncate: "end",
+            }),
+        ],
+    }),
+})
 
-// const AppItem = app => Widget.Button({
-//     on_clicked: () => {
-//         App.closeWindow(WINDOW_NAME)
-//         app.launch()
-//     },
-//     attribute: { app },
-//     child: Widget.Box({
-//         children: [
-//             // Widget.Icon({
-//             //     icon: app.icon_name || "",
-//             //     size: 42,
-//             // }),
-//             Widget.Label({
-//                 class_name: "title",
-//                 label: app.name,
-//                 xalign: 0,
-//                 vpack: "center",
-//                 truncate: "end",
-//             }),
-//         ],
-//     }),
-// })
+const Applauncher = ({ width, height, spacing }) => {
+    // list of application buttons
+    let applications = query("").map(AppItem)
 
-// export const AppLauncher = () =>Widget.Window({
-//     name: "applauncher",
-//     anchor: ["top", "right"],
-//     visible: true,
-//     child: Widget.Box({
-//         css:"min-height:100px; min-width:100px; background-color:red",
-//         vertical: true,
-//             children: [
-//             Widget.Entry({
-//                 placeholder_text: 'type here',
-//                 // text:`${appName}`,
-//                 visibility: true, // set to false for passwords
-//                 onAccept: ({ text }) => console.log(text)
-//             }),
+    // container holding the buttons
+    const list = Widget.Box({
+        vertical: true,
+        children: applications,
+        spacing,
+    })
 
-//             // wrap the list in a scrollable
-//             Widget.Scrollable({
-//                 hscroll: "never",
-//                 css: `min-width: 500px;`
-//                     + `min-height: 500px;`,
-//                 child:  Widget.Box({css: "min-height:100px; min-width:100px; background-color:blue"}),
-//             }),
-//         ],
-//     })
-// })
+    // repopulate the box, so the most frequent apps are on top of the list
+    function repopulate() {
+        applications = query("").map(AppItem)
+        list.children = applications
+    }
+
+    // search entry
+    const entry = Widget.Entry({
+        class_name: "app-entry",
+        hexpand: true,
+        css: `margin-bottom: ${spacing}px;`,
+
+        // to launch the first item on Enter
+        on_accept: () => {
+            // make sure we only consider visible (searched for) applications
+	    const results = applications.filter((item) => item.visible);
+            if (results[0]) {
+                App.toggleWindow(WINDOW_NAME)
+                results[0].attribute.app.launch()
+            }
+        },
+
+        // filter out the list
+        on_change: ({ text }) => applications.forEach(item => {
+            item.visible = item.attribute.app.match(text ?? "")
+        }),
+    })
+
+    return Widget.Box({
+        vertical: true,
+        class_name: "app-launcher-box",
+        children: [
+            entry,
+
+            // wrap the list in a scrollable
+            Widget.Scrollable({
+                hscroll: "never",
+                css: `min-width: ${width}px;`
+                    + `min-height: ${height}px;`,
+                child: list,
+            }),
+        ],
+        setup: self => self.hook(App, (_, windowName, visible) => {
+            if (windowName !== WINDOW_NAME)
+                return
+
+            // when the applauncher shows up
+            if (visible) {
+                repopulate()
+                entry.text = ""
+                entry.grab_focus()
+            }
+        }),
+    })
+}
+
+// there needs to be only one instance
+export const AppLauncher = () => Widget.Window({
+    name: WINDOW_NAME,
+    setup: self => self.keybind("Escape", () => {
+        App.closeWindow(WINDOW_NAME)
+    }),
+    visible: false,
+    layer: "top",
+    keymode: "exclusive",
+    child: Applauncher({
+        width: 500,
+        height: 281, // 16:9
+        spacing: 12,
+    }),
+})
