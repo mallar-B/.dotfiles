@@ -1,11 +1,24 @@
-/** @param {import('resource:///com/github/Aylur/ags/service/notifications.js').Notification} n */
-function NotificationIcon({ app_entry, app_icon, image }) {
+
+import GLib from "gi://GLib"
+
+const time = (time, format = "%H:%M") => GLib.DateTime
+    .new_from_unix_local(time)
+    .format(format)
+
+const NotificationIcon = ({ app_entry, app_icon, image }) => {
     if (image) {
         return Widget.Box({
-            css: `background-image: url("${image}");`
-                + "background-size: contain;"
-                + "background-repeat: no-repeat;"
-                + "background-position: center;",
+            vpack: "start",
+            hexpand: false,
+            class_name: "notification-image",
+            css: `
+                background-image: url("${image}");
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: center;
+                min-width: 78px;
+                min-height: 78px;
+            `,
         })
     }
 
@@ -13,92 +26,104 @@ function NotificationIcon({ app_entry, app_icon, image }) {
     if (Utils.lookUpIcon(app_icon))
         icon = app_icon
 
-    if (app_entry && Utils.lookUpIcon(app_entry))
-        icon = app_entry
+    if (Utils.lookUpIcon(app_entry || ""))
+        icon = app_entry || ""
 
     return Widget.Box({
         vpack: "start",
         hexpand: false,
+        class_name: "notification-icon-box",
         child: Widget.Icon({
+            size: 50,
             icon,
-            size: 58,
-            hpack: "start", hexpand: true,
+            hpack: "center", hexpand: true,
             vpack: "center", vexpand: true,
         }),
-
     })
 }
 
-/** @param {import('resource:///com/github/Aylur/ags/service/notifications.js').Notification} n */
-export const Notification = (n) =>{
-    const icon = Widget.Box({
-        vpack: "start",
-        class_name: "notification-icon",
-        child: NotificationIcon(n),
-    })
-
-    const title = Widget.Label({
-        class_name: "title",
-        xalign: 0,
-        justification: "left",
-        hexpand: true,
-        max_width_chars: 24,
-        truncate: "end",
-        wrap: true,
-        label: n.summary,
-        use_markup: true,
-    })
-
-    const body = Widget.Label({
-        class_name: "body",
-        hexpand: true,
-        use_markup: true,
-        xalign: 0,
-        justification: "left",
-        label: n.body.trim(),
-        wrap: true,
-    })
-
-    const actions = Widget.Box({
-        class_name: "actions",
-        children: n.actions.map(({ id, label }) => Widget.Button({
-            class_name: "action-button",
-            on_clicked: () => {
-                n.invoke(id)
-                n.dismiss()
-            },
-            hexpand: true,
-            child: Widget.Label(label),
-        })),
-    })
-
-    const closeButton = Widget.Button({
-        class_name: "close-button",
-        hpack: "end",
-        vpack: "fill",
-        on_clicked: n.dismiss,
-        child: Widget.Icon("window-close-symbolic"),
-    })
-
-    return Widget.EventBox(
-        {
-            attribute: { id: n.id },
-        },
-        Widget.Box(
-            {
-                class_name: `notification ${n.urgency}`,
+export const Notification = (notification) => {
+    const content = Widget.Box({
+        class_name: "content",
+        children: [
+            NotificationIcon(notification),
+            Widget.Box({
+                hexpand: true,
                 vertical: true,
-            },
-            Widget.Box([
-                icon,
-                Widget.Box(
-                    { vertical: true },
-                    title,
-                    body,
-                ),
-            ]),
-            actions,
-            closeButton,
-        ),
-    )
+                children: [
+                    Widget.Box({
+                        children: [
+                            Widget.Label({
+                                class_name: "title",
+                                xalign: 0,
+                                justification: "left",
+                                hexpand: true,
+                                max_width_chars: 24,
+                                truncate: "end",
+                                wrap: true,
+                                label: notification.summary.trim(),
+                                use_markup: true,
+                            }),
+                            Widget.Button({
+                                class_name: "close-button",
+                                vpack: "start",
+                                child: Widget.Icon("window-close-symbolic"),
+                                on_clicked: notification.close,
+                            }),
+                        ],
+                    }),
+                    Widget.Label({
+                        class_name: "description",
+                        hexpand: true,
+                        use_markup: true,
+                        xalign: 0,
+                        justification: "left",
+                        label: notification.body.trim(),
+                        max_width_chars: 30,
+                        truncate: "end",
+                        wrap: true,
+                    }),
+                ],
+            }),
+        ],
+    })
+
+    const actionsbox = notification.actions.length > 0 ? Widget.Revealer({
+        transition: "slide_down",
+        child: Widget.EventBox({
+            child: Widget.Box({
+                class_name: "actions horizontal",
+                children: notification.actions.map(action => Widget.Button({
+                    class_name: "action-button",
+                    on_clicked: () => notification.invoke(action.id),
+                    hexpand: true,
+                    child: Widget.Label(action.label),
+                })),
+            }),
+        }),
+    }) : null
+
+    const eventbox = Widget.EventBox({
+        vexpand: false,
+        on_primary_click: notification.dismiss,
+        on_hover() {
+            if (actionsbox)
+                actionsbox.reveal_child = true
+        },
+        on_hover_lost() {
+            if (actionsbox)
+                actionsbox.reveal_child = true
+
+            notification.dismiss()
+        },
+        child: Widget.Box({
+            vertical: true,
+            children: actionsbox ? [content, actionsbox] : [content],
+        }),
+    })
+
+    return Widget.Box({
+        class_name: `notification ${notification.urgency}`,
+        child: eventbox,
+    })
 }

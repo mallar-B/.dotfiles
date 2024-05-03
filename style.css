@@ -84,10 +84,14 @@ window.notification-popups box.notifications {
     padding: .5em;
 }
 
-.icon {
-    min-width: 68px;
-    min-height: 68px;
-    margin-right: 1em;
+
+/* Notifications */
+.notificaion-icon-box {
+    /* min-width: 68px;
+    min-height: 68px; */
+    /* border-radius: 7px; */
+    /* padding-right: 39px; */
+    background-color: red;
 }
 
 .icon image {
