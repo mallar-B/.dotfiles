@@ -8,11 +8,9 @@ import { AudioOptions } from "./widgets/audio_options/audioOptions.js"
 import { PowerButton } from "./widgets/powerbutton/powerbutton.js"
 import { PowerMenu } from "./widgets/powerbutton/powermenu.js"
 import { AppLauncher } from "./widgets/applauncher/applauncher.js" 
-import { QuickTools } from "./widgets/quick_tools/quickTools.js"
-
-// import { applauncher } from "./applauncher.js"
+import { QuickToolsMenu } from "./widgets/quick_tools/quickToolsMenu.js"
+import { QuickTools } from "./widgets/quick_tools/quickToolsButton.js"
 // import toReveal from "./widgets/audio_options/audioPopUp.js"
-
 
 // layout of the bar
 function Left() {
@@ -69,7 +67,13 @@ App.config({
         NotificationPopups(),
         PowerMenu(),
         AppLauncher(),
+        QuickToolsMenu(),
     ],
+})
+
+// auto reloading css
+Utils.monitorFile("/home/mallarb/.config/ags/style.css", () => {
+    App.applyCss("/home/mallarb/.config/ags/style.css")
 })
 
 export { }

@@ -10,7 +10,7 @@ const NotificationIcon = ({ app_entry, app_icon, image }) => {
         return Widget.Box({
             vpack: "start",
             hexpand: false,
-            class_name: "notification-image",
+            class_name: "notification-icon-box",
             css: `
                 background-image: url("${image}");
                 background-size: cover;
@@ -52,9 +52,10 @@ export const Notification = (notification) => {
                 vertical: true,
                 children: [
                     Widget.Box({
+                        class_name: "notification-title-box",
                         children: [
                             Widget.Label({
-                                class_name: "title",
+                                class_name: "notification-title",
                                 xalign: 0,
                                 justification: "left",
                                 hexpand: true,

@@ -80,53 +80,39 @@ highlight {
     font-family: monospace;
 }
 
+
+/* Notifications */
 window.notification-popups box.notifications {
     padding: .5em;
 }
 
-
-/* Notifications */
-.notificaion-icon-box {
-    /* min-width: 68px;
-    min-height: 68px; */
-    /* border-radius: 7px; */
-    /* padding-right: 39px; */
-    background-color: red;
+.notification-icon-box {
+    margin-right: 4px;
 }
 
-.icon image {
-    font-size: 58px;
-    /* to center the icon */
-    margin: 5px;
-    color: @theme_fg_color;
+.content {
+    padding: 7px 7px 10px 0px;
+
 }
 
-.icon box {
-    min-width: 68px;
-    min-height: 68px;
-    border-radius: 7px;
+.notification-title {
+    color: white;
+    font-size: 2em;
+    text-shadow: 0 0 3px black;
+}
+
+.close-button {
+    color: pink;
+
 }
 
 .notification {
     min-width: 350px;
-    border-radius: 11px;
-    padding: 1em;
-    margin: .5em;
-    border: 1px solid @wm_borders_edge;
-    background-color: @theme_bg_color;
+    background-color: rgba(0, 0, 0, 0.11);
 }
 
 .notification.critical {
     border: 1px solid lightcoral;
-}
-
-.title {
-    color: @theme_fg_color;
-    font-size: 1.4em;
-}
-
-.body {
-    color: @theme_unfocused_fg_color;
 }
 
 .actions .action-button {
@@ -142,3 +128,8 @@ window.notification-popups box.notifications {
     margin-right: 0;
 }
 
+
+/* quicktools */
+.idle-inhibitor-on {
+    color: red;
+}
