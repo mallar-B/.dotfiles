@@ -17,11 +17,13 @@
   - [x] power menu
     - [x] enhancements 
   - [x] applauncher
-    - [ ] enhancements   
-  - [ ] quick tools
-    - [ ] idle inhibitor
+    - [X] enhancements   
+  - [X] quick tools
+    - [X] idle inhibitor
+    - [X] wallpaper change
+    - [ ] resource usage
   - [ ] calander
-  - [ ] notification bug fix
+  - [X] notification bug fix
   - [ ] volume indicator
 
 ## Screenshots
