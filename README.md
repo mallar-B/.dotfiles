@@ -1,4 +1,10 @@
 # Most minimal [ags](https://aylur.github.io/ags-docs/) setup for pc (Hyprland)
+## Dependencies
+  - hypridle
+  - hyprlock
+  - bluez (optional)
+  - networkmanager
+
 ## Installation
   - follow the instructions [here](https://aylur.github.io/ags-docs/config/installation/)
 
