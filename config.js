@@ -12,6 +12,9 @@ import { QuickToolsMenu } from "./widgets/quick_tools/quickToolsMenu.js"
 import { QuickTools } from "./widgets/quick_tools/quickToolsButton.js"
 // import toReveal from "./widgets/audio_options/audioPopUp.js"
 
+// import {TestWindow} from "./debug/testWindow.js"
+// import { TestButton, TestButton2 } from "./debug/testButton.js"
+
 // layout of the bar
 function Left() {
     return Widget.Box({
@@ -27,6 +30,9 @@ function Center() {
         spacing: 8,
         children: [
             Date(),
+
+            // TestButton(),
+            // TestButton2(),
         ],
     })
 }
@@ -68,6 +74,8 @@ App.config({
         PowerMenu(),
         AppLauncher(),
         QuickToolsMenu(),
+
+        // TestWindow(),
     ],
 })
 

@@ -25,6 +25,7 @@ highlight {
 }
 
 
+
 /* Workspaces */
 .workspaces button.focused {
     background-color: rgba(255,255,255,0.2);
@@ -57,6 +58,9 @@ highlight {
 }
 .power-menu-icon{
     font-size: 38px;
+    transition: font-size 0.5s;
+    transition: color 0.5s;
+
 }
 .power-menu-button:hover .power-menu-icon {
     font-size: 60px;
@@ -132,4 +136,17 @@ window.notification-popups box.notifications {
 /* quicktools */
 .idle-inhibitor-on {
     color: red;
+}
+
+.quick-tools-menu-icon {
+    font-size: 38px;
+    transition: font-size 0.2s;
+}
+
+.quick-tools-menu-button{
+    min-width: 100px;
+}
+
+.quick-tools-menu-button:hover .quick-tools-menu-icon {
+    font-size: 90px;
 }
