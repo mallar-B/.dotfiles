@@ -21,6 +21,9 @@ export const IdleInhibitor = () => {
             if(self.attribute.enabled) Utils.execAsync(`pkill hypridle`).catch(err => console.log(err))
             else(Utils.execAsync(`hypridle &`).catch(err => console.log(err)))
             QuickToolsMenuOptions.reveal_child = false
+            Utils.timeout(400, () => {
+                App.toggleWindow("quicktools-menu")
+            })
         },
         child: Widget.Icon({
             icon: "media-optical-bd-symbolic",

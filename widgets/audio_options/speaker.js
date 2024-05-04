@@ -16,12 +16,12 @@ function getIcon() {
     return `audio-volume-${icons[icon]}-symbolic`
 }
 
-const icon = Widget.Icon({
+export const icon = Widget.Icon({
     class_name: "audio-icon",
     icon: Utils.watch(getIcon(), audio.speaker, getIcon),
 })
 
-const volumeLabel = Widget.Label().hook(audio.speaker, self =>{
+export const volumeLabel = Widget.Label().hook(audio.speaker, self =>{
     self.label = " " + Math.round(audio.speaker.volume * 100).toString() + "%";
 })
 
@@ -51,7 +51,7 @@ const Speaker = Widget.EventBox({
         else audio.speaker.volume -= 0.03;
     },
     onMiddleClick: () =>{ audio.speaker.is_muted = !audio.speaker.is_muted },
-    onPrimaryClick: () => { hyprland.messageAsync(`dispatch exec [ float; size 50% ] pavucontrol`) },
+    onPrimaryClick: () => { hyprland.messageAsync(`dispatch exec [ float; size 50%; ] pavucontrol`) },
     onSecondaryClick: () => { Utils.execAsync(['pkill', 'pavucontrol']).catch(err => console.log(err)) }
 })
 
