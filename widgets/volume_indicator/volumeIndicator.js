@@ -40,8 +40,10 @@ const volumeSlider = Widget.Box({
     })
 })
 
+
+
 export const toReveal = Widget.Revealer({    
-    reveal_child: true,
+    reveal_child: false,
     transition: "slide_up",
     transition_duration: 400,
     child: Widget.Box({
@@ -66,3 +68,21 @@ export const VolumeIndicator = () => Widget.Window({
         ]
 })
 })
+// popup logic //
+const showPopUp = () => {
+    toReveal.revealChild = true
+}
+const hidePopUp = () => {
+    toReveal.revealChild = false
+}
+var popupTimeout
+audio.connect("speaker-changed", () => {
+    showPopUp()
+
+    clearTimeout(popupTimeout);
+
+    popupTimeout = setTimeout(function() {
+        hidePopUp();
+    }, 2000);
+})
+

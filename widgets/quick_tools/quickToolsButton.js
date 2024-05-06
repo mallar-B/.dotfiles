@@ -2,7 +2,6 @@ import { QuickToolsMenuOptions } from "./quickToolsMenu.js"
 export const QuickTools = () => Widget.Button({
     class_name: "quick-tools-button",
     on_clicked: () =>{
-        console.log(QuickToolsMenuOptions.reveal_child)
         if(QuickToolsMenuOptions.reveal_child){
             QuickToolsMenuOptions.reveal_child = false
             Utils.timeout(400, () => {

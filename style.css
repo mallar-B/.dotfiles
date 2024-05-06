@@ -160,10 +160,11 @@ window.notification-popups box.notifications {
 
 /* volume indicator */
 .volume-indicator-box{
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0,0,0,0.3);
     margin-bottom: 180px;
     border-radius: 5px;
 }
+
 .volume-icon{
     padding-left: 5px;
 }
