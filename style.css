@@ -156,6 +156,50 @@ window.notification-popups box.notifications {
     font-size: 90px;
 }
 
-.volume-indicator{
-    background-color: #000055;
+
+
+/* volume indicator */
+.volume-indicator-box{
+    background-color: rgba(0,0,0,0.2);
+    margin-bottom: 180px;
+    border-radius: 5px;
 }
+.volume-icon{
+    padding-left: 5px;
+}
+
+.volume-slider trough{
+    min-height: 3px;
+    transition: min-height .2s;
+}
+
+.volume-slider slider{
+    background: transparent;
+    outline-color: transparent;
+    border-color: transparent;
+    color: transparent;
+    box-shadow: none;
+}
+
+.volume-slider highlight{
+    background-color: rgb(100, 169, 216);
+    min-height: 5px;
+}
+
+.volume-slider:hover trough{
+    min-height: 10px;
+}
+
+.volume-icon{
+    font-size: 17px;
+}
+
+.volume-label-box{
+    padding-right: 5px;
+}            
+
+
+
+/* .test-window{
+    pointer-events: none;
+} */

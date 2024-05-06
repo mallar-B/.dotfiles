@@ -10,7 +10,7 @@ import { PowerMenu } from "./widgets/powerbutton/powermenu.js"
 import { AppLauncher } from "./widgets/applauncher/applauncher.js" 
 import { QuickToolsMenu } from "./widgets/quick_tools/quickToolsMenu.js"
 import { QuickTools } from "./widgets/quick_tools/quickToolsButton.js"
-import { VolumeIndicator } from "./widgets/audio_options/volumeIndicator.js"
+import { VolumeIndicator } from "./widgets/volume_indicator/volumeIndicator.js"
 // import toReveal from "./widgets/audio_options/audioPopUp.js"
 
 // import {TestWindow} from "./debug/testWindow.js"
