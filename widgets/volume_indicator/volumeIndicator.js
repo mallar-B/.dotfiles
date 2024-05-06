@@ -1,4 +1,6 @@
 const audio = await Service.import("audio")
+const volumeObject = audio.speaker.bind("volume")
+let volume = volumeObject.emitter.volume
 
 const icons = {
     101: "overamplified",
@@ -10,7 +12,6 @@ const icons = {
 function getIcon() {
     const icon = audio.speaker.is_muted ? 0 : [101, 67, 34, 1, 0].find(
         threshold => threshold <= audio.speaker.volume * 100)
-
     return `audio-volume-${icons[icon]}-symbolic`
 }
 
@@ -22,12 +23,22 @@ const volumeIcon = Widget.Icon({
 const volumeLabel = Widget.Box({
     class_name: "volume-label-box",
     hpack: "center",
-    child:Widget.Label().hook(audio.speaker, self =>{
+    child:Widget.Label().hook( audio.speaker, self =>{
         self.label = " " + Math.round(audio.speaker.volume * 100).toString();
+        // when to show popup
+        if(volume != volumeObject.emitter.volume){ // don't show popup if volume hasn't changed even if state has changed
+            volume = volumeObject.emitter.volume
+            popupControl()
+        }
     })
 })
 
-const volumeSlider = Widget.Box({
+const volumeSlider = Widget.EventBox({
+    on_hover: () => clearTimeout(popupTimeout),
+    on_hover_lost: () => setTimeout(function() {
+        hidePopUp();
+    }, 1000),
+    
     child:Widget.Slider({
         class_name:"volume-slider",
         hexpand: true,
@@ -75,8 +86,8 @@ const showPopUp = () => {
 const hidePopUp = () => {
     toReveal.revealChild = false
 }
-var popupTimeout
-audio.connect("speaker-changed", () => {
+let popupTimeout
+const popupControl = () => {
     showPopUp()
 
     clearTimeout(popupTimeout);
@@ -84,5 +95,6 @@ audio.connect("speaker-changed", () => {
     popupTimeout = setTimeout(function() {
         hidePopUp();
     }, 2000);
-})
+}
+
 

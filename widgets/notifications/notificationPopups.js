@@ -26,7 +26,7 @@ function Animated(id) {
 
     idle(() => {
         outer.reveal_child = true
-        timeout(100, () => {
+        timeout(1000, () => {
             inner.reveal_child = true
         })
     })
@@ -36,7 +36,7 @@ function Animated(id) {
             inner.reveal_child = false
             timeout(100, () => {
                 outer.reveal_child = false
-                timeout(100, () => {
+                timeout(1000, () => {
                     box.destroy()
                 })
             })
