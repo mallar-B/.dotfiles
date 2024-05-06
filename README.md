@@ -12,6 +12,8 @@
 
   - `cp ./ags_personal/. ~/.config/ags`
 
+*NOTE: To get the blur effects add the configuration of `variable.conf` and `rules.conf` from `./ags_personal/hypr/hyprland` to your `~/.config/hypr/hyprland.conf`*
+
 ## App Launcher
   To use the applauncher you have to bind it to you hyprland config. e.g.-
   > `bind = ALT, SPACE, exec, ags -t applauncher`
@@ -27,10 +29,10 @@
   - [X] quick tools
     - [X] idle inhibitor
     - [X] wallpaper change
-    - [ ] resource usage
+    - [x] resource usage
   - [ ] calander
   - [X] notification bug fix
-  - [ ] volume indicator
+  - [X] volume indicator
 
 ## Screenshots
 
