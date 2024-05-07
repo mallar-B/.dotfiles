@@ -1,5 +1,6 @@
-
+// import { type Notification } from "types/service/notifications"
 import GLib from "gi://GLib"
+// import icons from "lib/icons"
 
 const time = (time, format = "%H:%M") => GLib.DateTime
     .new_from_unix_local(time)
@@ -10,7 +11,7 @@ const NotificationIcon = ({ app_entry, app_icon, image }) => {
         return Widget.Box({
             vpack: "start",
             hexpand: false,
-            class_name: "notification-icon-box",
+            class_name: "icon img",
             css: `
                 background-image: url("${image}");
                 background-size: cover;
@@ -22,7 +23,7 @@ const NotificationIcon = ({ app_entry, app_icon, image }) => {
         })
     }
 
-    let icon = "dialog-information-symbolic"
+    let icon = "emblem-system-symbolic"
     if (Utils.lookUpIcon(app_icon))
         icon = app_icon
 
@@ -32,10 +33,14 @@ const NotificationIcon = ({ app_entry, app_icon, image }) => {
     return Widget.Box({
         vpack: "start",
         hexpand: false,
-        class_name: "notification-icon-box",
+        class_name: "icon",
+        css: `
+            min-width: 78px;
+            min-height: 78px;
+        `,
         child: Widget.Icon({
-            size: 50,
             icon,
+            size: 58,
             hpack: "center", hexpand: true,
             vpack: "center", vexpand: true,
         }),
@@ -52,10 +57,9 @@ export const Notification = (notification) => {
                 vertical: true,
                 children: [
                     Widget.Box({
-                        class_name: "notification-title-box",
                         children: [
                             Widget.Label({
-                                class_name: "notification-title",
+                                class_name: "title",
                                 xalign: 0,
                                 justification: "left",
                                 hexpand: true,
@@ -64,6 +68,11 @@ export const Notification = (notification) => {
                                 wrap: true,
                                 label: notification.summary.trim(),
                                 use_markup: true,
+                            }),
+                            Widget.Label({
+                                class_name: "time",
+                                vpack: "start",
+                                label: time(notification.time),
                             }),
                             Widget.Button({
                                 class_name: "close-button",
@@ -80,8 +89,7 @@ export const Notification = (notification) => {
                         xalign: 0,
                         justification: "left",
                         label: notification.body.trim(),
-                        max_width_chars: 30,
-                        truncate: "end",
+                        max_width_chars: 24,
                         wrap: true,
                     }),
                 ],

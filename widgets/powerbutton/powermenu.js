@@ -14,7 +14,9 @@ const getIcon = (iconName) =>{
     return Widget.Button({
         class_name: "power-menu-button",
         onPrimaryClick: () =>{
-            if(action[iconName] === "systemctl suspend") {Utils.execAsync("hyprlock")}
+        if(action[iconName] === "systemctl suspend") {
+            Utils.execAsync("hyprlock")
+        }
             App.closeWindow("powermenu");
             Utils.execAsync(`${action[iconName]}`).catch(err => console.log(err));},
         child: Widget.Icon({
@@ -33,7 +35,6 @@ export const PowerMenu = () => Widget.Window({
     anchor: ["left", "right","top","bottom"],
     visible: false,
     layer: "top",
-    widthRequest: 50,
     keymode: "exclusive",
     child: Widget.Box({
         vertical:true,

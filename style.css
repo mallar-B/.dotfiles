@@ -1,6 +1,6 @@
 /* Overall */
 window {
-    background-color: rgba(0, 0, 0, 0.11);
+    background-color: rgba(51, 58, 61, 0.24);
     color: white;
     /* text-shadow: 0 0 3px #000000; */
 }
@@ -23,7 +23,6 @@ levelbar block,
 highlight {
     min-height: 10px;
 }
-
 
 
 /* Workspaces */
@@ -58,12 +57,11 @@ highlight {
 }
 .power-menu-icon{
     font-size: 38px;
-    transition: font-size 0.5s;
-    transition: color 0.5s;
+    transition: color 0.5s, font-size 0.2s;
 
 }
 .power-menu-button:hover .power-menu-icon {
-    font-size: 60px;
+    font-size: 90px;
     color: red;
 }
 .power-menu-window{
@@ -76,7 +74,7 @@ highlight {
 }
 .app-launcher-box{
     border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 10px;
+    border-radius: 5px;
     padding: 10px;
 }
 .app-title{
@@ -90,15 +88,19 @@ window.notification-popups box.notifications {
     padding: .5em;
 }
 
+.notification {
+    min-width: 440px;
+    background-image: linear-gradient(to bottom,transparent, rgba(0,0,0,0.2));
+    
+}
+
 .notification-icon-box {
     margin-right: 4px;
 }
 
 .content {
     padding: 7px 7px 10px 0px;
-
 }
-
 .notification-title {
     color: white;
     font-size: 2em;
@@ -108,11 +110,6 @@ window.notification-popups box.notifications {
 .close-button {
     color: pink;
 
-}
-
-.notification {
-    min-width: 350px;
-    background-color: rgba(0, 0, 0, 0.11);
 }
 
 .notification.critical {
@@ -140,7 +137,8 @@ window.notification-popups box.notifications {
 
 .quick-tools-menu {
     min-height: 100px;
-    background-image: linear-gradient(to bottom,rgba(0, 0, 0, 0.11), rgba(0,0,0,0.3))
+    background-image: linear-gradient(to bottom,transparent, rgba(0,0,0,0.5));
+    border-radius: 5px;
 }
 
 .quick-tools-menu-icon {
@@ -153,14 +151,14 @@ window.notification-popups box.notifications {
 }
 
 .quick-tools-menu-button:hover .quick-tools-menu-icon {
-    font-size: 90px;
+    font-size: 60px;
 }
 
 
 
 /* volume indicator */
 .volume-indicator-box{
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(51, 58, 61, 0.24);
     margin-bottom: 180px;
     border-radius: 5px;
 }

@@ -72,6 +72,7 @@ export const VolumeIndicator = () => Widget.Window({
     css: "background-color: transparent;",
     name: "volume-indicator",
     anchor: ["bottom",],
+	layer: "overlay",
     child: Widget.Box({
         css: "padding: 1px;",
         children: [
