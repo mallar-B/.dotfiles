@@ -1,4 +1,4 @@
-#!/bin/bash
+/#!/bin/bash
 
 # check if yay is installed
 
@@ -12,7 +12,7 @@ if [[ $installed != "/usr/bin/yay" ]]; then
 	wait
 fi
 
-userConfDir= "/home/"$user"/.config/"
+userConfDir= "/home/"$(whoami)"/.config/"
 while IFS= read -r package #IFS is special variable to fine whitespaces
 do
 	#Skip emty lines and comments in package.txt
