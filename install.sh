@@ -47,7 +47,7 @@ response=$(curl -s "$API_URL")
 wallpaper_url=$(echo "$response" | jq -r '.data[0].path')
 
 # Download the wallpaper using wget
-wget "$wallpaper_url" -P ~/Downloads/
+wget "$wallpaper_url" -P ~/Pictures/Wallpapers/
 echo "Random wallpaper downloaded to ~/Pictures/Wallpapers"
 
 # my personal packages install
