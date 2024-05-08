@@ -8,7 +8,7 @@ if [ -z "$is_running" ];
  
 	hyprpaper &
 	sleep 0.1
-	wallpaper=$(find /home/mallarb/Pictures/Wallpapers/ -type f | shuf -n 1)
+	wallpaper=$(find /home/$(whoami)/Pictures/Wallpapers/ -type f | shuf -n 1)
 
 	hyprctl hyprpaper preload "$wallpaper"
 	hyprctl hyprpaper wallpaper "HDMI-A-1,$wallpaper"
@@ -16,9 +16,9 @@ if [ -z "$is_running" ];
 
 	hyprshot -m output -c -o ~/.config/hypr/hyprlock/ -f curr_wall.png -s
 
-	else 
+else 
 	
-	wallpaper=$(find /home/mallarb/Pictures/Wallpapers/ -type f | shuf -n 1)
+	wallpaper=$(find /home/$(whoami)/Pictures/Wallpapers/ -type f | shuf -n 1)
 
 	hyprctl hyprpaper preload "$wallpaper"
 	hyprctl hyprpaper wallpaper "HDMI-A-1,$wallpaper"
