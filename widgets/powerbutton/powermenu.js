@@ -1,7 +1,5 @@
 const getIcon = (iconName) =>{
 
-    const user = "mallarb"
-
     const action = {
         "system-shutdown-symbolic": "poweroff",
         "system-reboot-symbolic": "reboot",

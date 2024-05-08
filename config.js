@@ -16,6 +16,8 @@ import { VolumeIndicator } from "./widgets/volume_indicator/volumeIndicator.js"
 // import {TestWindow} from "./debug/testWindow.js"
 // import { TestButton, TestButton2 } from "./debug/testButton.js"
 
+export const user = Utils.exec("whoami")
+
 // layout of the bar
 function Left() {
     return Widget.Box({
@@ -82,8 +84,8 @@ App.config({
 })
 
 // auto reloading css
-Utils.monitorFile("/home/mallarb/.config/ags/style.css", () => {
-    App.applyCss("/home/mallarb/.config/ags/style.css")
+Utils.monitorFile(`/home/${user}/.config/ags/style.css`, () => {
+    App.applyCss(`/home/${user}/.config/ags/style.css`)
 })
 
 export { }
