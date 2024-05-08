@@ -25,4 +25,4 @@ done < "./packages/dependencies.txt"
 
 cp -r hypr $userConfDir
 mkdir -p $userConfDir/ags/
-cp -r config.js style.css wigets $userConfDir/ags/
+cp -r config.js style.css widgets $userConfDir/ags/
