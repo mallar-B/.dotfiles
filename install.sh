@@ -22,3 +22,6 @@ do
 	
 	yay -S --needed --noconfirm "$package"
 done < "./packages/dependencies.txt"
+
+cp -r hypr /home/"$user"/.config/
+cp -r config.js style.css wigets /home/"$user"/.config/ags/
