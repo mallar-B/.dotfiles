@@ -14,7 +14,7 @@ import { VolumeIndicator } from "./widgets/volume_indicator/volumeIndicator.js"
 // import toReveal from "./widgets/audio_options/audioPopUp.js"
 
 // import {TestWindow} from "./debug/testWindow.js"
-import { TestButton, TestButton2 } from "./debug/testButton.js"
+// import { TestButton, TestButton2 } from "./debug/testButton.js"
 
 // layout of the bar
 function Left() {
@@ -32,7 +32,7 @@ function Center() {
         children: [
             Date(),
 
-            TestButton(),
+            // TestButton(),
             // TestButton2(),
         ],
     })
