@@ -12,7 +12,7 @@ if [[ $installed != "/usr/bin/yay" ]]; then
 	wait
 fi
 
-user=$(whoami)
+userConfDir= "/home/"$user"/.config/"
 while IFS= read -r package #IFS is special variable to fine whitespaces
 do
 	#Skip emty lines and comments in package.txt
@@ -23,5 +23,6 @@ do
 	yay -S --needed --noconfirm "$package"
 done < "./packages/dependencies.txt"
 
-cp -r hypr /home/"$user"/.config/
-cp -r config.js style.css wigets /home/"$user"/.config/ags/
+cp -r hypr $userConfDir
+mkdir -p $userConfDir/ags/
+cp -r config.js style.css wigets $userConfDir/ags/
