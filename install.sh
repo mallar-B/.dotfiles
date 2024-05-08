@@ -26,3 +26,6 @@ done < "./packages/dependencies.txt"
 cp -r hypr $userConfDir
 mkdir -p $userConfDir/ags/
 cp -r config.js style.css widgets $userConfDir/ags/
+
+# set theme to adw-gtk3-dark
+gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3=dark"
