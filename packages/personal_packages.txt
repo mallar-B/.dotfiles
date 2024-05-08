@@ -1,0 +1,9 @@
+thorium-browser-bin
+neovim
+github-desktop-bin
+gh
+thunar
+qbittorrent
+kdeconnect
+cloudflare-warp-bin
+haruna

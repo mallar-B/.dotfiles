@@ -12,6 +12,9 @@ if [[ $installed != "/usr/bin/yay" ]]; then
 	wait
 fi
 
+# remove dunst as ags has built in notification service
+yay -R dunst
+
 userConfDir="/home/"$(whoami)"/.config"
 while IFS= read -r package #IFS is special variable to fine whitespaces
 do
@@ -27,9 +30,22 @@ cp -r hypr $userConfDir
 mkdir -p $userConfDir/ags/
 cp -r config.js style.css widgets $userConfDir/ags/
 
-# remove dunst
-yay -R dunst
-
 # set theme to adw-gtk3-dark
 gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3-dark"
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark' # for gtk4 apps
+echo "Theme is set to adw-gtk3-dark"
+
+# my personal packages install
+if [[ $(whoami) == "mallarb" ]]; then
+	while IFS= read -r package #IFS is special variable to fine whitespaces
+	do
+	#Skip emty lines and comments in package.txt
+	if [[ -z "$package" || "$package" == "#"* ]]; then
+		continue
+	fi
+	
+	yay -S --needed --noconfirm "$package"
+	done < "./packages/personal_packages.txt"
+
+	echo "remember to update fstab, register warp-cli"
+fi
