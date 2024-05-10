@@ -4,27 +4,34 @@
 
 installed=$(which yay)
 if [[ $installed != "/usr/bin/yay" ]]; then 
+	cd ..
 	sudo pacman -S --needed git
 	git clone https://aur.archlinux.org/yay
 	wait
 	cd yay 
 	makepkg -si
 	wait
+	cd ..
+	cd ags_personal
 fi
 
 # remove dunst as ags has built in notification service
 yay -R dunst
 
 userConfDir="/home/"$(whoami)"/.config"
-while IFS= read -r package #IFS is special variable to fine whitespaces
-do
-	#Skip emty lines and comments in package.txt
-	if [[ -z "$package" || "$package" == "#"* ]]; then
-		continue
-	fi
+function install_packages(){
+	while IFS= read -r package #IFS is special variable to fine whitespaces
+	do
+		#Skip emty lines and comments in package.txt
+		if [[ -z "$package" || "$package" == "#"* ]]; then
+			continue
+		fi
 	
-	yay -S --needed --noconfirm "$package"
-done < "./packages/dependencies.txt"
+		yay -S --needed --noconfirm "$package"
+	done < $1 
+}
+
+install_packages "./packages/dependencies.txt"
 
 cp -r hypr $userConfDir
 mkdir -p $userConfDir/ags/
@@ -52,15 +59,6 @@ echo "Random wallpaper downloaded to ~/Pictures/Wallpapers"
 
 # my personal packages install
 if [[ $(whoami) == "mallarb" ]]; then
-	while IFS= read -r package #IFS is special variable to fine whitespaces
-	do
-	#Skip emty lines and comments in package.txt
-	if [[ -z "$package" || "$package" == "#"* ]]; then
-		continue
-	fi
-	
-	yay -S --needed --noconfirm "$package"
-	done < "./packages/personal_packages.txt"
-
+	install_packages "./packages/personal_packages.txt"
 	echo "remember to update fstab, register warp-cli"
 fi

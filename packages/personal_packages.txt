@@ -3,6 +3,8 @@ neovim
 github-desktop-bin
 gh
 thunar
+thunar-volman
+gvfs
 qbittorrent
 kdeconnect
 cloudflare-warp-bin
