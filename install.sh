@@ -35,10 +35,11 @@ function install_packages(){
 install_packages "./packages/dependencies.txt"
 
 # remove folders(if was any) and ereate symlinks to .config
+currDir=$(pwd)
 rm -rf $userConfDir/ags
 rm -rf $userConfDir/hypr
-ln -s ./config/hypr $userConfDir/hypr
-ln -s ./config/ags $userConfDir/ags
+ln -s $currDir/config/hypr $userConfDir/hypr
+ln -s $currDir/config/ags $userConfDir/ags
 
 
 # set theme to adw-gtk3-dark
