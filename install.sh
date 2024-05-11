@@ -15,7 +15,7 @@ if [[ $installed != "/usr/bin/yay" ]]; then
 	cd ags_personal
 fi
 
-# remove dunst as ags has built in notification service
+# remove dunst as ags has builtin notification service
 yay -R dunst
 
 userConfDir="/home/"$(whoami)"/.config"
@@ -31,11 +31,15 @@ function install_packages(){
 	done < $1 
 }
 
+# install dependencies
 install_packages "./packages/dependencies.txt"
 
-cp -r hypr $userConfDir
-mkdir -p $userConfDir/ags/
-cp -r config.js style.css widgets $userConfDir/ags/
+# remove folders(if was any) and ereate symlinks to .config
+rm -rf $userConfDir/ags
+rm -rf $userConfDir/hypr
+ln -s ./config/hypr $userConfDir/hypr
+ln -s ./config/ags $userConfDir/ags
+
 
 # set theme to adw-gtk3-dark
 gsettings set org.gnome.desktop.interface gtk-theme "adw-gtk3-dark"
