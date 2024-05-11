@@ -65,5 +65,10 @@ echo "Random wallpaper downloaded to ~/Pictures/Wallpapers"
 # my personal packages install
 if [[ $(whoami) == "mallarb" ]]; then
 	install_packages "./packages/personal_packages.txt"
-	echo "remember to update fstab, register warp-cli"
+	
+	# start warp service
+	sudo systemctl enable warp-svc.service
+	sudo systemctl start warp-svc.service
+
+	warp-cli register
 fi
