@@ -77,4 +77,6 @@ if [[ $(whoami) == "mallarb" ]]; then
   # copy config files
   rm -rf $userConfDir/kitty
   ln -s $currDir/.config/kitty $userConfDir/kitty
+  rm -rf $userConfDir/nvim
+  ln -s $currDir/.config/nvim $userConfDir/nvim
 fi
