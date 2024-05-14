@@ -64,11 +64,17 @@ echo "Random wallpaper downloaded to ~/Pictures/Wallpapers"
 
 # my personal packages install
 if [[ $(whoami) == "mallarb" ]]; then
+  currDir=$(pwd)
+  userConfDir="/home/"$(whoami)"/.config"
+
 	install_packages "./packages/personal_packages.txt"
 	
 	# start warp service
 	sudo systemctl enable warp-svc.service
 	sudo systemctl start warp-svc.service
-
 	warp-cli register
+
+  # copy config files
+  rm -rf $userConfDir/kitty
+  ln -s $currDir/.config/kitty $userConfDir/kitty
 fi

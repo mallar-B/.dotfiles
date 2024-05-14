@@ -13,9 +13,9 @@ const getIcon = (iconName) =>{
         class_name: "power-menu-button",
         onPrimaryClick: () =>{
         if(action[iconName] === "systemctl suspend") {
+            App.closeWindow("powermenu");
             Utils.execAsync("hyprlock")
         }
-            App.closeWindow("powermenu");
             Utils.execAsync(`${action[iconName]}`).catch(err => console.log(err));},
         child: Widget.Icon({
             class_name: "power-menu-icon",
