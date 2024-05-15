@@ -52,8 +52,8 @@ highlight {
     min-height: 100px;
 }
 .power-menu-button:hover{
-    min-width: 150px;
-    min-height: 150px;
+    min-width: 90px;
+    min-height: 90px;
 }
 .power-menu-icon{
     font-size: 38px;
@@ -66,6 +66,7 @@ highlight {
 }
 .power-menu-window{
     background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
 }
 
 /* App Launcher */

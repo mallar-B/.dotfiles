@@ -13,6 +13,8 @@ return {
         -- javascript
         null_ls.builtins.formatting.prettier,
         require("none-ls.diagnostics.eslint_d"),
+        -- css
+
       },
     })
 
