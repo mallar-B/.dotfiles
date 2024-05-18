@@ -16,7 +16,9 @@ return {
           }
         }
       })
-      vim.keymap.set({ 'n' }, '<C-b>', ':Neotree toggle<cr>', {})
+      vim.keymap.set({ 'n', 'i', 'v' }, '<C-b>', function ()
+       vim.cmd(':Neotree toggle') 
+      end, {})
     end
   }
 }

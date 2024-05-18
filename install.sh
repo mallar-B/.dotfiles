@@ -63,7 +63,11 @@ wget "$wallpaper_url" -P ~/Pictures/Wallpapers/
 echo "Random wallpaper downloaded to ~/Pictures/Wallpapers"
 
 # my personal packages install
-if [[ $(whoami) == "mallarb" ]]; then
+# if you want to configure and install
+# change user name
+
+user="mallarb"
+if [[ $(whoami) == "$user" ]]; then
   currDir=$(pwd)
   userConfDir="/home/"$(whoami)"/.config"
 
