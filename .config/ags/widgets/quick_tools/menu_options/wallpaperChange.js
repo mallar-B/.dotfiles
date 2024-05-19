@@ -11,5 +11,5 @@ export const WallpaperChange = () => Widget.Button({
         class_name: "quick-tools-menu-icon",
         icon: "folder-pictures-symbolic",
     }), 
-    tooltip_text: "Change Wallpaper/ Select Wallpaper",
+    tooltip_text: "Change Wallpaper | Select Wallpaper",
 })

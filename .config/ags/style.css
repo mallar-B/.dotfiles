@@ -132,7 +132,7 @@ window.notification-popups box.notifications {
 
 
 /* quicktools */
-.idle-inhibitor-on {
+.quick-tools-activated{
     color: red;
 }
 

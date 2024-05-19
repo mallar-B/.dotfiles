@@ -1,33 +1,39 @@
-import { QuickToolsMenuOptions } from "../quickToolsMenu.js"
+import { QuickToolsMenuOptions } from "../quickToolsMenu.js";
+
+const isRunning = () => {
+  return Utils.exec(`pidof hypridle`) ? "running" : null;
+};
 
 export const IdleInhibitor = () => {
-    
-    if(Utils.exec("pacman -Q hypridle").slice(0, 8) !== "hypridle") //check if hypridle is installed
-        return null;
-    return Widget.Button({
-        attribute: {
-            enabled: false,
-        },
-        vexpand: true,
-        class_name: "quick-tools-menu-button",
-        setup: self => {
-            self.attribute.enabled = !(!!Utils.exec('pidof hypridle'));
-            self.toggleClassName('idle-inhibitor-on', self.attribute.enabled);
-            self.tooltip_text = self.attribute.enabled ? "Disable Idle Inhibitor" : "Enable Idle Inhibitor";
-        },
-        on_clicked: (self) => {
-            self.attribute.enabled = !self.attribute.enabled
-            self.toggleClassName('idle-inhibitor-on', self.attribute.enabled);
-            if(self.attribute.enabled) Utils.execAsync(`pkill hypridle`).catch(err => console.log(err))
-            else(Utils.execAsync(`hypridle &`).catch(err => console.log(err)))
-            QuickToolsMenuOptions.reveal_child = false
-            Utils.timeout(400, () => {
-                App.toggleWindow("quicktools-menu")
-            })
-        },
-        child: Widget.Icon({
-            icon: "media-optical-bd-symbolic",
-            class_name: "quick-tools-menu-icon",
-        })
-    })
-}
+  //check if hypridle is installed
+  if (Utils.exec("pacman -Q hypridle").slice(0, 8) !== "hypridle") return null;
+  return Widget.Button({
+    vexpand: true,
+    class_name: "quick-tools-menu-button",
+    setup: (self) => {
+      self.tooltip_text = !isRunning()
+        ? "Disable idle-inhibitor"
+        : "Enable idle-inhibitor";
+      self.toggleClassName("quick-tools-activated", !isRunning());
+    },
+    on_clicked: (self) => {
+      if (isRunning())
+        // check if hypridle is running
+        Utils.execAsync(`pkill hypridle`).catch((err) => console.log(err));
+      else Utils.execAsync(`hypridle &`).catch((err) => console.log(err));
+      self.tooltip_text = !isRunning()
+        ? "Disable idle-inhibitor"
+        : "Enable idle-inhibitor";
+      self.toggleClassName("quick-tools-activated", !isRunning());
+      // close quicktools revealer
+      QuickToolsMenuOptions.reveal_child = false;
+      Utils.timeout(400, () => {
+        App.toggleWindow("quicktools-menu");
+      });
+    },
+    child: Widget.Icon({
+      icon: "media-optical-bd-symbolic",
+      class_name: "quick-tools-menu-icon",
+    }),
+  });
+};
