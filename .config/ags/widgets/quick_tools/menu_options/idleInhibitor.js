@@ -10,12 +10,11 @@ export const IdleInhibitor = () => {
   return Widget.Button({
     vexpand: true,
     class_name: "quick-tools-menu-button",
-    setup: (self) => {
-      self.tooltip_text = !isRunning()
-        ? "Disable idle-inhibitor"
-        : "Enable idle-inhibitor";
-      self.toggleClassName("quick-tools-activated", !isRunning());
-    },
+    tooltip_text: "Enable idle-inhibitor",
+    //
+    // setup: (self) => {
+    //   self.toggleClassName("quick-tools-activated", !isRunning());
+    // },
     on_clicked: (self) => {
       if (isRunning())
         // check if hypridle is running
