@@ -2,7 +2,7 @@
 
 sddm_setup(){
   #install sddm
-  yay -S --needed sddm-theme-mountain-git
+  yay -S --needed sddm-theme-mountain-git --noconfirm
   
   #copy sddm config
   sudo cp ./scripts/theme.conf /usr/share/sddm/themes/mountain/
