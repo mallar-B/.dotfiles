@@ -12,7 +12,7 @@ const getIcon = (iconName) => {
     onPrimaryClick: () => {
       if (action[iconName] === "systemctl suspend") {
         App.closeWindow("powermenu");
-        Utils.execAsync("hyprlock");
+        Utils.execAsync("hyprlock").catch((err) => console.log(err));
       }
       Utils.execAsync(`${action[iconName]}`).catch((err) => console.log(err));
     },

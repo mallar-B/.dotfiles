@@ -11,7 +11,7 @@ return {
 		lazy = false,
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_install = { "", "lua_ls", "cssls" },
+				ensure_install = { "", "lua_ls", "cssls", "phpactor" },
 			})
 		end,
 	},
@@ -25,6 +25,9 @@ return {
 			-- lspconfig.tsserver.setup({
 			-- capabilities = capabilities,
 			-- })
+      lspconfig.intelephense.setup({
+        capabilities = capabilities,
+      })
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
 			})
