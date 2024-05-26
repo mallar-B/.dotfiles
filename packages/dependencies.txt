@@ -18,3 +18,4 @@ hyprlock
 adw-gtk3
 
 trash
+fzf
