@@ -16,3 +16,5 @@ hypridle
 hyprlock
 
 adw-gtk3
+
+trash

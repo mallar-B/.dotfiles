@@ -70,8 +70,8 @@ echo "Random wallpaper downloaded to ~/Pictures/Wallpapers"
 
 user="mallarb"
 if [[ $(whoami) == "$user" ]]; then
-  currDir=$(pwd)
-  userConfDir="/home/"$(whoami)"/.config"
+  export currDir=$(pwd)
+  export userConfDir="/home/"$(whoami)"/.config"
 
 	install_packages "./packages/personal_packages.txt"
 	
@@ -89,3 +89,4 @@ fi
 
 source ./scripts/sddm.sh
 source ./scripts/grub.sh
+source ./scripts/terminal.sh
