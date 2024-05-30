@@ -1,12 +1,14 @@
-const hyprland = await Service.import('hyprland')
+const hyprland = await Service.import("hyprland");
 
-export const PowerButton = () => Widget.Button({
+export const PowerButton = () =>
+  Widget.Button({
     class_name: "power-button",
-    on_clicked: () => {App.toggleWindow("powermenu")},
+    on_clicked: () => {
+      App.toggleWindow("powermenu");
+    },
     child: Widget.Icon({
-        class_name: "power-button-icon",
-        icon: "system-shutdown-symbolic",
+      class_name: "power-button-icon",
+      icon: "system-shutdown-symbolic",
     }),
-    tooltip_text:"Power Menu",
-})
-
+    tooltip_text: "Power Menu",
+  });

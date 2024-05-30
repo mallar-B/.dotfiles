@@ -1,3 +1,5 @@
+const user = Utils.exec("whoami")
+
 const getIcon = (iconName) => {
   const action = {
     "system-shutdown-symbolic": "poweroff",
@@ -12,6 +14,7 @@ const getIcon = (iconName) => {
     onPrimaryClick: () => {
       if (action[iconName] === "systemctl suspend") {
         App.closeWindow("powermenu");
+        Utils.exec(`grim /home/${user}/.config/hypr/hyprlock/curr_wall.png`); 
         Utils.execAsync("hyprlock").catch((err) => console.log(err));
       }
       Utils.execAsync(`${action[iconName]}`).catch((err) => console.log(err));
