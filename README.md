@@ -5,7 +5,7 @@
   - bluez (optional)
   - networkmanager
 
-## Installation
+## Installation (run the install.sh for automated install)
   - follow the instructions [here](https://aylur.github.io/ags-docs/config/installation/)
 
   - `git clone https://github.com/mallar-B/ags_personal.git`
@@ -38,4 +38,4 @@
 ## Screenshots
 
 ![screenshot 1](https://github.com/mallar-B/ags_personal/blob/main/.Screenshots/2024-04-25-151357_hyprshot.png)
-![screenshot 2](https://github.com/mallar-B/ags_personal/blob/main/.Screenshots/2024-04-23-131450_hyprshot.png)
+![screenshot 2](https://github.com/mallar-B/ags_personal/blob/main/.Screenshots/powermenu.png/2024-05-26-141938_hyprshot.png)
