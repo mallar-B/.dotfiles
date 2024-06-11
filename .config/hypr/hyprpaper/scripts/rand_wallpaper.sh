@@ -8,7 +8,7 @@ if [ -z "$is_running" ];
 	then
  
 	hyprpaper &
-	sleep 0.1
+	sleep 1
 	wallpaper=$(find /home/$(whoami)/Pictures/Wallpapers/ -type f | shuf -n 1)
 
 	for monitor in $monitors;do
@@ -17,7 +17,6 @@ if [ -z "$is_running" ];
 		hyprctl hyprpaper unload all; 
 	done	
 
-	hyprshot -m output -c -o ~/.config/hypr/hyprlock/ -f curr_wall.png -s
 
 else 
 	
@@ -29,5 +28,4 @@ else
 		hyprctl hyprpaper unload all; 
 	done
 
-	hyprshot -m output -c -o ~/.config/hypr/hyprlock/ -f curr_wall.png -s
 fi

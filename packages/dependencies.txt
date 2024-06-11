@@ -1,6 +1,5 @@
 aylurs-gtk-shell
 
-hyprshot
 grim
 slurp
 jq

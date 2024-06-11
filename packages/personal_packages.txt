@@ -9,3 +9,4 @@ qbittorrent
 kdeconnect
 cloudflare-warp-bin
 haruna
+sshfs

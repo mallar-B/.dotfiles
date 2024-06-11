@@ -4,7 +4,7 @@ const getIcon = (iconName) => {
   const action = {
     "system-shutdown-symbolic": "poweroff",
     "system-reboot-symbolic": "reboot",
-    "system-log-out-symbolic": "pkill -u user",
+    "system-log-out-symbolic": `pkill -u ${user}`,
     "system-lock-screen-symbolic": "hyprlock",
     "weather-clear-night-symbolic": "systemctl suspend",
   };
