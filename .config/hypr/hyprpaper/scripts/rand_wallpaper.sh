@@ -14,6 +14,7 @@ if [ -z "$is_running" ];
 	for monitor in $monitors;do
 		hyprctl hyprpaper preload "$wallpaper"
 		hyprctl hyprpaper wallpaper "$monitor,$wallpaper"
+    sleep 1
 		hyprctl hyprpaper unload all; 
 	done	
 
@@ -25,6 +26,7 @@ else
 	for monitor in $monitors;do
 		hyprctl hyprpaper preload "$wallpaper"
 		hyprctl hyprpaper wallpaper "$monitor,$wallpaper"
+    sleep 1
 		hyprctl hyprpaper unload all; 
 	done
 
