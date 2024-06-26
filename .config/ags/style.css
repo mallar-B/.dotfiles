@@ -201,6 +201,18 @@ window.notification-popups box.notifications {
 
 
 
-/* .test-window{
-    pointer-events: none;
-} */
+.test-window{
+    /* pointer-events: none; */
+  /* background-color: rgb(100, 169, 216); */
+  border-radius: 5px;
+    min-height: 1000px;
+} 
+
+.calendar:selected{
+    background-color: rgba(255,255,255,0.1);
+}
+.calendar{
+    background-color: rgba(51, 58, 61, 0.24);
+    min-height: 200px;
+    border-radius: 5px;
+}
