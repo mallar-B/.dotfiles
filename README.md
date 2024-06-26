@@ -30,7 +30,8 @@
     - [X] idle inhibitor
     - [X] wallpaper change
     - [x] resource usage
-    - [ ] dnd
+    - [x] dnd
+    - [x] calendar 
   - [ ] notification center
   - [X] notification bug fix
   - [X] volume indicator
