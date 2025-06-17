@@ -6,15 +6,15 @@ current_sink=$(pactl info | grep 'Default Sink' | awk '{print $3}')
 
 current_index=-1
 for i in "${!sinks[@]}"; do
-  if [[ "${sinks[$i]}" == "$current_sink" ]]; then
-    current_index=$i
-    break
-  fi
+	if [[ "${sinks[$i]}" == "$current_sink" ]]; then
+		current_index=$i
+		break
+	fi
 done
 
 if [ "$current_index" -eq -1 ]; then
-  echo "Current sink not found."
-  exit 1
+	echo "Current sink not found."
+	exit 1
 fi
 
 next_index=$(((current_index + 1) % ${#sinks[@]}))
