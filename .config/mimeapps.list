@@ -1,6 +1,0 @@
-[Added Associations]
-video/x-matroska=org.kde.haruna.desktop;
-video/mp4=org.kde.haruna.desktop;
-
-[Default Applications]
-inode/directory=thunar.desktop

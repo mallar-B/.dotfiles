@@ -1,42 +1,15 @@
-# Most minimal [ags](https://aylur.github.io/ags-docs/) setup for pc (Hyprland)
-## Dependencies
-  - hypridle
-  - hyprlock
-  - bluez (optional)
-  - networkmanager
+# Dotfiles
 
-## Installation (run the install.sh for automated install)
-  - follow the instructions [here](https://aylur.github.io/ags-docs/config/installation/)
+## AGS Config
 
-  - `git clone https://github.com/mallar-B/ags_personal.git`
+The AGS (Aylur's GTK Shell) configuration has been moved to the [`agsv1`](https://github.com/mallar-B/.dotfiles/tree/agsv1) branch to keep things organized.
 
-  - `cp ./ags_personal/. ~/.config/ags`
+## Theme Management with GNU Stow
 
-*NOTE: To get the blur effects add the configuration of `variable.conf` and `rules.conf` from `./ags_personal/hypr/hyprland` to your `~/.config/hypr/hyprland.conf`*
+This repository is now being restructured to be **Stow-compatible** for managing different themes and configurations easily.
 
-## App Launcher
-  To use the applauncher you have to bind it to you hyprland config. e.g.-
-  > `bind = ALT, SPACE, exec, ags -t applauncher`
+To stow your configuration into the home directory:
 
-  *I could not figure out the right syntax to put the keybind in ags config. If you can help, let me know.*
+```bash
+stow . -t ~
 
-## TODOs
-
-  - [x] power menu
-    - [x] enhancements 
-  - [x] applauncher
-    - [X] enhancements   
-  - [X] quick tools
-    - [X] idle inhibitor
-    - [X] wallpaper change
-    - [x] resource usage
-    - [x] dnd
-    - [x] calendar 
-  - [ ] notification center
-  - [X] notification bug fix
-  - [X] volume indicator
-
-## Screenshots
-
-![screenshot 1](https://github.com/mallar-B/ags_personal/blob/main/.Screenshots/2024-04-25-151357_hyprshot.png)
-![screenshot 2](https://github.com/mallar-B/ags_personal/blob/main/.Screenshots/powermenu.png/2024-05-26-141938_hyprshot.png)
