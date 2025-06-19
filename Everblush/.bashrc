@@ -27,3 +27,7 @@ yay() {
 source /usr/share/nvm/init-nvm.sh
 export GTK_THEME=Everblush
 export PATH="$HOME/.cargo/bin:$PATH"
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export JAVA_HOME=$HOME/Android/Custom_JDKs/ms-17.0.15/
