@@ -1,0 +1,147 @@
+:vars {
+    --background: #141b1e;
+    --foreground: #dadada;
+    --color0: #141b1e;   /* Background */
+    --color1: #e57474;   /* Red */
+    --color2: #8ccf7e;   /* Green */
+    --color3: #e5c76b;   /* Yellow */
+    --color4: #67b0e8;   /* Blue */
+    --color5: #c47fd5;   /* Magenta */
+    --color6: #6cbfbf;   /* Cyan */
+    --color7: #dadada;   /* Foreground */
+    --color8: #3c474a;   /* Bright Black */
+    --color9: #ef7e7e;   /* Bright Red */
+    --color10: #9aff87;  /* Bright Green */
+    --color11: #f4d67a;  /* Bright Yellow */
+    --color12: #76c2f8;  /* Bright Blue */
+    --color13: #ce89df;  /* Bright Magenta */
+    --color14: #7ddcdc;  /* Bright Cyan */
+    --color15: #ffffff;  /* Bright White */
+    --window-bg: alpha(var(--background), 0.1);
+    --module-bg: alpha(var(--foreground), 0.1);
+    --module-bg-hard: alpha(var(--foreground), 0.5);
+    --border-color: var(--color6);      /* Cyan as border */
+    --ws-active: var(--color4);         /* Blue */
+    --ws-inactive: var(--color8);       /* Dim color */
+    --ws-empty: var(--color3);          /* Yellow */
+    --ws-urgent: var(--color1);          /* Red */
+}
+@define workspace-transition padding 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* @define fontsize-transition font-size 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
+
+*{
+	background-color:transparent;
+}
+
+#bar{
+	margin-right: 10px;
+        margin-left: 10px;
+        margin-top: 5px;
+        border-radius: 10px;
+	padding: 0px 10px 0px 0px;
+        background-color: var(--window-bg);
+        color:var(--foreground);
+        font-size: 16px;
+	font-family: FiraCodeNerdFont;
+	border: 2px solid var(--border-color);
+}
+.urgent{
+    color:var(--ws-urgent);
+    border-color: var(--ws-urgent);
+}
+
+.bar-circular-progress-bar{
+    background-color: transparent;
+    color: var(--module-bg);
+}
+
+.bar-process-icon{
+    margin: 0px 5px 0px 0px;
+    font-size: 18;
+}
+
+#workspaces-container{
+    background-color:var(--module-bg);
+    border-radius:10px;
+    padding: 2px;
+    transition: apply(workspace-transition);
+}
+#workspaces-container > button{
+    margin-right: 5px ;
+    margin-left: 5px ;
+    font-family: Victor Mono Thin;
+    font-style: italic;
+}
+#workspaces-container .active{
+    font-family: Victor Mono;
+    font-weight:bold;
+    color: var(--color10);
+    padding-left: 25px;
+    padding-right: 25px;
+    background-color:var(--module-bg);
+    border-radius:10px;
+    transition: apply(workspace-transition);
+    margin-top:1px;
+    margin-bottom:1px;
+}
+
+#app-title{
+    font-size: 14px;
+    font-family: FiraCode Nerd Font Light;
+    margin-left: 10px;
+    font-style: italic;
+}
+
+#bar-volume{
+    margin-right: 10px;
+    margin-left: 10px;
+    border-radius: 10px;
+}
+#bar-volume-progress-bar{
+    border: 3px solid var(--color11);
+}
+
+#bar-system-info-container{
+    margin-right: 5px;
+}
+#bar-cpu-progress-bar-container{
+    margin: 0px 5px 0px 5px;
+}
+#bar-mem-progress-bar-container{
+    margin: 0px 5px 0px 5px;
+}
+#cpu-icon{
+    color:var(--color4);
+}
+#cpu-progress-bar{
+    border: 3px solid var(--color4);;
+}
+#mem-icon{
+    color:var(--color2);
+}
+#mem-progress-bar{
+    border: 3px solid var(--color2);
+}
+
+#systray-container{
+    background-color:var(--module-bg);
+    border-radius:10px;
+    padding: 2px;
+    margin-right: 7px;
+}
+#systray-container > button:hover{
+    border-radius:5px;
+    background-color: var(--module-bg);
+    margin-top:1px;
+    margin-bottom:1px;
+}
+
+#power-button{
+    font-size: 18px;
+    color:var(--ws-urgent);
+    background-color:var(--module-bg);
+    margin-right: 2px;
+    padding-right: 15px;
+    padding-left: 15px;
+    border-radius: 10px;
+}
