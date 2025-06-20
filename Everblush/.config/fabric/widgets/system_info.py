@@ -34,6 +34,9 @@ class CpuWidget(Box):
         self.children = [self.cpu_progress_bar]
 
     def update_cpu_progress_bar(self, value, *_):
+        # Handle error before initializing
+        if not hasattr(self, "cpu_progress_bar"):
+            return
         # After splitting structure of lines will be [cpu n: a%, cpu n-1: b%,..., cpu 0: c%,'']
         lines = value.split(";")
         total_percentage_value = lines[-2].strip().split(" ")[1].rstrip("%")
@@ -45,7 +48,6 @@ class CpuWidget(Box):
             tooltip_text += (
                 f"<span bgcolor='#141b1e' fgcolor='#dadada'><big>{line}</big></span>"
             )
-        print(tooltip_text)
         # Set tooltip of the box
         self.set_tooltip_markup(tooltip_text)
 

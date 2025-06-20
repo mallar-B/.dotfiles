@@ -30,14 +30,13 @@ class StatusBar(Window):
         super().__init__(
             layer="top", anchor="left top right", exclusivity="auto", **kwargs
         )
-        self.date_time = DateTime(name="huha", id="huha")
-        self.timeWidget = CenterBox(
+        self.BarWidget = CenterBox(
             name="bar",
             start_children=[Workspaces(), AppTitle()],
             center_children=[Date()],
             end_children=[SystemInfo(), BarVolume(), SysTray(), PowerButton()],
         )
-        self.children = self.timeWidget
+        self.children = self.BarWidget
 
 
 if __name__ == "__main__":
