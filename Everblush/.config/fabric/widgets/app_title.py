@@ -7,7 +7,8 @@ class AppTitle(ActiveWindow):
         super().__init__(
             name="app-title",
             formatter=FormattedString(
-                "{'' if not win_title else truncate(win_title, 42)}", truncate=truncate
+                "{'' if not win_title or win_title == 'unknown' else truncate(win_title, 42)}",
+                truncate=truncate
             ),
             **kwargs
         )
