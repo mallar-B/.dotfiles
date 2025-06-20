@@ -6,7 +6,7 @@ from fabric.widgets.box import Box
 from fabric.widgets.overlay import Overlay
 from fabric.widgets.label import Label
 from fabric.widgets.image import Image
-from fabric.utils import exec_shell_command_async
+from fabric.utils import exec_shell_command_async, idle_add
 from utils import add_cursor_hover
 
 
@@ -78,7 +78,7 @@ class BarVolume(Box):
                 self.audio.speaker.volume += 8
             case 1:
                 self.audio.speaker.volume -= 8
-        self.get_icon()
+        idle_add(lambda *_: self.get_icon())
         return
 
     def on_speaker_changed(self, *_):
@@ -88,7 +88,7 @@ class BarVolume(Box):
         self.audio.speaker.bind(
             "volume", "value", self.progress_bar, lambda _, v: v / 100
         )
-        self.get_icon()
+        idle_add(lambda *_: self.get_icon())
         return
 
     def get_icon(self, *_):
