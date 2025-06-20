@@ -36,17 +36,12 @@ class AppTitle(ActiveWindow):
         windowId = json.loads(activeWindowStr).get("address").lstrip("0x")
         if fullScreenValue != 0:
             self.curr_full_screens.add(windowId)
-            print("current ids are", self.curr_full_screens)
             self.check_full_screen()
             return
         self.curr_full_screens.remove(windowId)
         self.check_full_screen()
-        print("current ids are", self.curr_full_screens)
 
     def unset_full_screen(self, _, event):
-        print("called by event")
-        print(type(self.curr_full_screens))
-        print("removing", event.data)
         self.curr_full_screens.remove(str(event.data[0]))
         self.check_full_screen()
 
