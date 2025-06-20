@@ -91,6 +91,14 @@
     margin-left: 10px;
     font-style: italic;
 }
+#app-title-fullscreen{
+    font-size: 16px;
+    font-family: FiraCode Nerd Font;
+    margin-left: 10px;
+    /* font-style:bold; */
+    background-color: alpha(var(--color10),0.5);
+    border-radius: 5px;
+}
 
 #bar-volume{
     margin-right: 10px;
