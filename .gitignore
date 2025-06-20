@@ -2,3 +2,4 @@
 .config/hypr/hyprlock/curr_wall.png
 *.out
 .config/hypr/hyprlock/curr_wall.png}
+*venv
