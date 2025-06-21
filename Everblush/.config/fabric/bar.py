@@ -2,7 +2,6 @@
 from fabric import Application
 from fabric.utils import get_relative_path
 from fabric.widgets.button import Button
-from fabric.widgets.datetime import DateTime
 from fabric.widgets.centerbox import CenterBox
 from fabric.system_tray.widgets import SystemTray
 from fabric.widgets.wayland import WaylandWindow as Window

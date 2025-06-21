@@ -1,3 +1,4 @@
+from typing import Container
 from fabric import Application
 from fabric.widgets.box import Box
 from fabric.widgets.label import Label
@@ -20,14 +21,14 @@ class AppLauncher(Window):
         )
         self.add_keybinding("Escape", lambda *_: self.close_window())
         self.add_keybinding(
-            "Return", lambda *_: (self.app_list[0].launch(), self.application.quit())
+            "Return", lambda *_: (self.app_list[0].launch(), self.application.quit()) # launch first result
         )
 
         # all_apps is a list of DesktopApp()
         self.all_apps = get_desktop_applications()
         # Container for app buttons
         self.current_app_list = Box(
-            style="min-height: 300px; min-width: 600px; padding: 10px",
+            # style="min-height: 300px; min-width: 600px; padding: 10px",
             h_expand=True,
             orientation="vertical",
         )
@@ -35,6 +36,7 @@ class AppLauncher(Window):
         self.scrollable = ScrolledWindow(
             name="scrollable",
             style="min-height: 300px; min-width: 600px; padding: 10px",
+            h_scrollbar_policy="never",
             child=self.current_app_list,
         )
         # Search bar

@@ -1,6 +1,7 @@
 #/bin/bash
 
 source ~/.config/fabric/venv/bin/activate
+export GTK_THEME=Everblush
 
 pid=$(ps aux | grep '[a]pplauncher.py$' | awk '{print $2}')
 c=""
