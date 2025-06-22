@@ -56,5 +56,5 @@ for cpu in "${!curr_total[@]}"; do
         usage=$(( (100 * (total_diff - idle_diff)) / total_diff ))
     fi
 
-    echo "$cpu: $usage%;"
+    printf "%s: %s%%;" "$cpu" "$usage"
 done

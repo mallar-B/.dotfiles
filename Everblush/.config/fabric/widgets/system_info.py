@@ -10,11 +10,12 @@ class CpuWidget(Box):
     def __init__(self, **kwargs):
         super().__init__(name="bar-cpu-progress-bar-container", **kwargs)
 
+        # cpu_bash_command = "bash -c '$HOME/.local/bin/cpu_usage.sh'"
         cpu_bash_command = "bash -c '$HOME/.local/bin/cpu_usage.sh'"
 
         self.cpu_usage = Fabricator(
             interval=3500,
-            poll_from=lambda f: exec_shell_command(cpu_bash_command),
+            poll_from=cpu_bash_command,
             on_changed=lambda f, value: self.update_cpu_progress_bar(value.strip()),
         )
 
@@ -34,10 +35,10 @@ class CpuWidget(Box):
         self.children = [self.cpu_progress_bar]
 
     def update_cpu_progress_bar(self, value, *_):
-        # Handle error before initializing
+        # # Handle error before initializing
         if not hasattr(self, "cpu_progress_bar"):
             return
-        # After splitting structure of lines will be [cpu n: a%, cpu n-1: b%,..., cpu 0: c%,'']
+        # # After splitting structure of lines will be [cpu n: a%, cpu n-1: b%,..., cpu 0: c%,'']
         lines = value.split(";")
         total_percentage_value = lines[-2].strip().split(" ")[1].rstrip("%")
         self.cpu_progress_bar.value = float(total_percentage_value)
@@ -46,9 +47,9 @@ class CpuWidget(Box):
         for line in lines[:-1]:
             line = line.strip(" ")
             tooltip_text += (
-                f"<span bgcolor='#141b1e' fgcolor='#dadada'><big>{line}</big></span>"
+                f"<span bgcolor='#141b1e' fgcolor='#dadada'><big>{line}\n</big></span>"
             )
-        # Set tooltip of the box
+        # # Set tooltip of the box
         self.set_tooltip_markup(tooltip_text)
 
 
