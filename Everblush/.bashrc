@@ -24,6 +24,25 @@ yay() {
     command yay "$@"
   fi
 }
+
+# Quality of life Alises
+alias cp='cp -i'
+alias cpr='cp -ir'
+alias mv='mv -i'
+alias rm='trash -v'
+alias mkdir='mkdir -p'
+alias less='less -R'
+alias cls='clear'
+alias yayf="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
+
+# Change directory aliases
+alias home='cd ~'
+alias cd..='cd ..'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
 source /usr/share/nvm/init-nvm.sh
 export GTK_THEME=Everblush
 export PATH="$HOME/.cargo/bin:$PATH"

@@ -59,15 +59,36 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
-# Aliases
+# List Aliases
 alias ls='ls -CF --color'
+alias la='ls -Ah'
+alias ll='ls -Al';
+alias lx='ls -lXBh' # sort by extension
+alias lr='ls -lRh' # recursive ls
+alias lf="ls -l | egrep -v '^d'" # files only
+alias ldir="ls -l | egrep '^d'" # directories only
+
+# Quality of life Alises
 alias poweroff='systemctl poweroff'
 alias reboot='systemctl reboot'
-# alias suspend='i3lock && systemctl suspend'
-# alias i3lock=~/.local/bin/i3_lock.sh
-alias ll='ls -l';
-alias cp='cp -r';
 alias cd='z';
+alias cp='cp -i'
+alias cpr='cp -ir'
+alias mv='mv -i'
+alias rm='trash -v'
+alias mkdir='mkdir -p'
+alias less='less -R'
+alias cls='clear'
+alias yayf="yay -Slq | fzf --multi --preview 'yay -Sii {1}' --preview-window=down:75% | xargs -ro yay -S"
+
+# Change directory aliases
+alias home='cd ~'
+alias cd..='cd ..'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+
 
 yay() {
   if [[ "$1" == "-S" && -n "$2" ]]; then
