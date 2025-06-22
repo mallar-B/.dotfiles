@@ -3,3 +3,4 @@
 *.out
 .config/hypr/hyprlock/curr_wall.png}
 *venv
+*__pycache__
