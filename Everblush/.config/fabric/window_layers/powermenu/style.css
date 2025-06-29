@@ -1,0 +1,50 @@
+:vars {
+    --background: #141b1e;
+    --foreground: #dadada;
+    --color0: #141b1e;   /* Background */
+    --color1: #e57474;   /* Red */
+    --color2: #8ccf7e;   /* Green */
+    --color3: #e5c76b;   /* Yellow */
+    --color4: #67b0e8;   /* Blue */
+    --color5: #c47fd5;   /* Magenta */
+    --color6: #6cbfbf;   /* Cyan */
+    --color7: #dadada;   /* Foreground */
+    --color8: #3c474a;   /* Bright Black */
+    --color9: #ef7e7e;   /* Bright Red */
+    --color10: #9aff87;  /* Bright Green */
+    --color11: #f4d67a;  /* Bright Yellow */
+    --color12: #76c2f8;  /* Bright Blue */
+    --color13: #ce89df;  /* Bright Magenta */
+    --color14: #7ddcdc;  /* Bright Cyan */
+    --color15: #ffffff;  /* Bright White */
+    --window-bg: alpha(var(--background), 0.1);
+    --module-bg: alpha(var(--foreground), 0.1);
+    --module-bg-hard: alpha(var(--foreground), 0.5);
+    --border-color: var(--color14);      /* Cyan as border */
+    --ws-active: var(--color4);         /* Blue */
+    --ws-inactive: var(--color8);       /* Dim color */
+    --ws-empty: var(--color3);          /* Yellow */
+    --ws-urgent: var(--color1);          /* Red */
+}
+#powermenu-container{
+	min-width: 150px;
+	/* min-height: 400px; */
+	background-color: var(--window-bg);
+	margin:10px;
+	border-radius:10px;
+	border: 3px solid var(--border-color)
+}
+
+#powermenu-buttons{
+	padding:10px;
+	min-height:90px;
+	border-radius:10px;
+	background-color: var(--window-bg);
+}
+#powermenu-buttons:hover{
+	background-color: var(--module-bg);
+}
+#powermenu-icons{
+	border-radius:10px
+}
+                /* style="background-color:blue;", */

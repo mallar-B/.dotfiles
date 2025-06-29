@@ -1,6 +1,7 @@
 # import fabric
 from fabric import Application
 from fabric.utils import get_relative_path
+from fabric.widgets.box import Box
 from fabric.widgets.button import Button
 from fabric.widgets.centerbox import CenterBox
 from fabric.system_tray.widgets import SystemTray
@@ -10,6 +11,7 @@ from widgets.date import Date
 from widgets.app_title import AppTitle
 from widgets.bar_volume import BarVolume
 from widgets.system_info import SystemInfo
+from window_layers.powermenu.powermenu import PowerMenu
 
 
 def SysTray():
@@ -19,8 +21,24 @@ def SysTray():
 
 
 def PowerButton():
-    button = Button(name="power-button", label="", on_clicked=lambda *_: print("huha"))
+    powermenu = PowerMenu()
+    button = Button(
+        name="power-button",
+        label="",
+        on_clicked=lambda *_: powermenu.toggle_powermenu(),
+    )
+    # button1 = Button(
+    #     name="power-button", label="w", on_clicked=lambda *_: powermenu.toggle_window()
+    # )
+    # button2 = Button(
+    #     name="power-button",
+    #     label="r",
+    #     on_clicked=lambda *_: powermenu.toggle_revealer(),
+    # )
 
+    # button = Box(children=[button1, button2])
+    # powermenu.set_visible(True)
+    # powermenu.set_visible(False)
     return button
 
 
