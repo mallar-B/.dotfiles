@@ -37,14 +37,35 @@ class PowerMenu(Window):
                 border: 3px solid var(--border-color)
             """,
             children=[
-                self.get_button("xfce-system-lock-symbolic", "bash -c 'hyprlock'"),
-                self.get_button("system-log-out-symbolic", "bash -c 'pkill -u $USER'"),
                 self.get_button(
-                    "system-shutdown-symbolic", "bash -c 'systemctl poweroff'"
+                    "system-shutdown-symbolic",
+                    "bash -c 'systemctl poweroff'",
+                    color="var(--color1)",
+                    color_hovered="var(--color9)",
                 ),
-                self.get_button("system-reboot-symbolic", "bash -c 'systemctl reboot'"),
                 self.get_button(
-                    "system-suspend-symbolic", "bash -c 'systemctl suspend'"
+                    "system-suspend-symbolic",
+                    "bash -c 'systemctl suspend'",
+                    color="var(--color5)",
+                    color_hovered="var(--color13)",
+                ),
+                self.get_button(
+                    "system-reboot-symbolic",
+                    "bash -c 'systemctl reboot'",
+                    color="var(--color2)",
+                    color_hovered="var(--color10)",
+                ),
+                self.get_button(
+                    "xfce-system-lock-symbolic",
+                    "bash -c 'hyprlock'",
+                    color="var(--color3)",
+                    color_hovered="var(--color11)",
+                ),
+                self.get_button(
+                    "system-log-out-symbolic",
+                    "bash -c 'pkill -u $USER'",
+                    color="var(--color4)",
+                    color_hovered="var(--color12)",
                 ),
             ],
             orientation="vertical",
@@ -64,6 +85,7 @@ class PowerMenu(Window):
                 children=self.revealer,
             )
         )
+        add_cursor_hover(self)
         self.is_powermenu_visible = False
 
     def toggle_powermenu(self, *_):
@@ -77,24 +99,44 @@ class PowerMenu(Window):
             self.revealer.set_reveal_child(False)
             GLib.timeout_add(450, lambda: self.hide())
 
-    def get_button(self, name, cmd, *_):
-        button = Button(
-            style="""
-                padding:10px;
-                min-height:90px;
-                border-radius:10px;
-                background-color: var(--window-bg);
-            """,
-            style_classes="huha",
-            child=Image(
-                name="powermenu-icons",
-                icon_name=str(name),
-                icon_size=64,
-            ),
-            on_clicked=lambda *_: exec_shell_command(cmd),
-            hovered=lambda *_: print("huha"),
+    def get_button(self, name, cmd, color="white", color_hovered="white", *_):
+        default_style = f"""
+            padding: 10px;
+            min-height: 90px;
+            border-radius: 10px;
+            color:{color};
+            background-color: var(--window-bg);
+            transition: all 0.2s ease-in-out;
+            """
+        hovered_style = f"""
+            padding: 10px;
+            min-height: 90px;
+            border-radius: 10px;
+            color:{color_hovered};
+            background-color: var(--module-bg);
+            transition: all 0.2s ease-in-out;
+            """
+        icon = Image(
+            name="powermenu-icons",
+            icon_name=str(name),
+            icon_size=64,
         )
-        add_cursor_hover(button, "pointer")
+
+        button = Button(
+            style=default_style,
+            style_classes="huha",
+            child=icon,
+            on_clicked=lambda *_: exec_shell_command(cmd),
+        )
+        add_cursor_hover(button)
+        button.connect(
+            "enter-notify-event",
+            lambda w, e: w.set_style(hovered_style),
+        )
+        button.connect(
+            "leave-notify-event",
+            lambda w, e: w.set_style(default_style),
+        )
         return button
 
 

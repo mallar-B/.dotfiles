@@ -47,4 +47,8 @@
 #powermenu-icons{
 	border-radius:10px
 }
+
+.huha:hover{
+	background-color: red;
+}
                 /* style="background-color:blue;", */
