@@ -1,0 +1,65 @@
+:vars {
+    --background: #141b1e;
+    --foreground: #dadada;
+    --color0: #141b1e;   /* Background */
+    --color1: #e57474;   /* Red */
+    --color2: #8ccf7e;   /* Green */
+    --color3: #e5c76b;   /* Yellow */
+    --color4: #67b0e8;   /* Blue */
+    --color5: #c47fd5;   /* Magenta */
+    --color6: #6cbfbf;   /* Cyan */
+    --color7: #dadada;   /* Foreground */
+    --color8: #3c474a;   /* Bright Black */
+    --color9: #ef7e7e;   /* Bright Red */
+    --color10: #9aff87;  /* Bright Green */
+    --color11: #f4d67a;  /* Bright Yellow */
+    --color12: #76c2f8;  /* Bright Blue */
+    --color13: #ce89df;  /* Bright Magenta */
+    --color14: #7ddcdc;  /* Bright Cyan */
+    --color15: #ffffff;  /* Bright White */
+    --window-bg: alpha(var(--background), 0.5);
+    --module-bg: alpha(var(--foreground), 0.1);
+    --module-bg-hard: alpha(var(--foreground), 0.5);
+    --border-color: var(--color14);      /* Cyan as border */
+    --ws-active: var(--color4);         /* Blue */
+    --ws-inactive: var(--color8);       /* Dim color */
+    --ws-empty: var(--color3);          /* Yellow */
+    --ws-urgent: var(--color1);          /* Red */
+}
+
+*{
+	background-color:transparent;
+}
+
+#applauncher-container{
+	background-color: var(--window-bg);
+	border: 2px solid var(--border-color);
+	border-radius: 10px;
+}
+
+#applauncher-search{
+	margin: 10px;
+	border-radius: 5px;
+	border: 1px dotted var(--border-color);
+}
+
+#applauncher-search:focus{
+	border: 1px solid var(--border-color);
+}
+
+#applauncher-scrollable{
+	margin: 10px;
+	border-top: 2px solid var(--module-bg);
+}
+
+#applauncher-app-button{
+	padding: 0px 2px;
+	border-bottom: 1px solid var(--module-bg);
+}
+
+#applauncher-app-lebel{
+	padding-left: 10px;
+	font-family: Firacode Nerd Font Mono;
+	font-weight: 600;
+	font-size: 15;
+}

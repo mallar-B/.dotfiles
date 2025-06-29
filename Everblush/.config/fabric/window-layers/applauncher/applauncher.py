@@ -13,6 +13,8 @@ from fabric.utils import get_desktop_applications, get_relative_path
 class AppLauncher(Window):
     def __init__(self, **kwargs):
         super().__init__(
+            name="applauncher-window",
+            title="applauncher",
             layer="top",
             anchor="center",
             exclusivity="auto",
@@ -40,14 +42,14 @@ class AppLauncher(Window):
         self.scrollable = ScrolledWindow(
             name="applauncher-scrollable",
             style_classes="srrollable",
-            style="min-height: 300px; min-width: 600px; padding: 10px",
+            style="min-height: 300px; min-width: 600px;",
             h_scrollbar_policy="never",
             child=self.current_app_list,
         )
         # Search bar
         self.search_box = Entry(
             name="applauncher-search",
-            placeholder="Search Desktop Apps...",
+            placeholder="  Search Desktop Apps...",
             notify_text=lambda entry, *_: self.get_app_list(entry.get_text()),
         )
         # Main container
@@ -82,19 +84,18 @@ class AppLauncher(Window):
         return Button(
             child=Box(
                 name="applauncher-app-button",
-                style="background-color:red",
                 orientation="horizontal",
-                spacing=12,
+                # spacing=12,
                 children=[
                     Image(pixbuf=app.get_icon_pixbuf(), h_align="start", size=32),
                     Label(
+                        name="applauncher-app-lebel",
                         label=app.display_name or "Unknown App",
                         v_align="center",
                         h_align="center",
                     ),
                 ],
             ),
-            tooltip_text=app.description,
             on_clicked=lambda *_: (app.launch(), self.application.quit()),
         )
 
