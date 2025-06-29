@@ -153,3 +153,10 @@
     padding-left: 15px;
     border-radius: 10px;
 }
+
+#applauncher-container{
+    background-color: red;
+}
+#applauncher-app-button{
+    background-color: red;
+}
