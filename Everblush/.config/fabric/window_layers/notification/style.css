@@ -32,7 +32,6 @@
     color: var(--foreground);
     font-family: "Jost*", "Cantarell", "Helvetica", "Arial", sans-serif;
 }
-
 #notification {
     padding: 10px;
     border: solid 2px var(--border-color);

@@ -19,6 +19,8 @@ NOTIFICATION_TIMEOUT = 10 * 1000  # 10 seconds
 
 class NotificationWidget(Box):
     def __init__(self, notification: Notification, **kwargs):
+        self._notification = notification
+
         super().__init__(
             size=(NOTIFICATION_WIDTH, -1),
             name="notification",
@@ -27,7 +29,15 @@ class NotificationWidget(Box):
             **kwargs,
         )
 
-        self._notification = notification
+        if self._notification.urgency == 2:
+            self.set_style(
+                """
+                padding: 10px;
+                border: solid 2px var(--ws-urgent);
+                border-radius: 10px;
+                background-color: var(--window-bg);
+                """
+            )
 
         body_container = Box(spacing=4, orientation="h")
 
