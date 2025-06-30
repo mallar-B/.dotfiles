@@ -43,7 +43,7 @@ final_space = true
   ]
 
   # Comprehensive template with clear distinction between unstaged and staged files
-  template = """ {{ .HEAD }}{{ if .Working.Untracked }} ?{{ .Working.Untracked }}{{ end }}{{ if .Staging.Added }} +{{ .Staging.Added }}{{ end }}{{ if .Working.Modified }} *{{ .Working.Modified }}{{ end }}{{ if .Staging.Modified }} ~{{ .Staging.Modified }}{{ end }}{{ if gt .Behind 0 }}⇣{{ end }}{{ if gt .Ahead 0 }}⇡{{ end }}"""
+  template = """ {{ .HEAD }}{{ if .Working.Untracked }} ?{{ .Working.Untracked }}{{ end }}{{ if .Staging.Added }} +{{ .Staging.Added }}{{ end }}{{ if .Working.Modified }} *{{ .Working.Modified }}{{ end }}{{ if .Staging.Modified }} ~{{ .Staging.Modified }}{{ end }}{{ if gt .Behind 0 }} ⇣{{ end }}{{ if gt .Ahead 0 }} ⇡{{ end }}"""
 
   [blocks.segments.properties]
   fetch_status = true

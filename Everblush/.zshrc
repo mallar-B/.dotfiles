@@ -88,12 +88,12 @@ yay() {
   if [[ "$1" == "-S" && -n "$2" ]]; then
     command yay "$@"
     for pkg in "${@:2}"; do
-      grep -qxF "$pkg" ~/pkg.txt || echo "$pkg" >>~/pkg.txt
+      grep -qxF "$pkg" ~/.config/pkg.txt || echo "$pkg" >>~/.config/pkg.txt
     done
   elif [[ "$1" =~ ^-R(ns)?$ && -n "$2" ]]; then
     command yay "$@"
     for pkg in "${@:2}"; do
-      sed -i "s/^$pkgs$/#$pkg/" ~/pkg.txt
+      sed -i "s/^$pkgs$/#$pkg/" ~/.config/pkg.txt
     done
   else
     command yay "$@"
