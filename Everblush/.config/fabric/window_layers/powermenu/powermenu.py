@@ -1,12 +1,9 @@
-from time import sleep
 from fabric import Application
 from fabric.utils import (
     GLib,
     exec_shell_command,
     get_relative_path,
     idle_add,
-    invoke_repeater,
-    time,
 )
 from fabric.widgets.box import Box
 from fabric.widgets.button import Button
@@ -97,7 +94,7 @@ class PowerMenu(Window):
             idle_add(lambda: self.revealer.set_reveal_child(True))
         else:
             self.revealer.set_reveal_child(False)
-            GLib.timeout_add(450, lambda: self.hide())
+            GLib.timeout_add(410, lambda: self.hide())
 
     def get_button(self, name, cmd, color="white", color_hovered="white", *_):
         default_style = f"""
@@ -124,18 +121,17 @@ class PowerMenu(Window):
 
         button = Button(
             style=default_style,
-            style_classes="huha",
             child=icon,
             on_clicked=lambda *_: exec_shell_command(cmd),
         )
         add_cursor_hover(button)
         button.connect(
             "enter-notify-event",
-            lambda w, e: w.set_style(hovered_style),
+            lambda w, *_: w.set_style(hovered_style),
         )
         button.connect(
             "leave-notify-event",
-            lambda w, e: w.set_style(default_style),
+            lambda w, *_: w.set_style(default_style),
         )
         return button
 
