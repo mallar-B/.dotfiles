@@ -10,6 +10,7 @@ from fabric.notifications import Notifications, Notification
 from fabric.utils import invoke_repeater, get_relative_path
 
 from gi.repository import GdkPixbuf
+from lxml import html
 
 
 NOTIFICATION_WIDTH = 360
@@ -39,8 +40,24 @@ class NotificationWidget(Box):
                 """
             )
 
+        # Build the notification content
+        self._build_notification_content()
+
+    def strip_html(self, text):
+        if not text:
+            return ""
+
+        try:
+            tree = html.fromstring(text)
+            return tree.text_content().strip()
+        except Exception as e:
+            print(f"[strip_html error] {e} on input: {text!r}")
+            return text
+
+    def _build_notification_content(self):
         body_container = Box(spacing=4, orientation="h")
 
+        # Add image if available
         if image_pixbuf := self._notification.image_pixbuf:
             body_container.add(
                 Image(
@@ -52,17 +69,19 @@ class NotificationWidget(Box):
                 )
             )
 
+        # Add text content
         body_container.add(
             Box(
                 spacing=4,
                 orientation="v",
                 children=[
-                    # a box for holding both the "summary" label and the "close" button
+                    # Header box with summary and close button
                     Box(
                         orientation="h",
                         children=[
                             Label(
-                                label=self._notification.summary,
+                                label=self.strip_html(self._notification.summary)
+                                or "(no summary)",
                                 ellipsization="middle",
                             )
                             .build()
@@ -71,9 +90,7 @@ class NotificationWidget(Box):
                         ],
                         h_expand=True,
                         v_expand=True,
-                    )
-                    # add the "close" button
-                    .build(
+                    ).build(
                         lambda box, _: box.pack_end(
                             Button(
                                 name="close-button",
@@ -90,8 +107,9 @@ class NotificationWidget(Box):
                             0,
                         )
                     ),
+                    # Body text
                     Label(
-                        label=self._notification.body,
+                        label=self.strip_html(self._notification.body) or "",
                         line_wrap="word-char",
                         v_align="start",
                         h_align="start",
@@ -107,6 +125,7 @@ class NotificationWidget(Box):
 
         self.add(body_container)
 
+        # Add action buttons if available
         if actions := self._notification.actions:
             self.add(
                 Box(
@@ -125,16 +144,20 @@ class NotificationWidget(Box):
                 )
             )
 
-        # destroy this widget once the notification is closed
+        # Set up notification lifecycle
+        self._setup_notification_lifecycle()
+
+    def _setup_notification_lifecycle(self):
+        # Destroy this widget once the notification is closed
         self._notification.connect(
             "closed",
             lambda *_: (
-                parent.remove(self) if (parent := self.get_parent()) else None,  # type: ignore
+                parent.remove(self) if (parent := self.get_parent()) else None,
                 self.destroy(),
             ),
         )
 
-        # automatically close the notification after the timeout period
+        # Automatically close the notification after the timeout period
         invoke_repeater(
             NOTIFICATION_TIMEOUT,
             lambda: self._notification.close("expired"),
@@ -147,7 +170,6 @@ if __name__ == "__main__":
         "notifications",
         WaylandWindow(
             title="notification",
-            # margin="8px 8px 8px 8px",
             anchor="top right",
             style="background-color:transparent",
             child=Box(

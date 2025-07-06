@@ -80,7 +80,7 @@ final_space = true
 
     ]
     # template = '{{ if eq .Shell "zsh"}} {{else}}{{.Shell}} {{end}}'
-    template ='{{ if .Env.VIRTUAL_ENV }}{{ .Env.VIRTUAL_ENV | base }}❯{{else}}❯{{ end }}'
+    template ='{{ if .Env.VIRTUAL_ENV }}<magenta>{{ .Env.VIRTUAL_ENV | base }}</> ❯{{else}}❯{{ end }}'
 
 [transient_prompt]
   background = 'transparent'

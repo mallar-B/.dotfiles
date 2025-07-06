@@ -90,3 +90,4 @@ cmatrix
 oh-my-posh-bin
 tmux
 hello
+jdk21-openjdk
