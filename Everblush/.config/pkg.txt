@@ -89,5 +89,13 @@ localsend-bin
 cmatrix
 oh-my-posh-bin
 tmux
-hello
 jdk21-openjdk
+cronie
+vi
+quickshell
+zip
+wine
+winetricks
+wine-mono
+wine-gecko
+xwaylandvideobridge
