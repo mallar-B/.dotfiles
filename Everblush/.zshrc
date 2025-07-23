@@ -69,7 +69,10 @@ alias cd='z';
 alias cp='cp -i'
 alias cpr='cp -ir'
 alias mv='mv -i'
-alias rm='trash -v'
+# alias rm='trash -v'
+rm () {
+  command trash -v "$@" ## autocomplete support
+}
 alias mkdir='mkdir -p'
 alias less='less -R'
 alias cls='clear'
@@ -82,7 +85,6 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
-
 
 yay() {
   if [[ "$1" == "-S" && -n "$2" ]]; then
@@ -99,7 +101,6 @@ yay() {
     command yay "$@"
   fi
 }
-
 
 # Shell integrations
 ## fzf
