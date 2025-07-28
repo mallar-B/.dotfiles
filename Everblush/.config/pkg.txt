@@ -99,3 +99,5 @@ winetricks
 wine-mono
 wine-gecko
 xwaylandvideobridge
+unrar
+flatpak
