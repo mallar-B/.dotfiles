@@ -60,6 +60,9 @@ alias ll='ls -Al';
 alias lx='ls -lXBh' # sort by extension
 alias lr='ls -lRh' # recursive ls
 alias lf="ls -l | egrep -v '^d'" # files only
+alias lz="ls -lSh"
+alias lt="ls -t"
+alias llt="ls -lt"
 alias ldir="ls -l | egrep '^d'" # directories only
 
 # Quality of life Alises
