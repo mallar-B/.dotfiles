@@ -101,3 +101,17 @@ wine-gecko
 xwaylandvideobridge
 unrar
 flatpak
+cloudflared-bin
+dotool
+postman
+breakpad
+--rebuild
+--noconfirm
+google-breakpad
+--rebuild
+--noconfirm
+matugen-bin
+ttf-material-symbols-variable-git
+inter-font
+ttf-fira-code
+fontforge

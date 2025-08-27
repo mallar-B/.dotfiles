@@ -128,3 +128,4 @@ export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export JAVA_HOME=$HOME/Android/Custom_JDKs/ms-17.0.15/
+export QML2_IMPORT_PATH="/usr/lib/qt6/qml/"
