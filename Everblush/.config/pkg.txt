@@ -115,3 +115,4 @@ ttf-material-symbols-variable-git
 inter-font
 ttf-fira-code
 fontforge
+cloudflare-warp-bin
