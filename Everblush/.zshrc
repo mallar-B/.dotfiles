@@ -39,6 +39,7 @@ eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/config.toml)"
 bindkey -v
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
+bindkey '^y' autosuggest-accept
 
 # History
 HISTSIZE=4000

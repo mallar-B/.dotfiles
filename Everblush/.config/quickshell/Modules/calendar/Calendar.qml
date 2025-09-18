@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 
 PanelWindow {
+    id: calendar
     implicitHeight: 400
     implicitWidth: 300
     color: "#181818"
