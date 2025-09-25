@@ -2,125 +2,168 @@ import Quickshell
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+import qs.Common
 
 PanelWindow {
-    id: calendar
-    implicitHeight: 400
-    implicitWidth: 300
-    color: "#181818"
-    anchors.top: true
-    exclusionMode: "Ignore"
-    margins.top: (screen.height / 100) * 3.5
+  implicitHeight: 350
+  implicitWidth: 300
+  color: Theme.background_primary
+  anchors.top: true
+  exclusionMode: "Ignore"
+  margins.top: (screen.height / 100) * 3.5
 
-    property date currentMonth: new Date()   // month being shown
-    property date selectedDate: new Date()   // user selection
+  property date currentMonth: new Date()   // month being shown
+  property date selectedDate: new Date()   // user selection
+  property date today: new Date()
 
-    function daysInMonth(year, month) {
-        return new Date(year, month + 1, 0).getDate();
-    }
-    function firstDayOfMonth(year, month) {
-        return new Date(year, month, 1).getDay(); // 0=Sunday..6=Saturday
-    }
-    function isSameDay(a, b) {
-        return a.getFullYear() === b.getFullYear()
-            && a.getMonth() === b.getMonth()
-            && a.getDate() === b.getDate();
-    }
+  function daysInMonth(year, month) {
+    return new Date(year, month + 1, 0).getDate();
+  }
+  function firstDayOfMonth(year, month) {
+    return new Date(year, month, 1).getDay(); // 0=Sunday..6=Saturday
+  }
+  function isSameDay(a, b) {
+    return a.getFullYear() === b.getFullYear()
+        && a.getMonth() === b.getMonth()
+        && a.getDate() === b.getDate();
+  }
 
-    ColumnLayout {
-        anchors.fill: parent
-        spacing: 8
+  ColumnLayout {
+    anchors.fill: parent
+    spacing: 8
 
-        // --- Month header with navigation ---
-        RowLayout {
-            Layout.fillWidth: true
+    // --- Month header with navigation ---
+    RowLayout {
+      Layout.fillWidth: true
 
-            ToolButton {
-                text: "‹"
-                onClicked: currentMonth = new Date(currentMonth.getFullYear(),
-                                                   currentMonth.getMonth() - 1, 1)
-            }
-            Label {
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                text: Qt.formatDate(currentMonth, "MMMM yyyy")
-                color: "white"
-                font.bold: true
-            }
-            ToolButton {
-                text: "›"
-                onClicked: currentMonth = new Date(currentMonth.getFullYear(),
-                                                   currentMonth.getMonth() + 1, 1)
-            }
+      ToolButton {
+        id: arrowIconLeft
+        text: ""
+        highlighted: false
+        onClicked: currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1)
+        contentItem: Text{
+          text: arrowIconLeft.text
+          color: Theme.foreground_secondary
+          font.pixelSize: 20
         }
-
-        // --- Weekday row ---
-        RowLayout {
-            Layout.fillWidth: true
-            Repeater {
-                model: ["Su","Mo","Tu","We","Th","Fr","Sa"]
-                delegate: Label {
-                    text: modelData
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.fillWidth: true
-                    color: "#aaaaaa"
-                }
-            }
+        background: Rectangle{
+          color: arrowIconLeft.hovered ? Theme.background_secondary : "transparent"
+          border.width: 3
+          border.color: Theme.background_primary
+          radius: 7
         }
+      }
+      Label {
+        Layout.fillWidth: true
+        horizontalAlignment: Text.AlignHCenter
+        text: Qt.formatDate(currentMonth, "MMMM yyyy")
+        color: Theme.foreground_primary
+        font.bold: true
+      }
+      ToolButton {
+        id: arrowIconRight
+        text: ""
+        onClicked: currentMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1)
+        contentItem: Text{
+          text: arrowIconRight.text
+          color: Theme.foreground_secondary
+          font.pixelSize: 20
+        }
+        background: Rectangle{
+          color: arrowIconRight.hovered ? Theme.background_secondary : "transparent"
+          border.width: 3
+          border.color: Theme.background_primary
+          radius: 7
+        }
+      }
+    }
 
-        // --- Days grid ---
-        // // --- Days grid ---
-GridLayout {
-    id: dayGrid
-    Layout.fillWidth: true
-    Layout.fillHeight: true
-    columns: 7
-    rowSpacing: 4
-    columnSpacing: 4
+    // --- Weekday row ---
+    Row {
+    width: parent.width
+      Repeater {
+        model: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]
+        delegate: Label {
+          text: modelData
+          font.pixelSize: 14
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          color: "#aaaaaa"
+          width: parent.width / 7
+          height: 30
+        }
+      }
+    }
 
-    property int year: currentMonth.getFullYear()
-    property int month: currentMonth.getMonth()
-    property int days: daysInMonth(year, month)
-    property int firstDay: firstDayOfMonth(year, month)
+    // --- Days grid ---
+    GridLayout {
+      id: dayGrid
+      // Layout.fillWidth: true
+      // Layout.fillHeight: true
+      columns: 7
+      rowSpacing: 4
+      columnSpacing: 4
 
-    Repeater {
+      property int year: currentMonth.getFullYear()
+      property int month: currentMonth.getMonth()
+      property int days: daysInMonth(year, month)
+      property int firstDay: firstDayOfMonth(year, month)
+
+      Repeater {
         model: 42   // 6 weeks × 7 days
         delegate: Rectangle {
-            required property int index
+          required property int index
 
-            // 🔑 make each cell expand to its grid slot
-            Layout.fillWidth: true
-            Layout.fillHeight: true
+          Layout.fillWidth: true
+          Layout.preferredHeight: 40
+          radius: 100
 
-            radius: 6
-            color: {
-                if (index < dayGrid.firstDay || index >= dayGrid.firstDay + dayGrid.days)
-                    return "transparent";
+          color: {
+            if (index < dayGrid.firstDay || index >= dayGrid.firstDay + dayGrid.days)
+                return "transparent";
+            let d = new Date(dayGrid.year, dayGrid.month, index - dayGrid.firstDay + 1);
+            if (isSameDay(d, selectedDate)) return Theme.blue;
+            if (isSameDay(d,today)) return Theme.magenta;
+            return "transparent";
+          }
+
+          //Padding around each cell
+          Rectangle{
+            anchors.fill: parent
+            border.width: 5
+            border.color: Theme.background_primary
+            radius: 10
+            color: "transparent"
+          }
+
+          // Date numbers
+          Label {
+            anchors.centerIn: parent
+            text: (index < dayGrid.firstDay || index >= dayGrid.firstDay + dayGrid.days)
+                  ? ""
+                  : index - dayGrid.firstDay + 1
+            color: "white"
+          }
+
+          // Making interactable
+          MouseArea {
+            anchors.fill: parent
+            enabled: !(index < dayGrid.firstDay || index >= dayGrid.firstDay + dayGrid.days)
+            onClicked: {
                 let d = new Date(dayGrid.year, dayGrid.month, index - dayGrid.firstDay + 1);
-                return isSameDay(d, selectedDate) ? "#3D7BFF" : "transparent";
+                selectedDate = d;
             }
-
-            Label {
-                anchors.centerIn: parent
-                text: (index < dayGrid.firstDay || index >= dayGrid.firstDay + dayGrid.days)
-                      ? ""
-                      : index - dayGrid.firstDay + 1
-                color: "white"
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                enabled: !(index < dayGrid.firstDay || index >= dayGrid.firstDay + dayGrid.days)
-                onClicked: {
-                    let d = new Date(dayGrid.year, dayGrid.month, index - dayGrid.firstDay + 1);
-                    selectedDate = d;
-                    console.log("Picked:", d);
-                }
-            }
+          }
         }
+      }
     }
-}
-
+    Behavior on visible{
+      NumberAnimation {
+        duration: Anim.durations.small
+        easing.type: Easing.Bezier
+        easing.bezierCurve: Anim.curves.expressiveEffects
+      }
     }
+  }
 }
 

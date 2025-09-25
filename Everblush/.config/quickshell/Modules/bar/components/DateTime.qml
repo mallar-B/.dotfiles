@@ -5,6 +5,8 @@ import qs.Common
 
 WrapperRectangle{ // Rectangle is starting from the center so not properly aligning
 	// anchors.centerIn: parent
+	property var calendarRef: null
+
 	anchors.horizontalCenter: parent.horizontalCenter
 	topMargin: 5
 	color: "#00000000"
@@ -32,6 +34,12 @@ WrapperRectangle{ // Rectangle is starting from the center so not properly align
 			running:true
 			repeat:true
 			onTriggered: dateProc.running = true
+		}
+		MouseArea{
+			anchors.fill: parent
+			onClicked: if(calendarRef){
+				calendarRef.visible = !calendarRef.visible
+			}
 		}
 
 	}
