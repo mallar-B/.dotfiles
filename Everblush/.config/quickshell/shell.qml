@@ -11,6 +11,5 @@ ShellRoot{
 	}
 	Calendar {
 		id: calendarWindow
-		visible: false
 	}
 }

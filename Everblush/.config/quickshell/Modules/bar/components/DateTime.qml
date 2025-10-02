@@ -38,7 +38,7 @@ WrapperRectangle{ // Rectangle is starting from the center so not properly align
 		MouseArea{
 			anchors.fill: parent
 			onClicked: if(calendarRef){
-				calendarRef.visible = !calendarRef.visible
+				calendarRef.open = !calendarRef.open
 			}
 		}
 
