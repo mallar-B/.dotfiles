@@ -1,20 +1,24 @@
+// TODO:NOTIFICATION HUB WILL BE ADDED IN THIS WINDOW
+//
 import Quickshell
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
+// import QtQuick.Effects
+// import Qt5Compat.GraphicalEffects
 import qs.Common
+import Quickshell.Wayland
 
 PanelWindow {
   id: calendarWindow
-  height: open ? 350 : 0
-  implicitWidth: 300
+  // make room for drop shadow
+  implicitHeight: 360
+  implicitWidth: 400
   anchors.top: true
-  exclusionMode: "Ignore"
-  // margins.top: (screen.height / 100) * 3.5
-  
-  property bool open: false
-
-  margins.top: open ? (screen.height / 100) * 3.5 : -implicitHeight
+  exclusionMode: "Ignore" // don't make space
+  margins.top: (screen.height / 100) * 3.5
+  visible: false
+  color: "transparent"
 
   property date currentMonth: new Date()   // month being shown
   property date selectedDate: new Date()   // user selection
@@ -31,10 +35,69 @@ PanelWindow {
         && a.getMonth() === b.getMonth()
         && a.getDate() === b.getDate();
   }
+  // handle opening and closing with animations
+  function toggleWindow(){
+    if(!calendarWindow.visible){
+      calendarWindow.visible = true
+      calendarOpen.start()
+      print(calendarContainer.x)
+    }
+    else{
+      // closing of the window is included in calendarClose
+      calendarClose.start()
+    }
+  }
+
+  Component.onCompleted: {
+		if (this.WlrLayershell != null) {
+		this.WlrLayershell.layer = WlrLayer.Top;
+		this.WlrLayershell.namespace = "calendar";
+		}
+	}
+
 
   Rectangle{
+    id: calendarContainer
     color: Theme.background_primary
-    anchors.fill: parent
+    height: 350
+    width: 300
+    x: 10
+    y: -400
+    radius: 15
+    // layer.enabled: true
+    // layer.effect: DropShadow {
+    //     horizontalOffset: -1
+    //     verticalOffset: 1
+    //     radius: 8
+    //     samples: 12
+    //     color: "#000000"
+    //     opacity: 1
+    //     spread: 0
+    // }
+
+    // open and closing animations
+    PropertyAnimation{
+      id:calendarOpen
+      target: calendarContainer
+      property: "y"
+      to: 0
+      duration: Anim.duration.expressiveEffects
+      easing.type: Easing.Bezier
+			easing.bezierCurve: Anim.curves.expressiveEffects
+    }
+
+    PropertyAnimation{
+      id:calendarClose
+      target: calendarContainer
+      property: "y"
+      to: -400
+      duration: Anim.duration.extraLarge
+      easing.type: Easing.Bezier
+			easing.bezierCurve: Anim.curves.expressiveFastSpatial
+      onStopped: calendarWindow.visible = false
+    }
+
+    // main layout
     ColumnLayout {
       anchors.fill: parent
       spacing: 8
@@ -165,13 +228,6 @@ PanelWindow {
               }
             }
           }
-        }
-      }
-      Behavior on height{
-        NumberAnimation {
-          duration: 5000
-          easing.type: Easing.Bezier
-          easing.bezierCurve: Anim.curves.expressiveEffects
         }
       }
     }
