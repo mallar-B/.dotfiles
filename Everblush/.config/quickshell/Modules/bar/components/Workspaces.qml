@@ -8,30 +8,54 @@ Rectangle{
 	anchors.verticalCenter: parent.verticalCenter
 	anchors.leftMargin: 10 // Align with hyprland window
 	anchors.left: parent.left
+
+	property var workspaces: Hyprland.workspaces.values // Raw datas as list
+
+	function isWorkspaceEmpty(idx){
+		for(let i=0; i<workspaces.length; i++){
+			if(idx === workspaces[i].id) return false
+		}
+		return true
+	}
+
+	function isWorkspaceFullscreen(idx){
+		for(let i=0; i<workspaces.length; i++){
+			if(idx === workspaces[i].id && workspaces[i].hasFullscreen){
+				return true
+			}
+		}
+		return false
+	}
+
 	Row{
 		id: wss
 		anchors.verticalCenter: parent.verticalCenter
 		spacing: 7
 		Repeater{
-			model: Hyprland.workspaces
-			// anchors.centerIn: parent.horizontalCenter
+			// model: Hyprland.workspaces
+			model: 10
 			delegate: Rectangle { // delegate => template
-				property bool isActive: modelData.active
+				property int wsId: index + 1
+				property bool isActive: wsId === Hyprland.focusedWorkspace.id
+				property var isEmpty: isWorkspaceEmpty(wsId)
+				property bool isFullscreen: isWorkspaceFullscreen(wsId)
 				radius: height / 2
 				height: 10
 				width: isActive ? 24 : 10
-				color: isActive ? Theme.blue : Theme.foreground_secondary
-
+				color: isFullscreen 
+					? Theme.green : isActive 
+					? Theme.light_yellow : isEmpty
+					? Theme.foreground_secondary : Theme.yellow
 				MouseArea { // for each ws buttons
 					anchors.fill: parent
 					hoverEnabled: true
 					onClicked: {
-						Hyprland.dispatch(`workspace ${modelData.id}`)
+						Hyprland.dispatch(`workspace ${wsId}`)
+						print(workspaces[2].hasFullscreen)
 					}
 					// ToolTip.visible:
 					ToolTip.text: `Workspace ${modelData.id} (${modelData.name})`
 				}
-				
 
 				Behavior on width {
 					NumberAnimation {
@@ -68,4 +92,3 @@ Rectangle{
 			}
 	}
 }
-
