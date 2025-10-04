@@ -111,7 +111,7 @@ PanelWindow {
         target: calendarContainer
         property: "y"
         to: -200
-        duration: Anim.durations.normalexpressiveFastSpatial
+        duration: Anim.durations.expressiveFastSpatial
         easing.type: Easing.BezierSpline
         easing.bezierCurve: Anim.curves.standard
       }
