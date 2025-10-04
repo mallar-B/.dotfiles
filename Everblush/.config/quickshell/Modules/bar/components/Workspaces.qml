@@ -36,7 +36,9 @@ Rectangle{
 			model: 10
 			delegate: Rectangle { // delegate => template
 				property int wsId: index + 1
-				property bool isActive: wsId === Hyprland.focusedWorkspace.id
+				property bool isActive: (Hyprland && Hyprland.focusedWorkspace)
+				? (wsId === Hyprland.focusedWorkspace.id)
+				: false
 				property var isEmpty: isWorkspaceEmpty(wsId)
 				property bool isFullscreen: isWorkspaceFullscreen(wsId)
 				radius: height / 2
