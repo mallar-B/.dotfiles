@@ -12,8 +12,8 @@ import Quickshell.Wayland
 PanelWindow {
   id: calendarWindow
   // make room for drop shadow
-  implicitHeight: 360
-  implicitWidth: 400
+  implicitHeight: 350
+  implicitWidth: 300
   anchors.top: true
   exclusionMode: "Ignore" // don't make space
   margins.top: (screen.height / 100) * 3.5
@@ -55,14 +55,14 @@ PanelWindow {
 		}
 	}
 
-
   Rectangle{
     id: calendarContainer
     color: Theme.background_primary
     height: 350
     width: 300
-    x: 10
-    y: -400
+    scale: 0 //collapsed
+    y: -200
+    opacity: 0
     radius: 15
     // layer.enabled: true
     // layer.effect: DropShadow {
@@ -76,25 +76,61 @@ PanelWindow {
     // }
 
     // open and closing animations
-    PropertyAnimation{
+    ParallelAnimation{
       id:calendarOpen
-      target: calendarContainer
-      property: "y"
-      to: 0
-      duration: Anim.duration.expressiveEffects
-      easing.type: Easing.Bezier
-			easing.bezierCurve: Anim.curves.expressiveEffects
+      NumberAnimation {
+        target: calendarContainer
+        property: "y"
+        to: 0
+        duration: Anim.durations.expressiveFastSpatial
+        easing.type: Easing.BezierSpline
+        easing.bezierCurve: Anim.curves.standard
+      }
+      NumberAnimation {
+        target: calendarContainer
+        property: "scale"
+        to: 1
+        duration: Anim.durations.expressiveFastSpatial
+        easing.type: Easing.BezierSpline
+        easing.bezierCurve: Anim.curves.standard
+      }
+      NumberAnimation {
+        target: calendarContainer
+        property: "opacity"
+        to: 1
+        duration: Anim.durations.expressiveFastSpatial
+        easing.type: Easing.BezierSpline
+        easing.bezierCurve: Anim.curves.standard
+      }
     }
 
-    PropertyAnimation{
+    ParallelAnimation{
       id:calendarClose
-      target: calendarContainer
-      property: "y"
-      to: -400
-      duration: Anim.duration.extraLarge
-      easing.type: Easing.Bezier
-			easing.bezierCurve: Anim.curves.expressiveFastSpatial
       onStopped: calendarWindow.visible = false
+      NumberAnimation{
+        target: calendarContainer
+        property: "y"
+        to: -200
+        duration: Anim.durations.normalexpressiveFastSpatial
+        easing.type: Easing.BezierSpline
+        easing.bezierCurve: Anim.curves.standard
+      }
+      NumberAnimation {
+        target: calendarContainer
+        property: "scale"
+        to: 0
+        duration: Anim.durations.normal
+        easing.type: Easing.Bezier
+        easing.bezierCurve: Anim.curves.standard
+      }
+      NumberAnimation {
+        target: calendarContainer
+        property: "opacity"
+        to: 0
+        duration: Anim.durations.normal
+        easing.type: Easing.BezierSpline
+        easing.bezierCurve: Anim.curves.standard
+      }
     }
 
     // main layout
