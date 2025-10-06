@@ -1,6 +1,7 @@
 import Quickshell
 import qs.Modules.bar
 import qs.Modules.calendar
+import qs.Modules.applauncher
 import "Modules/bar/components"
 
 ShellRoot{
@@ -12,4 +13,5 @@ ShellRoot{
 	Calendar {
 		id: calendarWindow
 	}
+	Applauncher{}
 }
