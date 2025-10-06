@@ -49,11 +49,11 @@ PanelWindow {
   }
 
   Component.onCompleted: {
-		if (this.WlrLayershell != null) {
-		this.WlrLayershell.layer = WlrLayer.Top;
-		this.WlrLayershell.namespace = "calendar";
-		}
-	}
+    if (this.WlrLayershell != null) {
+      this.WlrLayershell.layer = WlrLayer.Top;
+      this.WlrLayershell.namespace = "calendar";
+    }
+  }
 
   Rectangle{
     id: calendarContainer
