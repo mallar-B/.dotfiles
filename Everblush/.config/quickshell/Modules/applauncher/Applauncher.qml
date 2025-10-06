@@ -54,16 +54,21 @@ PanelWindow {
 	// Main container
 	Rectangle {
 		id: mainContainer
-		anchors.fill: parent
+		anchors.top: parent.top
+		anchors.left: parent.left
+		anchors.right: parent.right
+		height: childrenRect.height + 40
 		radius: 10
 		color: Theme.background_primary
 		// border.width: 2
 		// border.color: Theme.orange
+		clip: true
 
 		ColumnLayout {
-			anchors.fill: parent
+			anchors.top: parent.top
+			anchors.left: parent.left
+			anchors.right: parent.right
 			anchors.margins: 20
-			spacing: 12
 
 			// Search input container
 			Rectangle {
@@ -186,8 +191,18 @@ PanelWindow {
 				searchText: searchbox.text
 			}
 			Rectangle {
+				Layout.alignment: Qt.AlignTop
 				Layout.fillWidth: true
-				Layout.fillHeight: true
+				Layout.preferredHeight: {
+					if (searchbox.text === "") return 0
+					const itemHeight = 60
+					const spacing = 10
+					const maxVisibleItems = 5
+					const resultCount = searcher.resultsModel.count
+					const visibleItems = Math.min(resultCount, maxVisibleItems)
+					return visibleItems > 0 ? (visibleItems * itemHeight) + ((visibleItems - 1) * spacing) : 100
+				}
+				Layout.maximumHeight: 400
 				radius: 8
 				color: "transparent"
 				clip: true
@@ -254,8 +269,8 @@ PanelWindow {
 								// Selected App desc.
 								Text {
 									Layout.fillWidth: true
-									text: model.description 
-										? model.description : model.genericName 
+									text: model.description
+										? model.description : model.genericName
 										? model.genericName : "no description available"
 									font.family: "FiraCode Nerd Font"
 									font.pixelSize: 13
@@ -268,36 +283,41 @@ PanelWindow {
 
 					// Custom scrollbar
 					ScrollBar.vertical: ScrollBar {
-							policy: "AsNeeded"
+						visible: !(searcher.resultsModel.count === 0 && searchbox.text.length > 0)
+						policy: "AsNeeded"
 
-							contentItem: Rectangle {
-									implicitWidth: 6
-									radius: 3
-									color: Theme.dark_gray
-									opacity: parent.active ? 1 : 0.9
-
-									Behavior on opacity {
-											NumberAnimation { duration: 200 }
-									}
-							}
+						contentItem: Rectangle {
+							implicitWidth: 6
+							radius: 3
+							color: Theme.dark_gray
+							opacity: parent.active ? 1 : 0.9
+						}
 					}
 				}
 
 				// Empty state
 				Text {
-						anchors.centerIn: parent
-						visible: searcher.resultsModel.count === 0 && searchbox.text.length > 0
-						text: "No applications found"
-						font.pixelSize: 16
-						color: Theme.light_gray
+					anchors.centerIn: parent
+					visible: searcher.resultsModel.count === 0 && searchbox.text.length > 0
+					text: "No applications found"
+					font.pixelSize: 16
+					color: Theme.light_gray
 				}
+			}
+		}
+
+		Behavior on height{
+			NumberAnimation {
+				duration: Anim.durations.normal
+				easing.type: Easing.Bezier
+				easing.bezierCurve: Anim.curves.expressiveEffects
 			}
 		}
 	}
 
 	onVisibleChanged: {
-			if (visible) {
-				searchbox.forceActiveFocus() // Trigger imput focus on panelwindow visible
-			}
+		if (visible) {
+			searchbox.forceActiveFocus() // Trigger imput focus on panelwindow visible
+		}
 	}
 }
