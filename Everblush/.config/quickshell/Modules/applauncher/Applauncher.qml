@@ -21,10 +21,16 @@ PanelWindow {
 		if(applauncherWindow.visible){
 			isClosing = true
 			stopAnimation.start()
+			backdropLayer.visible = false
 		} else if(!applauncherWindow.visible){
 			isOpening = true
 			applauncherWindow.visible = true
+			backdropLayer.visible = true
 		}
+	}
+
+	Backdrop{
+		id: backdropLayer
 	}
 
 	Timer{
@@ -54,7 +60,7 @@ PanelWindow {
 			}
 		}
 		// After launching close the window and rest query
-		applauncherWindow.visible = false
+		toggleApplauncher()
 		searchbox.text = ""
 		resultsList.currentIndex = 0 // remove selection
 	}
