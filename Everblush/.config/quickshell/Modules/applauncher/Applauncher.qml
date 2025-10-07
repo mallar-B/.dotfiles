@@ -15,6 +15,30 @@ PanelWindow {
 	implicitWidth: 670
 	color: "transparent"
 
+	property bool isClosing: false
+	property bool isOpening: false
+	function toggleApplauncher(){
+		if(applauncherWindow.visible){
+			isClosing = true
+			stopAnimation.start()
+		} else if(!applauncherWindow.visible){
+			isOpening = true
+			applauncherWindow.visible = true
+		}
+	}
+
+	Timer{
+		id: stopAnimation
+		interval: Anim.durations.normal // same as mainContainer's width
+		running: false
+		repeat: false
+		onTriggered:{
+			applauncherWindow.visible = false
+			isClosing = false
+			isOpening = false
+		}
+	}
+
 	function launchApp(app) {
 		if (!app) return
 		// Desktop apps
@@ -48,27 +72,26 @@ PanelWindow {
 	GlobalShortcut{
 		name: "toggleApplauncher"
 		description: "toggles applauncher"
-		onPressed: applauncherWindow.visible = !applauncherWindow.visible
+		onPressed: toggleApplauncher()
 	}
 
 	// Main container
 	Rectangle {
 		id: mainContainer
 		anchors.top: parent.top
-		anchors.left: parent.left
-		anchors.right: parent.right
-		height: childrenRect.height + 40
-		radius: 10
-		color: Theme.background_primary
-		// border.width: 2
-		// border.color: Theme.orange
+		width: applauncherWindow.visible && !isClosing ? parent.width : 0
+		height: searchbox.text === "" ? childrenRect.height + 15 : childrenRect.height + 40
+		radius: isClosing ? 5  : isOpening ? (searchbox.text === "" ? 30 : 20) : 5
+		color: searchbox.text === "" ? Theme.background_primary : Theme.background_primary
+		border.width: applauncherWindow.visible ? 1 : 0
+		border.color: searchbox.text === "" ? Theme.gray : Theme.dark_gray
 		clip: true
 
 		ColumnLayout {
 			anchors.top: parent.top
 			anchors.left: parent.left
 			anchors.right: parent.right
-			anchors.margins: 20
+			anchors.margins: searchbox.text === "" ? 10 : 20
 
 			// Search input container
 			Rectangle {
@@ -76,9 +99,10 @@ PanelWindow {
 				Layout.fillWidth: true
 				Layout.preferredHeight: 40
 				radius: 7
-				color: Theme.background_secondary
+				color: searchbox.text === "" ? Theme.background_primary : Theme.background_secondary
 				border.color: searchbox.activeFocus? Theme.blue : Theme.dark_gray
-				border.width: searchbox.activeFocus ? 1 : 2
+				border.width: searchbox.text === ""
+				? 0 : searchbox.activeFocus ? 1 : 2
 
 				RowLayout {
 					anchors.fill: parent
@@ -88,9 +112,17 @@ PanelWindow {
 					// Search icon
 					Text {
 						text: ""
-						font.pixelSize: 18
+						font.pixelSize: searchbox.text === "" ? 22 : 18
 						font.bold: true
 						color: Theme.foreground_secondary
+
+						Behavior on font.pixelSize{
+							NumberAnimation {
+								duration: Anim.durations.normal
+								easing.type: Easing.Bezier
+								easing.bezierCurve: Anim.curves.expressiveEffects
+							}
+						}
 					}
 
 					// Search input field
@@ -99,7 +131,7 @@ PanelWindow {
 						activeFocusOnTab: true
 						Layout.fillWidth: true
 						Layout.fillHeight: true
-						font.pixelSize: 16
+						font.pixelSize: 17
 						font.family: "FiraCode Nerd Font"
 						color: Theme.foreground_primary
 						placeholderText: "Froglight Search" // I like minecraft
@@ -113,6 +145,7 @@ PanelWindow {
 						selectedTextColor: Theme.teal
 
 						onAccepted: {
+							if (searchbox.text === "") return // don't launch the first app because its not showing in UI
 							if (resultsList.currentIndex >= 0 && resultsList.currentIndex < searcher.resultsModel.count) {
 								launchApp(searcher.resultsModel.get(resultsList.currentIndex).app)
 							}
@@ -145,10 +178,18 @@ PanelWindow {
 								}
 								event.accepted = true
 							} else if (event.key === Qt.Key_Escape) {
-								applauncherWindow.visible = false // close window
+								toggleApplauncher() // close window with animations
 								searchbox.text = "" // reset query
 								resultsList.currentIndex = 0 // remove selection
 								event.accepted = true
+							}
+						}
+
+						Behavior on font.pixelSize{
+							NumberAnimation {
+								duration: Anim.durations.normal
+								easing.type: Easing.Bezier
+								easing.bezierCurve: Anim.curves.expressiveEffects
 							}
 						}
 					}
@@ -181,6 +222,22 @@ PanelWindow {
 								font.pixelSize: 18
 							}
 						}
+					}
+				}
+
+				Behavior on color{
+					ColorAnimation {
+						duration: Anim.durations.expressiveFastSpatial
+						easing.type: Easing.Bezier
+						easing.bezierCurve: Anim.curves.expressiveEffects
+					}
+				}
+
+				Behavior on border.color{
+					ColorAnimation {
+						duration: Anim.durations.expressiveFastSpatial
+						easing.type: Easing.Bezier
+						easing.bezierCurve: Anim.curves.expressiveEffects
 					}
 				}
 			}
@@ -304,6 +361,14 @@ PanelWindow {
 					color: Theme.light_gray
 				}
 			}
+
+			Behavior on anchors.margins{
+				NumberAnimation {
+					duration: Anim.durations.normal
+					easing.type: Easing.Bezier
+					easing.bezierCurve: Anim.curves.expressiveEffects
+				}
+			}
 		}
 
 		Behavior on height{
@@ -313,6 +378,31 @@ PanelWindow {
 				easing.bezierCurve: Anim.curves.expressiveEffects
 			}
 		}
+
+		Behavior on width{
+			NumberAnimation {
+				duration: Anim.durations.normal
+				easing.type: Easing.Bezier
+				easing.bezierCurve: Anim.curves.expressiveEffects
+			}
+		}
+
+		Behavior on color{
+			ColorAnimation {
+				duration: Anim.durations.normal
+				easing.type: Easing.Bezier
+				easing.bezierCurve: Anim.curves.expressiveEffects
+			}
+		}
+
+		Behavior on radius{
+			NumberAnimation{
+				duration: Anim.durations.normal
+				easing.type: Easing.Bezier
+				easing.bezierCurve: Anim.curves.expressiveEffects
+			}
+		}
+
 	}
 
 	onVisibleChanged: {
