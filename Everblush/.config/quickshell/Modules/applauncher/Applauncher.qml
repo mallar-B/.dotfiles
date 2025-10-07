@@ -21,16 +21,18 @@ PanelWindow {
 		if(applauncherWindow.visible){
 			isClosing = true
 			stopAnimation.start()
-			backdropLayer.visible = false
 		} else if(!applauncherWindow.visible){
 			isOpening = true
 			applauncherWindow.visible = true
-			backdropLayer.visible = true
+			backdropWindow.show()
 		}
 	}
 
 	Backdrop{
-		id: backdropLayer
+		id: backdropWindow
+		openAnimDuration: Anim.durations.normal
+		closeAnimDuration: Anim.durations.expressiveEffects
+		closeWindowFunc: toggleApplauncher
 	}
 
 	Timer{
@@ -39,6 +41,7 @@ PanelWindow {
 		running: false
 		repeat: false
 		onTriggered:{
+			backdropWindow.hide()
 			applauncherWindow.visible = false
 			isClosing = false
 			isOpening = false
@@ -415,5 +418,15 @@ PanelWindow {
 		if (visible) {
 			searchbox.forceActiveFocus() // Trigger imput focus on panelwindow visible
 		}
+	}
+
+	// Dynamic mouse area to simulate
+	// like clicking on bckdrop
+	MouseArea{
+		anchors.bottom: parent.bottom
+		anchors.left: parent.left
+		anchors.right: parent.right
+		height: applauncherWindow.height - mainContainer.height
+		onClicked: toggleApplauncher()
 	}
 }
