@@ -113,3 +113,5 @@ cloudflare-warp-bin
 --rebuild
 google-breakpad
 --rebuild
+baobab
+progress
