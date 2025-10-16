@@ -12,6 +12,11 @@ source "${ZINIT_HOME}/zinit.zsh"
 
 # Prompt -> Powerlevel10k
 # zinit ice depth=1; zinit light romkatv/powerlevel10k
+#
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"  # for login shell
+eval "$(pyenv init - zsh)"   # for interactive shell
 
 # Plugins
 zinit light zsh-users/zsh-syntax-highlighting
@@ -130,3 +135,12 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export JAVA_HOME=$HOME/Android/Custom_JDKs/ms-17.0.15/
 export QML2_IMPORT_PATH="/usr/lib/qt6/qml/"
+
+# Load pyenv automatically by appending
+# the following to 
+# ~/.zprofile (for login shells)
+# and ~/.zshrc (for interactive shells) :
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
