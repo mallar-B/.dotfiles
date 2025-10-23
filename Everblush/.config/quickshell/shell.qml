@@ -1,8 +1,9 @@
 import Quickshell
 import qs.Modules.bar
+import "Modules/bar/components"
 import qs.Modules.calendar
 import qs.Modules.applauncher
-import "Modules/bar/components"
+import qs.Modules.notifications
 
 ShellRoot{
 	Bar {
@@ -14,4 +15,5 @@ ShellRoot{
 		id: calendarWindow
 	}
 	Applauncher{}
+	// Notification{}
 }
