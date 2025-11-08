@@ -30,7 +30,7 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 -- Keep signcolumn on by default
-vim.o.signcolumn = 'yes'
+vim.o.signcolumn = 'auto:4'
 
 -- Decrease update time
 vim.o.updatetime = 250
@@ -59,3 +59,11 @@ vim.o.scrolloff = 12
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 vim.o.confirm = true
+
+-- for neovide
+-- Paste from system clipboard on Ctrl+Shift+V
+vim.keymap.set("n", "<C-S-v>", '"+p', { noremap = true, silent = true })
+vim.keymap.set("i", "<C-S-v>", '<Esc>"+pa', { noremap = true, silent = true })
+vim.keymap.set("v", "<C-S-v>", '"+p', { noremap = true, silent = true })
+
+vim.opt.guifont = "Monaspace Radon Frozen:h12"
