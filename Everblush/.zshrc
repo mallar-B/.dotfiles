@@ -59,6 +59,32 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
+# Find command from history
+fuzzy_history_by_prefix() {
+  # get prefix typed so far (left of cursor)
+  local prefix=$LBUFFER
+  local selected
+
+  # if nothing typed, show whole history; otherwise show only lines that start with prefix
+  if [[ -z $prefix ]]; then
+    # fc -l -n 1 => show history lines without numbers
+    selected=$(fc -l -n 1 | fzf --height 40% --reverse) || return
+  else
+    # pre-filter history to lines that start with prefix, newest first
+    # fc -l -n 1 lists full history (oldest->newest); tac reverses so newest appear first
+    selected=$(fc -l -n 1 | tac | awk -v p="$prefix" 'index($0,p)==1' | fzf --height 40% --reverse --query="$prefix") || return
+  fi
+
+  # if chosen, replace the current buffer with the selected history entry
+  LBUFFER=$selected
+  CURSOR=${#LBUFFER}
+  zle redisplay
+}
+
+zle -N fuzzy_history_by_prefix
+# bind to Ctrl-R (change if you prefer another key)
+bindkey '^R' fuzzy_history_by_prefix
+
 # List Aliases
 alias ls='ls -CF --color'
 alias la='ls -Ah'
@@ -111,6 +137,12 @@ yay() {
   fi
 }
 
+nvid() {
+  neovide "$@" > /dev/null 2>&1 &
+  disown
+  exit
+}
+
 # Shell integrations
 ## fzf
 # source <(fzf --zsh) ## for fzf 0.48 and later
@@ -137,7 +169,7 @@ export JAVA_HOME=$HOME/Android/Custom_JDKs/ms-17.0.15/
 export QML2_IMPORT_PATH="/usr/lib/qt6/qml/"
 
 # Load pyenv automatically by appending
-# the following to 
+# the following to
 # ~/.zprofile (for login shells)
 # and ~/.zshrc (for interactive shells) :
 
