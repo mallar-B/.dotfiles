@@ -7,6 +7,7 @@ import qs.Modules.notifications
 
 ShellRoot{
 	Bar {
+		id: bar
 		DateTime{
 			calendarRef: calendarWindow
 		}
@@ -15,5 +16,7 @@ ShellRoot{
 		id: calendarWindow
 	}
 	Applauncher{}
-	// Notification{}
+	Notifications{
+		bar: bar
+	}
 }
