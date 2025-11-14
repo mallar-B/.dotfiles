@@ -17,6 +17,6 @@ ShellRoot{
 	}
 	Applauncher{}
 	Notifications{
-		bar: bar
+		barRef: bar
 	}
 }

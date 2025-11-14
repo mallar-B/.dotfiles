@@ -7,7 +7,7 @@ import qs.Common
 PanelWindow {
   id: root
 
-  required property var bar // For top margin
+  required property var barRef // For top margin
   property list<Notification> notifs
 
   exclusionMode: ExclusionMode.Ignore
@@ -47,7 +47,7 @@ PanelWindow {
       values: [...root.notifs]
     }
     anchors.right: parent.right
-    y: root.bar.height
+    y: root.barRef.height
     implicitWidth: 400
     implicitHeight: children.reduce((h, c) => h + c.height, 0)
     interactive: false
@@ -82,7 +82,7 @@ PanelWindow {
       notif: modelData
 
       onDismissed: () => {
-        // modelData.dismiss();
+        modelData.dismiss();
         const index = root.notifs.indexOf(notif);
         if (index > -1)
           root.notifs.splice(index, 1);
