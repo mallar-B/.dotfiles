@@ -6,6 +6,9 @@ import qs.Common
 Item {
   id: root
   required property Notification notif
+  property var image: notif ? notif.image : ""
+  property var body: notif ? notif.body : ""
+  property var summary: notif ? notif.summary : ""
 
   implicitWidth: 400
   implicitHeight: 122
@@ -43,14 +46,14 @@ Item {
         // Icon container
         Rectangle {
           id: iconContainer
-          visible: !!notif.image
           width: 54
           height: 54
           anchors.margins: 10
 
           Image {
+            visible: source != ""
             anchors.fill: parent
-            source: notif.image
+            source: root.image
             fillMode: Image.PreserveAspectCrop
             smooth: true
           }
@@ -59,12 +62,12 @@ Item {
         Column {
           id: textColumn
           spacing: 10
-          width: notif.image ? parent.width - iconContainer.width : parent.width
+          width: root.image ? parent.width - iconContainer.width : parent.width
 
           // Notification title
           Label {
             width: parent.width
-            text: root.notif?.summary
+            text: root.summary
             font.family: "Monaspace Krypton Frozen"
             font.pointSize: 18
             font.bold: true
@@ -77,7 +80,7 @@ Item {
           // Notification body
           Text {
             width: parent.width
-            text: root.notif?.body
+            text: root.body
             font.family: "Monaspace Radon Frozen"
             font.pointSize: 12
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere

@@ -28,6 +28,15 @@ Item {
   property var velocityY: 0
   property var velocityR: 0
 
+  property bool dismissedAlready: false
+
+  function triggerDismissed() {
+    if (dismissedAlready)
+      return;
+    dismissedAlready = true;
+    dismissed();
+  }
+
   FrameAnimation {
     function dampingVelocity(currentVelocity, delta) {
       const spring = 1.0;
@@ -73,13 +82,13 @@ Item {
           }
 
           if (display.x > display.width || display.y > screen.height) {
-            root.dismissed();
+            root.triggerDismissed()
           }
         } else if (root.state == NotifItem.Dismissing) {
           root.velocityX += frameTime * 20000;
 
           if (display.x > display.width) {
-            root.dismissed();
+            root.triggerDismissed()
           }
         }
 
@@ -91,7 +100,6 @@ Item {
 
   implicitWidth: display.width
   implicitHeight: display.height
-  anchors.fill: display
 
   Display {
     id: display
