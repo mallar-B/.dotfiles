@@ -8,7 +8,7 @@ PanelWindow {
   id: root
 
   required property var barRef // For top margin
-  property var notifs: []
+  property list<Notification> notifs
 
   exclusionMode: ExclusionMode.Ignore
   color: "transparent"
@@ -27,19 +27,12 @@ PanelWindow {
   }
 
   NotificationServer {
+    id: notifServer
     actionsSupported: true
+    persistenceSupported: true
 
     onNotification: notif => {
       notif.tracked = true;
-
-      // Wrap the Notification in a JS object
-      const entry = {
-        notif: notif, // the raw Notification object
-        id: Date.now() + Math.random() // unique id for stable identity, if needed
-      };
-
-      root.notifs = [...root.notifs, entry];
-      console.log("notifs:", root.notifs);
     }
   }
 
@@ -48,39 +41,62 @@ PanelWindow {
     item: stack
   }
 
-ListView {
-  id: stack
+  ListView {
+    id: stack
 
-  model: ScriptModel {
-    values: root.notifs   // 👈 no spreading, no filter yet
-  }
+    model: notifServer.trackedNotifications // Use default given
 
-  anchors.right: parent.right
-  y: root.barRef.height
-  implicitWidth: 400
-  implicitHeight: children.reduce((h, c) => h + c.height, 0)
-  interactive: false
-  spacing: 20
+    anchors.right: parent.right
+    y: root.barRef.height
+    implicitWidth: 400
+    implicitHeight: children.reduce((h, c) => h + c.height, 0)
+    interactive: false
+    // spacing: 20
 
-  delegate: NotifItem {
-    // The element in `root.notifs` is our JS wrapper object
-    required property var modelData
+    displaced: Transition {
+        NumberAnimation {
+            property: "y"
+            duration: 200
+            easing.type: Easing.OutCubic
+        }
+    }
 
-    // Pass the underlying Notification to NotifItem
-    notif: modelData.notif
+    move: Transition {
+        NumberAnimation {
+            property: "y"
+            duration: 200
+            easing.type: Easing.OutCubic
+        }
+    }
 
-    onDismissed: () => {
-      // Safely try to dismiss the underlying Notification, if it's still valid
-      if (modelData.notif) {
-        modelData.notif.dismiss();
-      }
+    remove: Transition {
+        NumberAnimation {
+            property: "y"
+            duration: 200
+            easing.type: Easing.OutCubic
+        }
+    }
 
-      // Remove this entry from root.notifs by identity
-      const idx = root.notifs.indexOf(modelData);
-      if (idx > -1) {
-        root.notifs.splice(idx, 1);
-        root.notifs = [...root.notifs]; // trigger bindings
+    delegate: NotifItem {
+      required property Notification modelData
+
+      notif: modelData
+
+      onDismissed: () => {
+
+        if (notif) {
+          notif.dismiss();
+          print("dismissed")
+        }
+
+        // Remove this entry from root.notifs by identity
+        const idx = root.notifs.indexOf(notif);
+        if (idx > -1) {
+          root.notifs.splice(idx, 1);
+          root.notifs = [...root.notifs]; // trigger bindings
+          print("after dm", root.notifs)
+        }
       }
     }
   }
-}}
+}
