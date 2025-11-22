@@ -47,11 +47,12 @@ PanelWindow {
     model: notifServer.trackedNotifications // Use default given
 
     anchors.right: parent.right
-    y: root.barRef.height
+    anchors.rightMargin: 10 // Match hyprland windows
+    y: root.barRef.height + 10 // Match hyprland windows
     implicitWidth: 400
     implicitHeight: children.reduce((h, c) => h + c.height, 0)
     interactive: false
-    // spacing: 20
+    spacing: 5
 
     displaced: Transition {
         NumberAnimation {
