@@ -2,9 +2,12 @@ import Quickshell
 import QtQuick
 import Quickshell.Wayland
 import "components"
+import "components/systray"
 import qs.Common
 
 PanelWindow {
+	id: root
+
 	Component.onCompleted: {
 		if (this.WlrLayershell != null) {
 		this.WlrLayershell.layer = WlrLayer.Top;
@@ -40,5 +43,8 @@ PanelWindow {
 
 		DateTime {}
 		Workspaces {}
+		SysTray{
+			barRef: root
+		}
 	}
 }
