@@ -37,6 +37,7 @@ return {
         bash = { 'shfmt' },
         cpp = { 'clang-format' },
         go = { 'gofmt' },
+        html = { 'prettierd' },
         javascript = { 'prettierd' },
         javascriptreact = { 'prettierd' },
         json = { 'prettierd' },
