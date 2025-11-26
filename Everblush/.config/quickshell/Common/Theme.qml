@@ -28,19 +28,23 @@ QtObject{
 	readonly property color light_gray: Qt.rgba(0.541, 0.569, 0.573, 1.0) // #8A9192
 	readonly property color dark_gray: Qt.rgba(0.184, 0.212, 0.220, 1.0) // #2F3638
 
-	// Muted versions (with opacity)
-	readonly property color muted_red: Qt.rgba(0.898, 0.455, 0.455, 0.1) // #E574741A
-	readonly property color muted_green: Qt.rgba(0.549, 0.812, 0.494, 0.1) // #8CCF7E1A
-	readonly property color muted_yellow: Qt.rgba(0.898, 0.780, 0.420, 0.1) // #E5C76B1A
-	readonly property color muted_blue: Qt.rgba(0.173, 0.161, 0.200, 1.0) // #accde6
+	// Muted Default
+	readonly property color muted_red: Qt.rgba(0.78, 0.40, 0.40, 1.0)  // #C76464
+	readonly property color muted_green: Qt.rgba(0.47, 0.69, 0.43, 1.0)  // #78B06E
+	readonly property color muted_yellow: Qt.rgba(0.78, 0.67, 0.38, 1.0)  // #C7AB61
+	readonly property color muted_blue: Qt.rgba(0.34, 0.58, 0.77, 1.0)  // #5794C4
+	readonly property color muted_magenta: Qt.rgba(0.66, 0.43, 0.72, 1.0)  // #A96FB7
+	readonly property color muted_cyan: Qt.rgba(0.36, 0.62, 0.62, 1.0)  // #5C9E9E
 
-	readonly property color muted_magenta: Qt.rgba(0.769, 0.498, 0.835, 0.1) // #C47FD51A
-	readonly property color muted_cyan: Qt.rgba(0.424, 0.749, 0.749, 0.1) // #6CBFBF1A
-	readonly property color muted_orange: Qt.rgba(0.965, 0.722, 0.561, 0.1) // #F6B8901A
-	readonly property color muted_purple: Qt.rgba(0.655, 0.616, 0.882, 0.1) // #A793E11A
-	readonly property color muted_teal: Qt.rgba(0.482, 0.792, 0.769, 0.1) // #7BCAB91A
-	readonly property color muted_pink: Qt.rgba(0.949, 0.655, 0.765, 0.1) // #F2A7C31A
-	readonly property color muted_gray: Qt.rgba(0.420, 0.463, 0.471, 0.1) // #6B76781A
+	// Muted Extra
+	readonly property color muted_orange: Qt.rgba(0.84, 0.63, 0.52, 1.0)  // #D5A081
+	readonly property color muted_purple: Qt.rgba(0.56, 0.53, 0.75, 1.0)  // #9087BE
+	readonly property color muted_teal: Qt.rgba(0.42, 0.69, 0.66, 1.0)  // #6CAFA9
+	readonly property color muted_pink: Qt.rgba(0.84, 0.57, 0.69, 1.0)  // #D693B0
+	readonly property color muted_accent: Qt.rgba(0.31, 0.42, 0.84, 1.0)  // #507ACF
+	readonly property color muted_gray: Qt.rgba(0.37, 0.41, 0.43, 1.0)  // #5F696D
+	readonly property color muted_light_gray: Qt.rgba(0.49, 0.52, 0.53, 1.0)  // #7D8487
+	readonly property color muted_dark_gray: Qt.rgba(0.16, 0.19, 0.20, 1.0)  // #2A3033
 
 	readonly property color foreground_primary: Qt.rgba(0.855, 0.855, 0.855, 1.0) // #DADADA
 	readonly property color foreground_secondary: Qt.rgba(0.702, 0.725, 0.722, 1.0) // #B3B9B8

@@ -2,19 +2,32 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell.Widgets
 import Quickshell.Services.SystemTray
+import qs.Common
 
 WrapperRectangle {
 	id: sysTrayRect
 
 	property var barRef
 	property var tooltipWindow: PopupMenu{ popupAnchor: sysTrayRect.barRef }
+	property double hPadding: 12
+	property double vPadding: 3
 
 	anchors.verticalCenter: parent.verticalCenter
 	anchors.rightMargin: 10
 	anchors.right: parent.right
-	color: "transparent"
+	implicitWidth: row.implicitWidth + (hPadding * 2)
+	implicitHeight: row.implicitHeight + (vPadding * 2)
+
+	color: Theme.dark_gray
+	radius: 15
 
 	RowLayout {
+		id:row
+
+		anchors.left: parent.left
+		anchors.right: parent.right
+		anchors.leftMargin: sysTrayRect.hPadding
+		anchors.rightMargin: sysTrayRect.hPadding
 		spacing: 10
 
 		Repeater {
@@ -38,6 +51,7 @@ WrapperRectangle {
 					id: hoverArea
 					anchors.fill: parent
 					hoverEnabled: true
+					cursorShape: Qt.PointingHandCursor
 
 					onEntered: {
 						// console.log(tooltipWindow.anchor.rect.x,tooltipWindow.anchor.rect.y)
