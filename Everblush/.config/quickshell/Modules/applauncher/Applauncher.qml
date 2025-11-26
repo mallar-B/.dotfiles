@@ -1,5 +1,4 @@
 import Quickshell
-import Quickshell.Io
 import Quickshell.Widgets
 import QtQuick
 import QtQuick.Controls
@@ -286,7 +285,7 @@ PanelWindow {
 						height: 60
 						color: resultsList.currentIndex === index
 						? Theme.light_blue : listButton.containsMouse
-						? Theme.muted_blue : Theme.muted_gray
+						? Theme.muted_blue : Theme.background_secondary
 						radius: 7
 
 						MouseArea {
