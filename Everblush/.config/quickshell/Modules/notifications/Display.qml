@@ -49,9 +49,8 @@ Item {
           width: 54
           height: 54
           anchors.margins: 10
-
+          visible: root.image!= ""
           Image {
-            visible: source != ""
             anchors.fill: parent
             source: root.image
             fillMode: Image.PreserveAspectCrop

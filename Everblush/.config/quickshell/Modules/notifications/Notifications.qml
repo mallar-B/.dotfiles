@@ -89,14 +89,6 @@ PanelWindow {
           notif.dismiss();
           print("dismissed")
         }
-
-        // Remove this entry from root.notifs by identity
-        const idx = root.notifs.indexOf(notif);
-        if (idx > -1) {
-          root.notifs.splice(idx, 1);
-          root.notifs = [...root.notifs]; // trigger bindings
-          print("after dm", root.notifs)
-        }
       }
     }
   }
