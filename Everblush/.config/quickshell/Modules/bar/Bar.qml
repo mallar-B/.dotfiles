@@ -1,5 +1,6 @@
 import Quickshell
 import QtQuick
+import QtQuick.Layouts
 import Quickshell.Wayland
 import "components"
 import "components/systray"
@@ -27,9 +28,11 @@ PanelWindow {
 	// 	right: 10
 	// }
 
+	// TODO: change this whole to rowlayout
 	Rectangle {
 		anchors.fill: parent
 		radius: 0
+		// color: Theme.background_primary
 		color: Theme.background_primary
 
 		// Bottom border
@@ -41,10 +44,27 @@ PanelWindow {
 			color: Theme.dark_gray
 		}
 
-		DateTime {}
+		DateTime {
+			id:datetime
+		}
 		Workspaces {}
-		SysTray{
-			barRef: root
+		RowLayout{
+			anchors.right: parent.right
+			anchors.left: datetime.right
+			anchors.verticalCenter: parent.verticalCenter
+			anchors.rightMargin: 10
+
+			height: parent.height
+
+			VolumeControl{
+				Layout.fillWidth: true
+				Layout.fillHeight: true
+			}
+			SysTray{
+				Layout.alignment: Qt.AlignRight
+				barRef: root
+			}
+
 		}
 	}
 }

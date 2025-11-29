@@ -12,9 +12,6 @@ WrapperRectangle {
 	property double hPadding: 12
 	property double vPadding: 3
 
-	anchors.verticalCenter: parent.verticalCenter
-	anchors.rightMargin: 10
-	anchors.right: parent.right
 	implicitWidth: row.implicitWidth + (hPadding * 2)
 	implicitHeight: row.implicitHeight + (vPadding * 2)
 
