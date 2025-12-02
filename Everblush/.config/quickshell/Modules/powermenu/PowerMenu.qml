@@ -1,11 +1,10 @@
 import QtQuick
 import Quickshell
 import Quickshell.Widgets
-import Quickshell.Io
 import qs.Common
 
 PanelWindow {
-	id: powermenu
+	id: root
 	property var barRef
 
 	anchors {
@@ -33,24 +32,48 @@ PanelWindow {
 		{ label: "Reboot", command: "systemctl reboot", icon: "system-reboot" },
 		{ label: "Poweroff", command: "systemctl poweroff", icon: "system-shutdown-symbolic" }
 	]
+  // rotation of the whole arc
+  property real angleOffset: 0
+
+  // target angle for "center" (left side of circle ~= 180°)
+  property real targetAngle: 180
+
+  // which REPEATER index is currently closest to targetAngle
+  property int currentIndex: -1
+
+  // convenience: the logical action under the "center"
+  property var currentAction: currentIndex >= 0
+    ? actions[currentIndex % actions.length]
+    : null
 
 	// Full circle background, only the left half is visible inside the window
 	Rectangle {
 		id: circle
-		width: powermenu.diameter
-		height: powermenu.diameter
+		width: root.diameter
+		height: root.diameter
 		radius: width / 2
 
 		anchors.verticalCenter: parent.verticalCenter
 		anchors.left: parent.left
 
-		color: Theme.background_primary
+		// color: Theme.background_primary
+		color: "red"
 		border.color: Theme.dark_gray
+		MouseArea {
+			anchors.fill: parent
+			onWheel: (e) =>{
+				root.angleOffset += e.angleDelta.y / 120 * 5
+				print(e.angleDelta.y)
+			}
+		}
 	}
 
 	// arc layout of buttons along the circle
 	Repeater {
-		model: powermenu.actions.length * 2
+    id: repeater
+    property int listLength: root.actions.length
+
+		model: listLength * 2
 
 		delegate: Item {
 			id: slot
@@ -65,15 +88,16 @@ PanelWindow {
 			property real startAngle: 105
 			property real endAngle:   250
 
-			property real t: powermenu.actions.length > 1
-				? index / (powermenu.actions.length - 1)
+			property real t: repeater.listLength > 1
+				? index / (repeater.listLength - 1)
 				: 0.5
 
-			property real angleDeg: startAngle + (endAngle - startAngle) * t
+			// property real angleDeg: startAngle + (endAngle - startAngle) * t
+			property real angleDeg: (startAngle + (endAngle - startAngle) * t + root.angleOffset) % 360
 			property real angleRad: angleDeg * Math.PI / 180
 
 			// Keep buttons slightly inside the edge of the circle
-			property real r: powermenu.diameter * 0.38
+			property real r: root.diameter * 0.38
 
 			readonly property real cx: circle.x + circle.width  / 2
 			readonly property real cy: circle.y + circle.height / 2
@@ -101,19 +125,10 @@ PanelWindow {
 					spacing: 2
 
 					IconImage {
-						width: 28
-						height: 28
-						source: powermenu.actions[index % 5].icon
+						width: 60
+						height: 60
+						source: Quickshell.iconPath(root.actions[index % repeater.listLength].icon)
 						mipmap: true
-					}
-
-					Text {
-						text: powermenu.actions[index%5].label
-						color: "white"
-						font.pixelSize: 11
-						horizontalAlignment: Text.AlignHCenter
-						verticalAlignment: Text.AlignVCenter
-						elide: Text.ElideRight
 					}
 				}
 
@@ -123,7 +138,7 @@ PanelWindow {
 					hoverEnabled: true
 
 					onClicked: {
-						Quickshell.execDetached({command: ["sh", "-c", powermenu.actions[index].command]})
+						Quickshell.execDetached({command: ["sh", "-c", root.actions[index % repeater.listLength].command]})
 					}
 				}
 			}
