@@ -44,6 +44,7 @@ return {
         lua = { 'stylua' },
         markdown = { 'prettierd' },
         nix = { 'alejandra' },
+        php = { 'pretty-php' },
         python = { 'black' },
         rust = { 'rustfmt' },
         sh = { 'shfmt' },

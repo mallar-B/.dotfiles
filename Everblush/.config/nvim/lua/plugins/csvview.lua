@@ -18,5 +18,16 @@ return {
       jump_prev_row = { '<S-Enter>', mode = { 'n', 'v' } },
     },
   },
-  cmd = { 'CsvViewEnable', 'CsvViewDisable', 'CsvViewToggle' },
+  -- cmd = { 'CsvViewEnable', 'CsvViewDisable', 'CsvViewToggle' },
+  init = function()
+    -- Auto-enable CsvView whenever a CSV/TSV buffer is opened
+    local group = vim.api.nvim_create_augroup("CsvViewAutoEnable", { clear = true })
+    vim.api.nvim_create_autocmd("FileType", {
+      group = group,
+      pattern = { "csv", "tsv" },
+      callback = function()
+        vim.cmd("CsvViewEnable display_mode=border")
+      end,
+    })
+  end,
 }

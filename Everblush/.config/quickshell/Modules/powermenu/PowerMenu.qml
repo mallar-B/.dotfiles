@@ -109,13 +109,6 @@ PanelWindow {
 
     delegate: Item {
       id: slot
-      // scale:{
-      //   if(root.currentIndex == index % arcRepeater.listLength) return 1.4
-      //   if(root.currentIndex + 1 == index % arcRepeater.listLength) return 0.9
-      //   if(root.currentIndex + 2 == index % arcRepeater.listLength) return 0.5
-      //   if(root.currentIndex + 3 == index % arcRepeater.listLength) return 0.5
-      //   if(root.currentIndex + 4 == index % arcRepeater.listLength) return 0.9
-      // }
 
       width: 80
       height: 80
@@ -151,22 +144,29 @@ PanelWindow {
         property var coorFromLeft: bubble.mapToItem(circle, 0, bubble.height/2);
         property int distFromLeft: Math.round(coorFromLeft.x);
 
-        color: mouseArea.pressed
-          ? Theme.gray
-          : (mouseArea.containsMouse ? Theme.dark_gray : Theme.background_secondary)
-        border.color: Theme.gray
+        // color: mouseArea.pressed
+        //   ? Theme.gray
+        //   : (mouseArea.containsMouse ? Theme.dark_gray : Theme.background_secondary)
+        color: Theme.background_primary
+        // border.color: Theme.gray
+        //
 
         readonly property string iconName: root.actions[index % arcRepeater.listLength].label
         Loader{
           id: iconLoader
           anchors.fill: parent
           source: bubble.iconName == "Lock" ? "LockIcon.qml"
+          // source: bubble.iconName == "Lock" ? null 
           : bubble.iconName == "Logout" ? "LogoutIcon.qml"
           : bubble.iconName == "Sleep" ? "SleepIcon.qml"
           : bubble.iconName == "Reboot" ? "RebootIcon.qml"
           : bubble.iconName == "Poweroff" ? "PowerIcon.qml"
           : null
         }
+        // IconImage{
+        //   anchors.fill: parent
+        //   source: Quickshell.iconPath("system-lock-screen")
+        // }
 
         MouseArea {
           id: mouseArea
@@ -178,7 +178,8 @@ PanelWindow {
               command: ["sh", "-c", root.actions[index % arcRepeater.listLength].command]
             })
           }
-          onEntered: () => { iconLoader.item.isHovered = true }
+          // onEntered: () => { iconLoader.item.isHovered = true; print(bubble.distFromLeft) }
+          onEntered: () => {print(bubble.distFromLeft) }
           onExited: () => { iconLoader.item.isHovered = false }
         }
       }

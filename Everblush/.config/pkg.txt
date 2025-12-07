@@ -110,8 +110,6 @@ inter-font
 ttf-fira-code
 fontforge
 cloudflare-warp-bin
---rebuild
 google-breakpad
---rebuild
 baobab
 progress
