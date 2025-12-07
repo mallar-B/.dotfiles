@@ -4,144 +4,191 @@ import Quickshell.Widgets
 import qs.Common
 
 PanelWindow {
-	id: root
-	property var barRef
+  id: root
+  property var barRef
 
-	anchors {
-		right: true
-		top: true
-	}
+  anchors {
+    right: true
+    top: true
+  }
 
-	exclusionMode: "Ignore"
+  exclusionMode: "Ignore"
 
-	property int diameter: 500
+  property int diameter: 500
 
-	implicitWidth: diameter / 2
-	implicitHeight: diameter
-	margins.top: barRef.height + 10
+  implicitWidth: diameter / 2
+  implicitHeight: diameter
+  margins.top: barRef.height + 10
 
-	color: "transparent"
+  color: "transparent"
 
-	focusable: true
+  focusable: true
 
-	// Powermenu actions
-	property var actions: [
-		{ label: "Lock", command: "hyprlock", icon: "system-lock-screen" },
-		{ label: "Logout", command: "hyprctl dispatch exit", icon: "system-log-out" },
-		{ label: "Sleep", command: "systemctl suspend", icon: "system-suspend" },
-		{ label: "Reboot", command: "systemctl reboot", icon: "system-reboot" },
-		{ label: "Poweroff", command: "systemctl poweroff", icon: "system-shutdown-symbolic" }
-	]
+  // Powermenu actions
+  property var actions: [
+    { label: "Lock", command: "hyprlock", icon: "system-lock-screen" },
+    { label: "Logout", command: "hyprctl dispatch exit", icon: "system-log-out" },
+    { label: "Sleep", command: "systemctl suspend", icon: "system-suspend" },
+    { label: "Reboot", command: "systemctl reboot", icon: "system-reboot" },
+    { label: "Poweroff", command: "systemctl poweroff", icon: "system-shutdown-symbolic" }
+  ]
+  property var components: [
+    "PowerIcon"
+  ]
   // rotation of the whole arc
-  property real angleOffset: 0
+  property int angleOffset: 0
+  property int animatedAngleOffset: 0 // to avoid wrong offset because of animation
 
-  // target angle for "center" (left side of circle ~= 180°)
-  property real targetAngle: 180
+  // target angle for center
+  // property real targetAngle: 90
 
   // which REPEATER index is currently closest to targetAngle
   property int currentIndex: -1
 
-  // convenience: the logical action under the "center"
-  property var currentAction: currentIndex >= 0
-    ? actions[currentIndex % actions.length]
-    : null
+  function updateCurrent() {
+    // Left-middle point of the circle
+    var leftX = circle.x;          // left edge of circle
+    var leftY = circle.y + circle.height / 2;     // vertical center of circle
 
-	// Full circle background, only the left half is visible inside the window
-	Rectangle {
-		id: circle
-		width: root.diameter
-		height: root.diameter
-		radius: width / 2
+    var minDistSq = Number.MAX_VALUE;
+    var best = -1;
 
-		anchors.verticalCenter: parent.verticalCenter
-		anchors.left: parent.left
+    for (var i = 0; i < arcRepeater.count; ++i) {
+      var item = arcRepeater.itemAt(i);
+      if (!item) continue;
 
-		// color: Theme.background_primary
-		color: "red"
-		border.color: Theme.dark_gray
-		MouseArea {
-			anchors.fill: parent
-			onWheel: (e) =>{
-				root.angleOffset += e.angleDelta.y / 120 * 5
-				print(e.angleDelta.y)
-			}
-		}
-	}
+      // left of the icon
+      var cx = item.x
+      var cy = item.y + item.height / 2;
 
-	// arc layout of buttons along the circle
-	Repeater {
-    id: repeater
+      var dx = cx - leftX;
+      var dy = cy - leftY;
+      var distSq = dx * dx + dy * dy;
+
+      if (distSq < minDistSq) {
+          minDistSq = distSq;
+          best = i;
+      }
+    }
+
+    currentIndex = best % root.actions.length;
+    // console.log("called")
+  }
+  onAngleOffsetChanged: animatedAngleOffset = angleOffset
+  Component.onCompleted: updateCurrent()
+  onAnimatedAngleOffsetChanged: updateCurrent()
+
+  // Full circle background, only the left half is visible inside the window
+  Rectangle {
+    id: circle
+    width: root.diameter
+    height: root.diameter
+    radius: width / 2
+
+    anchors.verticalCenter: parent.verticalCenter
+    anchors.left: parent.left
+
+    color: Theme.background_primary
+    border.color: Theme.dark_gray
+    MouseArea {
+      anchors.fill: parent
+      onWheel: (e) =>{
+        root.angleOffset += (e.angleDelta.y / 120 * 36) - ((e.angleDelta.y / 120 * 36) % 36)
+        // console.log(root.animatedAngleOffset,root.angleOffset)
+      }
+    }
+  }
+
+  // arc layout of buttons along the circle
+  Repeater {
+    id: arcRepeater
     property int listLength: root.actions.length
+    property int rings: 2 // how many times we wrap the items around
 
-		model: listLength * 2
+    model: listLength * rings // duplicates to give the spinning illusion
 
-		delegate: Item {
-			id: slot
+    delegate: Item {
+      id: slot
+      // scale:{
+      //   if(root.currentIndex == index % arcRepeater.listLength) return 1.4
+      //   if(root.currentIndex + 1 == index % arcRepeater.listLength) return 0.9
+      //   if(root.currentIndex + 2 == index % arcRepeater.listLength) return 0.5
+      //   if(root.currentIndex + 3 == index % arcRepeater.listLength) return 0.5
+      //   if(root.currentIndex + 4 == index % arcRepeater.listLength) return 0.9
+      // }
 
-			width: 80
-			height: 80
+      width: 80
+      height: 80
 
-			// Angle span along the visible (left) half of the circle
-			// 0° = right, 90° = up, 180° = left, 270° = down
-			// property real startAngle: 110
-			// property real endAngle:   250
-			property real startAngle: 105
-			property real endAngle:   250
+      // 0 deg = right, 90 deg = up, 180 deg = left, 270 deg = down
+      property real startAngle: 0
+      property real endAngle:   360
 
-			property real t: repeater.listLength > 1
-				? index / (repeater.listLength - 1)
-				: 0.5
+      // distribute the model items evenly
+      property real t: arcRepeater.model > 0
+        ? index / arcRepeater.model
+        : 0.0
 
-			// property real angleDeg: startAngle + (endAngle - startAngle) * t
-			property real angleDeg: (startAngle + (endAngle - startAngle) * t + root.angleOffset) % 360
-			property real angleRad: angleDeg * Math.PI / 180
+      property real angleDeg: (startAngle + (endAngle - startAngle) * t + root.animatedAngleOffset) % 360
+      property real angleRad: angleDeg * Math.PI / 180
 
-			// Keep buttons slightly inside the edge of the circle
-			property real r: root.diameter * 0.38
+      // Keep buttons  inside the edge of the circle
+      property real r: root.diameter * 0.38
 
-			readonly property real cx: circle.x + circle.width  / 2
-			readonly property real cy: circle.y + circle.height / 2
+      readonly property real cx: circle.x + circle.width  / 2
+      readonly property real cy: circle.y + circle.height / 2
 
-			// Convert polar -> Cartesian (Qt y-axis goes down)
-			x: cx + r * Math.cos(angleRad) - width  / 2
-			y: cy - r * Math.sin(angleRad) - height / 2
+      // Convert polar -> Cartesian (Qt y-axis goes down)
+      x: cx + r * Math.cos(angleRad) - width  / 2
+      y: cy - r * Math.sin(angleRad) - height / 2
 
-			// Button bubble
-			Rectangle {
-				id: bubble
-				anchors.centerIn: parent
-				width: parent.width
-				height: parent.height
-				radius: width / 2
+      Rectangle {
+        id: bubble
 
-				color: mouseArea.pressed
-					? Theme.gray
-					: (mouseArea.containsMouse ? Theme.dark_gray : Theme.background_secondary)
+        anchors.fill: parent
+        radius: width / 2
 
-				border.color: Theme.gray
+        property var coorFromLeft: bubble.mapToItem(circle, 0, bubble.height/2);
+        property int distFromLeft: Math.round(coorFromLeft.x);
 
-				Column {
-					anchors.centerIn: parent
-					spacing: 2
+        color: mouseArea.pressed
+          ? Theme.gray
+          : (mouseArea.containsMouse ? Theme.dark_gray : Theme.background_secondary)
+        border.color: Theme.gray
 
-					IconImage {
-						width: 60
-						height: 60
-						source: Quickshell.iconPath(root.actions[index % repeater.listLength].icon)
-						mipmap: true
-					}
-				}
+        readonly property string iconName: root.actions[index % arcRepeater.listLength].label
+        Loader{
+          id: iconLoader
+          anchors.fill: parent
+          source: bubble.iconName == "Lock" ? "LockIcon.qml"
+          : bubble.iconName == "Logout" ? "LogoutIcon.qml"
+          : bubble.iconName == "Sleep" ? "SleepIcon.qml"
+          : bubble.iconName == "Reboot" ? "RebootIcon.qml"
+          : bubble.iconName == "Poweroff" ? "PowerIcon.qml"
+          : null
+        }
 
-				MouseArea {
-					id: mouseArea
-					anchors.fill: parent
-					hoverEnabled: true
+        MouseArea {
+          id: mouseArea
+          anchors.fill: parent
+          hoverEnabled: true
 
-					onClicked: {
-						Quickshell.execDetached({command: ["sh", "-c", root.actions[index % repeater.listLength].command]})
-					}
-				}
-			}
-		}
-	}
+          onClicked: () =>{
+            Quickshell.execDetached({
+              command: ["sh", "-c", root.actions[index % arcRepeater.listLength].command]
+            })
+          }
+          onEntered: () => { iconLoader.item.isHovered = true }
+          onExited: () => { iconLoader.item.isHovered = false }
+        }
+      }
+    }
+  }
+  Behavior on animatedAngleOffset {
+    NumberAnimation {
+      duration: Anim.durations.normal
+      easing.type: Easing.Bezier
+      easing.bezierCurve: Anim.curves.expressiveEffects
+    }
+  }
 }
