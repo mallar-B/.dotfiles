@@ -40,11 +40,12 @@ Canvas {
 
     // Second arc
     // ctx.translate(cx /2, cy/2)
-    ctx.translate(cx - 9, 0)
+    ctx.rotate(Math.PI/50)
+    ctx.translate(cx +5, 0)
     ctx.beginPath();
-    ctx.arc(0, 0, radius * 1.1, Math.PI * 4/6, Math.PI * 8/6);
+    ctx.arc(0, 0, radius * 1.2, Math.PI * 4.5/6, Math.PI * 7.5/6);
     ctx.stroke()
-    ctx.fillRect(10, 0, 5, 5)//center
+    // ctx.fillRect(10, 0, 5, 5)//center
   }
 
   onFillColorChanged: requestPaint()

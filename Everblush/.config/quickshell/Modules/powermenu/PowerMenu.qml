@@ -169,8 +169,7 @@ PanelWindow {
           id: iconLoader
           anchors.fill: parent
           source: bubble.iconName == "Lock" ? "LockIcon.qml"
-          // source: bubble.iconName == "Lock" ? null
-          // : bubble.iconName == "Logout" ? "LogoutIcon.qml"
+          : bubble.iconName == "Logout" ? "LogoutIcon.qml"
           : bubble.iconName == "Sleep" ? "SleepIcon.qml"
           : bubble.iconName == "Reboot" ? "RebootIcon.qml"
           : bubble.iconName == "Poweroff" ? "PowerIcon.qml"

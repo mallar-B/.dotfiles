@@ -23,5 +23,5 @@ ShellRoot{
 		barRef: bar
 	}
 	VolumeOSD{}
-	// PowerMenu{ barRef: bar}
+	PowerMenu{ barRef: bar}
 }
