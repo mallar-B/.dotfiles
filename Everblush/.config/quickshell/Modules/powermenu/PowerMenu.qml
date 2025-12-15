@@ -71,7 +71,7 @@ PanelWindow {
       }
     }
 
-    currentIndex = best % root.actions.length;
+    currentIndex = best % (root.actions.length * 2);
     // console.log("called")
   }
   onAngleOffsetChanged: animatedAngleOffset = angleOffset
@@ -122,7 +122,8 @@ PanelWindow {
         ? index / arcRepeater.model
         : 0.0
 
-      property real angleDeg: (startAngle + (endAngle - startAngle) * t + root.animatedAngleOffset) % 360
+      // property real angleDeg: (startAngle + (endAngle - startAngle) * t + root.animatedAngleOffset) % 360
+      property real angleDeg: startAngle + (endAngle - startAngle) * t + root.animatedAngleOffset
       property real angleRad: angleDeg * Math.PI / 180
 
       // Keep buttons  inside the edge of the circle
@@ -132,8 +133,10 @@ PanelWindow {
       readonly property real cy: circle.y + circle.height / 2
 
       // Convert polar -> Cartesian (Qt y-axis goes down)
-      x: cx + r * Math.cos(angleRad) - width  / 2
-      y: cy - r * Math.sin(angleRad) - height / 2
+      // x: cx + r * Math.cos(angleRad) - width  / 2
+      // y: cy - r * Math.sin(angleRad) - height / 2
+      x: Math.round(cx + r * Math.cos(angleRad) - width  / 2)
+      y: Math.round(cy - r * Math.sin(angleRad) - height / 2)
 
       Rectangle {
         id: bubble
@@ -149,24 +152,31 @@ PanelWindow {
         //   : (mouseArea.containsMouse ? Theme.dark_gray : Theme.background_secondary)
         color: Theme.background_primary
         // border.color: Theme.gray
-        //
+        // scale: Math.abs(index - root.currentIndex) === 0 ? 1.05
+        // : Math.abs(index - root.currentIndex) === 1 ? 0.8
+        // : Math.abs(index - root.currentIndex) === 2 ? 0.7 : 0.3
+
+        Component { 
+          id: fallbackComponent;
+          IconImage {
+            anchors.fill: parent;
+            source: Quickshell.iconPath("dialog-error-symbolic") 
+          }
+        }
 
         readonly property string iconName: root.actions[index % arcRepeater.listLength].label
         Loader{
           id: iconLoader
           anchors.fill: parent
           source: bubble.iconName == "Lock" ? "LockIcon.qml"
-          // source: bubble.iconName == "Lock" ? null 
-          : bubble.iconName == "Logout" ? "LogoutIcon.qml"
+          // source: bubble.iconName == "Lock" ? null
+          // : bubble.iconName == "Logout" ? "LogoutIcon.qml"
           : bubble.iconName == "Sleep" ? "SleepIcon.qml"
           : bubble.iconName == "Reboot" ? "RebootIcon.qml"
           : bubble.iconName == "Poweroff" ? "PowerIcon.qml"
-          : null
+          : fallbackComponent
+
         }
-        // IconImage{
-        //   anchors.fill: parent
-        //   source: Quickshell.iconPath("system-lock-screen")
-        // }
 
         MouseArea {
           id: mouseArea
@@ -179,17 +189,23 @@ PanelWindow {
             })
           }
           // onEntered: () => { iconLoader.item.isHovered = true; print(bubble.distFromLeft) }
-          onEntered: () => {print(bubble.distFromLeft) }
+          onEntered: () => {print(root.currentIndex, index) }
           onExited: () => { iconLoader.item.isHovered = false }
+        }
+        Behavior on scale{
+          NumberAnimation {
+            duration: Anim.durations.small
+            easing.type: Easing.Bezier
+            easing.bezierCurve: Anim.curves.expressiveEffects
+          }
         }
       }
     }
   }
   Behavior on animatedAngleOffset {
     NumberAnimation {
-      duration: Anim.durations.normal
-      easing.type: Easing.Bezier
-      easing.bezierCurve: Anim.curves.expressiveEffects
+      duration: Anim.durations.small
+      easing.type: Easing.InOutSine
     }
   }
 }
