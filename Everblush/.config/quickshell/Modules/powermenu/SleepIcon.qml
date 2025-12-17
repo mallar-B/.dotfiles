@@ -1,58 +1,132 @@
 import QtQuick
 import qs.Common
+Item{
+  id: root
 
-import QtQuick
-import qs.Common
-
-Canvas {
-  id: icon
-  property color fillColor: Theme.yellow
   property color strokeColor: Theme.yellow
-  property real strokeWidth: 10
+  property real  strokeWidth: 10
+  property real  introProgress: 0.0
+  property real  rotation: 0.0
 
-  onPaint: {
-    const ctx = getContext("2d");
-    if (!ctx) return;
+  Canvas {
+    id: canvas
+    anchors.fill: parent
 
-    ctx.reset();
-    ctx.clearRect(0, 0, width, height);
+    renderTarget: Canvas.Image
+    renderStrategy: Canvas.Immediate
 
-    const w = width;
-    const h = height;
-    const cx = w * 0.5;
-    const cy = h * 0.5;
-    const radius = Math.min(w, h) * 0.44;
+    onPaint: {
+      const ctx = getContext("2d");
+      if (!ctx) return;
 
-    ctx.lineJoin = "round";
-    ctx.lineCap = "round";
-    ctx.strokeStyle = strokeColor;
-    ctx.lineWidth = strokeWidth;
+      ctx.reset();
+      ctx.clearRect(0, 0, width, height);
 
-    // First arc
-    // ctx.rotate(0)
-    ctx.translate(cx, cy)
-    ctx.rotate(-Math.PI/4)
-    ctx.beginPath();
-    ctx.arc(0, 0, radius, Math.PI/2.5, Math.PI * 5/3);
-    ctx.stroke();
+      // Wobble
+      ctx.translate(width / 2, height / 2);
+      ctx.rotate(root.rotation);
+      ctx.translate(-width / 2, -height / 2);
 
-    ctx.fillStyle = "red";
+      const w      = width;
+      const h      = height;
+      const cx     = w * 0.5;
+      const cy     = h * 0.5;
+      const radius = Math.min(w, h) * 0.44;
 
-    // Second arc
-    // ctx.translate(cx /2, cy/2)
-    ctx.rotate(Math.PI/50)
-    ctx.translate(cx +5, 0)
-    ctx.beginPath();
-    ctx.arc(0, 0, radius * 1.2, Math.PI * 4.5/6, Math.PI * 7.5/6);
-    ctx.stroke()
-    // ctx.fillRect(10, 0, 5, 5)//center
+      ctx.lineJoin    = "round";
+      ctx.lineCap     = "round";
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth   = strokeWidth;
+
+      function clamp01(x) { return Math.max(0, Math.min(1, x)); }
+
+      function arcPart(cx, cy, r, a0, a1, anticlockwise, rem) {
+        const da = a1 - a0;
+        const arcLen = Math.abs(da) * r;
+        if (arcLen <= 0) return rem;
+
+        const t = Math.min(1, rem / arcLen);
+        const a = a0 + da * t;
+        ctx.arc(cx, cy, r, a0, a, anticlockwise);
+        return rem - arcLen;
+      }
+
+      // ---- Arc configurations ----
+      const arc1Start = Math.PI / 2.5;
+      const arc1End   = Math.PI * 5 / 3;
+
+      const arc2Start = Math.PI * 4.5 / 6;
+      const arc2End   = Math.PI * 7.5 / 6;
+
+      const arc1Len = Math.abs(arc1End - arc1Start) * radius;
+      const arc2Len = Math.abs(arc2End - arc2Start) * radius * 1.2;
+
+      const totalLen = arc1Len + arc2Len;
+      let visible = clamp01(introProgress) * totalLen;
+
+      // ---- First arc ----
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(-Math.PI / 4);
+
+      if (visible > 0) {
+        ctx.beginPath();
+        ctx.moveTo(
+          Math.cos(arc1Start) * radius,
+          Math.sin(arc1Start) * radius
+        );
+        visible = arcPart(0, 0, radius, arc1Start, arc1End, false, visible);
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      if (visible <= 0) return;
+
+      // ---- Second arc ----
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(-Math.PI / 4);
+      ctx.rotate(Math.PI / 50);
+      ctx.translate(cx + 5, 0);
+
+      ctx.beginPath();
+      ctx.moveTo(
+        Math.cos(arc2Start) * radius * 1.2,
+        Math.sin(arc2Start) * radius * 1.2
+      );
+      arcPart(0, 0, radius * 1.2, arc2Start, arc2End, false, visible);
+      ctx.stroke();
+
+      ctx.restore();
+    }
+  }
+  ParallelAnimation{
+    id: introAnim
+    NumberAnimation {
+      target: root
+      property: "introProgress"
+      from: 0
+      to: 1
+      duration: 600
+      easing.type: Easing.OutCubic
+    }
+    NumberAnimation {
+      target: root
+      property: "rotation"
+      from: -Math.PI
+      to: 0
+      duration: 700
+      easing.type: Easing.OutBack
+    }
   }
 
-  onFillColorChanged: requestPaint()
-  onStrokeColorChanged: requestPaint()
-  onStrokeWidthChanged: requestPaint()
-  onWidthChanged: requestPaint()
-  onHeightChanged: requestPaint()
+  Component.onCompleted: introAnim.start()
+
+  onIntroProgressChanged: canvas.requestPaint()
+  onStrokeColorChanged: canvas.requestPaint()
+  onStrokeWidthChanged: canvas.requestPaint()
+  onWidthChanged: canvas.requestPaint()
+  onHeightChanged: canvas.requestPaint()
 }
 
 // directly from svg
