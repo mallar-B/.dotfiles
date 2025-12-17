@@ -1,6 +1,9 @@
 import QtQuick
+import QtQuick.Controls
+import QtQuick.Effects
 import Quickshell
 import Quickshell.Widgets
+import Quickshell.Wayland
 import qs.Common
 
 PanelWindow {
@@ -13,6 +16,7 @@ PanelWindow {
   }
 
   exclusionMode: "Ignore"
+  visible: false
 
   property int diameter: 500
 
@@ -26,15 +30,13 @@ PanelWindow {
 
   // Powermenu actions
   property var actions: [
-    { label: "Poweroff", command: "systemctl poweroff", icon: "system-shutdown-symbolic" },
-    { label: "Sleep", command: "systemctl suspend", icon: "system-suspend" },
-    { label: "Reboot", command: "systemctl reboot", icon: "system-reboot" },
-    { label: "Lock", command: "hyprlock", icon: "system-lock-screen" },
-    { label: "Logout", command: "hyprctl dispatch exit", icon: "system-log-out" },
+    { label: "Shutdown", command: "systemctl poweroff", icon: "system-shutdown-symbolic", color: Theme.red },
+    { label: "Sleep", command: "systemctl suspend", icon: "system-suspend", color: Theme.yellow },
+    { label: "Reboot", command: "systemctl reboot", icon: "system-reboot", color: Theme.blue },
+    { label: "Lock", command: "hyprlock", icon: "system-lock-screen", color: Theme.green },
+    { label: "Logout", command: "hyprctl dispatch exit", icon: "system-log-out", color: Theme.purple },
   ]
-  property var components: [
-    "PowerIcon"
-  ]
+
   // rotation of the whole arc
   property int angleOffset: 0
   property int animatedAngleOffset: 0 // to avoid wrong offset because of animation
@@ -74,8 +76,22 @@ PanelWindow {
     currentIndex = best % (root.actions.length * 2);
     // console.log("called")
   }
+
+  function toggleWindow() {
+    if (root.visible){
+      root.visible = false;
+      return;
+    }
+    if (!root.visible){
+      root.visible = true;
+    }
+  }
+
   onAngleOffsetChanged: animatedAngleOffset = angleOffset
-  Component.onCompleted: updateCurrent()
+  Component.onCompleted: {
+    updateCurrent()
+		  this.WlrLayershell.namespace = "powermenu";
+  }
   onAnimatedAngleOffsetChanged: updateCurrent()
 
   // Full circle background, only the left half is visible inside the window
@@ -94,7 +110,35 @@ PanelWindow {
       anchors.fill: parent
       onWheel: (e) =>{
         root.angleOffset += (e.angleDelta.y / 120 * 36) - ((e.angleDelta.y / 120 * 36) % 36)
-        // console.log(root.animatedAngleOffset,root.angleOffset)
+      }
+    }
+    Rectangle{
+      anchors.verticalCenter: parent.verticalCenter
+      anchors.horizontalCenter: parent.horizontalCenter
+      anchors.horizontalCenterOffset: -(circle.width / 7)
+
+      Label{
+        id: currentLabel
+        property var currentIcon: root.actions[root.currentIndex % root.actions.length]
+
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        text: currentIcon.label
+        // color: currentIcon.color
+        color: Theme.foreground_secondary
+        font.pointSize: 18
+        font.family: "Monaspace Radon Frozen"
+
+        // Glow
+        layer.enabled: true
+        layer.effect: MultiEffect {
+        shadowEnabled: true
+        shadowColor: currentLabel.currentIcon.color
+        shadowBlur: 1.0
+        shadowScale: 1.1
+        shadowHorizontalOffset: 0
+        shadowVerticalOffset: 0
+        }
       }
     }
   }
@@ -147,8 +191,8 @@ PanelWindow {
         // Propertyies to decide relative distance from currindex
         property int relDist: {
           if(Math.abs(index - root.currentIndex) >= root.actions.length){
-            return root.actions.length 
-              - (Math.abs(index - root.currentIndex) 
+            return root.actions.length
+              - (Math.abs(index - root.currentIndex)
               % root.actions.length)
           }
           return Math.abs(index - root.currentIndex)
@@ -173,15 +217,16 @@ PanelWindow {
 
         readonly property string iconName: root.actions[index % arcRepeater.listLength].label
         Loader{
+          active: root.visible
           id: iconLoader
           anchors.fill: parent
-          source: bubble.iconName == "Lock" ? "LockIcon.qml"
-          : bubble.iconName == "Logout" ? "LogoutIcon.qml"
-          : bubble.iconName == "Sleep" ? "SleepIcon.qml"
-          : bubble.iconName == "Reboot" ? "RebootIcon.qml"
-          : bubble.iconName == "Poweroff" ? "PowerIcon.qml"
-          : fallbackComponent
-
+          source:
+              bubble.iconName == "Lock"     ? "../../Common/icons/LockIcon.qml"
+            : bubble.iconName == "Logout"   ? "../../Common/icons/LogoutIcon.qml"
+            : bubble.iconName == "Sleep"    ? "../../Common/icons/SleepIcon.qml"
+            : bubble.iconName == "Reboot"   ? "../../Common/icons/RebootIcon.qml"
+            : bubble.iconName == "Shutdown" ? "../../Common/icons/PowerIcon.qml"
+            : fallbackComponent
         }
 
         MouseArea {
@@ -195,8 +240,8 @@ PanelWindow {
               command: ["sh", "-c", root.actions[index % arcRepeater.listLength].command]
             })
           }
-          // onEntered: () => { iconLoader.item.isHovered = true }
-          // onExited: () => { iconLoader.item.isHovered = false }
+          onEntered: () => { root.currentIndex = index }
+          onExited: () => { root.updateCurrent() }
         }
         Behavior on scale{
           NumberAnimation {
@@ -208,6 +253,7 @@ PanelWindow {
       }
     }
   }
+
   Behavior on animatedAngleOffset {
     NumberAnimation {
       duration: Anim.durations.small

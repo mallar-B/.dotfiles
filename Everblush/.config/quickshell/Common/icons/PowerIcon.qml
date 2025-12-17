@@ -7,6 +7,7 @@ Canvas {
   width: 100
   height: 100
   contextType: "2d"
+  anchors.fill: parent
 
   property bool isHovered: false
 

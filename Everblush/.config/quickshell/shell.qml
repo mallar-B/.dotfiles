@@ -14,6 +14,7 @@ ShellRoot{
 		DateTime{
 			calendarRef: calendarWindow
 		}
+		powerMenuRef: powerMenuWindow
 	}
 	Calendar {
 		id: calendarWindow
@@ -23,5 +24,8 @@ ShellRoot{
 		barRef: bar
 	}
 	VolumeOSD{}
-	PowerMenu{ barRef: bar}
+	PowerMenu{ 
+		id: powerMenuWindow
+		barRef: bar
+	}
 }

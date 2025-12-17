@@ -9,6 +9,8 @@ import qs.Common
 PanelWindow {
 	id: root
 
+	required property var powerMenuRef
+
 	Component.onCompleted: {
 		if (this.WlrLayershell != null) {
 		this.WlrLayershell.layer = WlrLayer.Top;
@@ -64,7 +66,27 @@ PanelWindow {
 				Layout.alignment: Qt.AlignRight
 				barRef: root
 			}
-
+			// powericon
+			Item{
+				width: 20
+				height: 20
+				Text{
+					anchors.verticalCenter: parent.verticalCenter
+					anchors.horizontalCenter: parent.horizontalCenter
+					text: ""
+					color: Theme.light_red
+					font.pointSize: 15
+					font.bold: true
+				}
+				MouseArea{
+					anchors.fill: parent
+					hoverEnabled: true
+					cursorShape: Qt.PointingHandCursor
+					onClicked: () =>{
+						root.powerMenuRef.toggleWindow()
+					}
+				}
+			}
 		}
 	}
 }
