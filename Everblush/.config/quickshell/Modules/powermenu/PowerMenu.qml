@@ -26,11 +26,11 @@ PanelWindow {
 
   // Powermenu actions
   property var actions: [
-    { label: "Lock", command: "hyprlock", icon: "system-lock-screen" },
-    { label: "Logout", command: "hyprctl dispatch exit", icon: "system-log-out" },
+    { label: "Poweroff", command: "systemctl poweroff", icon: "system-shutdown-symbolic" },
     { label: "Sleep", command: "systemctl suspend", icon: "system-suspend" },
     { label: "Reboot", command: "systemctl reboot", icon: "system-reboot" },
-    { label: "Poweroff", command: "systemctl poweroff", icon: "system-shutdown-symbolic" }
+    { label: "Lock", command: "hyprlock", icon: "system-lock-screen" },
+    { label: "Logout", command: "hyprctl dispatch exit", icon: "system-log-out" },
   ]
   property var components: [
     "PowerIcon"
@@ -144,23 +144,30 @@ PanelWindow {
         anchors.fill: parent
         radius: width / 2
 
-        property var coorFromLeft: bubble.mapToItem(circle, 0, bubble.height/2);
-        property int distFromLeft: Math.round(coorFromLeft.x);
+        // Propertyies to decide relative distance from currindex
+        property int relDist: {
+          if(Math.abs(index - root.currentIndex) >= root.actions.length){
+            return root.actions.length 
+              - (Math.abs(index - root.currentIndex) 
+              % root.actions.length)
+          }
+          return Math.abs(index - root.currentIndex)
+        }
 
         // color: mouseArea.pressed
         //   ? Theme.gray
         //   : (mouseArea.containsMouse ? Theme.dark_gray : Theme.background_secondary)
         color: Theme.background_primary
         // border.color: Theme.gray
-        // scale: Math.abs(index - root.currentIndex) === 0 ? 1.05
-        // : Math.abs(index - root.currentIndex) === 1 ? 0.8
-        // : Math.abs(index - root.currentIndex) === 2 ? 0.7 : 0.3
+        scale: relDist === 0 ? 1.1
+        : relDist === 1 ? 0.6
+        : relDist === 2 ? 0.5 : 0.3
 
-        Component { 
+        Component {
           id: fallbackComponent;
           IconImage {
             anchors.fill: parent;
-            source: Quickshell.iconPath("dialog-error-symbolic") 
+            source: Quickshell.iconPath("dialog-error-symbolic")
           }
         }
 
@@ -181,15 +188,15 @@ PanelWindow {
           id: mouseArea
           anchors.fill: parent
           hoverEnabled: true
+          cursorShape: Qt.PointingHandCursor
 
           onClicked: () =>{
             Quickshell.execDetached({
               command: ["sh", "-c", root.actions[index % arcRepeater.listLength].command]
             })
           }
-          // onEntered: () => { iconLoader.item.isHovered = true; print(bubble.distFromLeft) }
-          onEntered: () => {print(root.currentIndex, index) }
-          onExited: () => { iconLoader.item.isHovered = false }
+          // onEntered: () => { iconLoader.item.isHovered = true }
+          // onExited: () => { iconLoader.item.isHovered = false }
         }
         Behavior on scale{
           NumberAnimation {
