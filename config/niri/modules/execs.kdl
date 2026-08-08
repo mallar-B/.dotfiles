@@ -1,0 +1,22 @@
+spawn-sh-at-startup "quickshell"
+
+// Thunderbird
+window-rule {
+    match app-id="net.thunderbird.Thunderbird"
+    open-on-workspace "10"
+    open-focused false
+    open-maximized true
+}
+spawn-at-startup "thunderbird"
+
+// Work Browser
+window-rule {
+    match app-id="chromium-browser"
+    open-on-workspace "5"
+    open-focused false
+    open-maximized true
+}
+spawn-at-startup "chromium-browser"
+
+// Wallpaper
+spawn-sh-at-startup "swaybg -i ~/Pictures/Wallpapers/fuji.jpg"

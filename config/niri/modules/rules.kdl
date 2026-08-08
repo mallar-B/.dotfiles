@@ -1,0 +1,36 @@
+// Terminal
+window-rule {
+    match app-id="Alacritty"
+    default-column-width {
+        proportion 0.33333
+    }
+}
+recent-windows {
+    binds {
+        Mod+Tab {
+            next-window scope="workspace"
+        }
+        Mod+Shift+Tab {
+            previous-window scope="workspace"
+        }
+        Alt+Tab {
+            next-window scope="all"
+        }
+        Alt+Shift+Tab {
+            previous-window scope="all"
+        }
+    }
+}
+layer-rule {
+    match namespace="^wallpaper$"
+    place-within-backdrop true
+}
+layer-rule {
+    match namespace="^workspace-blur$"
+    background-effect {
+        blur true
+        xray true
+        saturation 1.0
+        noise 0.01
+    }
+}
