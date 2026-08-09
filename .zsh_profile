@@ -1,0 +1,122 @@
+# ============================================================
+# Minimal Zsh prompt — Starship replacement
+# Requires a Nerd Font for icons
+# ============================================================
+
+# Disable any existing prompt framework.
+unset STARSHIP_SHELL
+PROMPT=''
+RPROMPT=''
+
+# Enable prompt substitutions such as $(git_prompt_info).
+setopt PROMPT_SUBST
+
+# Built-in color support.
+autoload -Uz colors && colors
+
+# Built-in Git repository information.
+autoload -Uz vcs_info
+autoload -Uz add-zsh-hook
+
+# ------------------------------------------------------------
+# Colors
+# ------------------------------------------------------------
+
+PROMPT_USER_COLOR='%F{cyan}'
+PROMPT_HOST_COLOR='%F{blue}'
+PROMPT_PATH_COLOR='%F{green}'
+PROMPT_GIT_COLOR='%F{magenta}'
+PROMPT_ERROR_COLOR='%F{red}'
+PROMPT_DIM_COLOR='%F{244}'
+PROMPT_RESET='%f'
+
+# ------------------------------------------------------------
+# Git configuration
+# ------------------------------------------------------------
+
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' check-for-changes true
+
+# Branch with no changes.
+zstyle ':vcs_info:git:*' formats \
+  "${PROMPT_GIT_COLOR}   %b${PROMPT_RESET}%u%c"
+
+# Branch while an operation such as rebase/merge is active.
+zstyle ':vcs_info:git:*' actionformats \
+  "${PROMPT_GIT_COLOR}   %b${PROMPT_RESET} ${PROMPT_ERROR_COLOR}[%a]${PROMPT_RESET}%u%c"
+
+# Working tree markers.
+zstyle ':vcs_info:git:*' stagedstr \
+  " ${PROMPT_USER_COLOR}●${PROMPT_RESET}"
+
+zstyle ':vcs_info:git:*' unstagedstr \
+  " ${PROMPT_ERROR_COLOR}●${PROMPT_RESET}"
+
+# ------------------------------------------------------------
+# Prompt state
+# ------------------------------------------------------------
+
+typeset -g PROMPT_EXIT_STATUS=''
+typeset -g PROMPT_COMMAND_SYMBOL='❯'
+typeset -g PROMPT_GIT_STATUS=''
+
+function update_prompt_state() {
+  local last_status=$?
+
+  # Refresh Git information.
+  vcs_info
+
+  # Git ahead/behind status.
+  PROMPT_GIT_STATUS=''
+  if [[ -n ${vcs_info_msg_0_} ]]; then
+    local ahead behind
+    local counts=$(git rev-list --left-right --count HEAD...@{upstream} 2>/dev/null)
+    if [[ -n $counts ]]; then
+      read ahead behind <<< "$counts"
+      (( ahead > 0 )) && PROMPT_GIT_STATUS+=" ${PROMPT_USER_COLOR}⇡${PROMPT_RESET}"
+      (( behind > 0 )) && PROMPT_GIT_STATUS+=" ${PROMPT_ERROR_COLOR}⇣${PROMPT_RESET}"
+    fi
+  fi
+
+  # Show non-zero exit status only.
+  if (( last_status != 0 )); then
+    PROMPT_EXIT_STATUS="${PROMPT_ERROR_COLOR}✘ ${last_status}${PROMPT_RESET}  "
+    PROMPT_COMMAND_SYMBOL="${PROMPT_ERROR_COLOR}❯${PROMPT_RESET}"
+  else
+    PROMPT_EXIT_STATUS=''
+    PROMPT_COMMAND_SYMBOL="${PROMPT_USER_COLOR}❯${PROMPT_RESET}"
+  fi
+}
+
+add-zsh-hook precmd update_prompt_state
+
+# ------------------------------------------------------------
+# Prompt
+# ------------------------------------------------------------
+
+# Example:
+# ~/projects/app   main ●
+# ❯
+PROMPT='${PROMPT_EXIT_STATUS}${PROMPT_PATH_COLOR}%~${PROMPT_RESET}${vcs_info_msg_0_}${PROMPT_GIT_STATUS}
+${PROMPT_COMMAND_SYMBOL} '
+
+# Optional right-side username/hostname for SSH sessions.
+if [[ -n "$SSH_CONNECTION" ]]; then
+  RPROMPT="${PROMPT_DIM_COLOR}%n@%m${PROMPT_RESET}"
+else
+  RPROMPT=''
+fi
+
+# ------------------------------------------------------------
+# Terminal title
+# ------------------------------------------------------------
+
+function set_terminal_title() {
+  print -Pn "\e]0;%n@%m: %~\a"
+}
+
+add-zsh-hook precmd set_terminal_title
+
+# Remove the automatic Python virtual-environment prefix.
+# The active environment can still be checked with $VIRTUAL_ENV.
+export VIRTUAL_ENV_DISABLE_PROMPT=1
