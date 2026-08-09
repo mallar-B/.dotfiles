@@ -1,3 +1,4 @@
+//@ pragma IconTheme Everforest-Dark
 import QtQuick
 import Quickshell
 import "components"

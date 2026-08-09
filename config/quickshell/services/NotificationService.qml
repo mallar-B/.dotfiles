@@ -16,9 +16,56 @@ Scope {
     property string toastBody: ""
     property string toastIcon: ""
     property var activeNotification: null
+    property var localNoticeKeys: ({})
 
     function safeString(value) {
         return value === undefined || value === null ? "" : String(value);
+    }
+
+    function addHistory(appName, summary, body, icon) {
+        historyModel.insert(0, {
+            "appName": root.safeString(appName),
+            "summary": root.safeString(summary),
+            "body": root.safeString(body),
+            "icon": root.safeString(icon),
+            "time": Qt.formatDateTime(new Date(), "HH:mm")
+        });
+
+        while (historyModel.count > 50)
+            historyModel.remove(historyModel.count - 1);
+    }
+
+    function showLocal(summary, body, icon) {
+        if (root.activeNotification)
+            root.closeToast(true);
+        else {
+            root.toastVisible = false;
+            toastTimer.stop();
+        }
+
+        root.activeNotification = null;
+        root.toastScreen = root.preferredScreen();
+        root.toastAppName = "QuickShell";
+        root.toastSummary = root.safeString(summary);
+        root.toastBody = root.safeString(body);
+        root.toastIcon = root.safeString(icon);
+        root.toastVisible = root.toastScreen !== null;
+
+        root.addHistory(root.toastAppName, root.toastSummary, root.toastBody, root.toastIcon);
+
+        if (root.toastVisible)
+            toastTimer.restart();
+    }
+
+    function showLocalOnce(key, summary, body, icon) {
+        const noticeKey = root.safeString(key);
+        if (noticeKey.length > 0 && root.localNoticeKeys[noticeKey])
+            return;
+
+        if (noticeKey.length > 0)
+            root.localNoticeKeys[noticeKey] = true;
+
+        root.showLocal(summary, body, icon);
     }
 
     function preferredScreen() {
@@ -81,16 +128,7 @@ Scope {
             root.toastIcon = root.safeString(notification.appIcon || notification.image);
             root.toastVisible = root.toastScreen !== null;
 
-            historyModel.insert(0, {
-                "appName": root.toastAppName,
-                "summary": root.toastSummary,
-                "body": root.toastBody,
-                "icon": root.toastIcon,
-                "time": Qt.formatDateTime(new Date(), "HH:mm")
-            });
-
-            while (historyModel.count > 50)
-                historyModel.remove(historyModel.count - 1);
+            root.addHistory(root.toastAppName, root.toastSummary, root.toastBody, root.toastIcon);
 
             toastTimer.restart();
         }

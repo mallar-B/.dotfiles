@@ -85,6 +85,12 @@ PanelWindow {
                 theme: bar.theme
             }
 
+            BatteryControl {
+                Layout.alignment: Qt.AlignHCenter
+                theme: bar.theme
+                notifications: bar.notifications
+            }
+
             ClockDisplay {
                 Layout.alignment: Qt.AlignHCenter
                 theme: bar.theme
