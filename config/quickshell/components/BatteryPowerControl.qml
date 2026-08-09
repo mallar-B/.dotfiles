@@ -11,7 +11,7 @@ Item {
 
     readonly property var battery: UPower.displayDevice
     readonly property bool ready: battery && battery.ready
-    readonly property int percentage: ready ? Math.round(battery.percentage) : 0
+    readonly property int percentage: ready ? Math.round(battery.percentage) * 100 : 0
     readonly property bool charging: ready && battery.state === UPowerDeviceState.Charging
     readonly property bool fullyCharged: ready && battery.state === UPowerDeviceState.FullyCharged
 
