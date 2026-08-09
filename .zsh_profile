@@ -39,11 +39,11 @@ zstyle ':vcs_info:*' check-for-changes true
 
 # Branch with no changes.
 zstyle ':vcs_info:git:*' formats \
-  "${PROMPT_GIT_COLOR}   %b${PROMPT_RESET}%u%c"
+  "${PROMPT_GIT_COLOR}   %b${PROMPT_RESET}"
 
 # Branch while an operation such as rebase/merge is active.
 zstyle ':vcs_info:git:*' actionformats \
-  "${PROMPT_GIT_COLOR}   %b${PROMPT_RESET} ${PROMPT_ERROR_COLOR}[%a]${PROMPT_RESET}%u%c"
+  "${PROMPT_GIT_COLOR}   %b${PROMPT_RESET} ${PROMPT_ERROR_COLOR}[%a]${PROMPT_RESET}"
 
 # Working tree markers.
 zstyle ':vcs_info:git:*' stagedstr \
@@ -66,15 +66,54 @@ function update_prompt_state() {
   # Refresh Git information.
   vcs_info
 
-  # Git ahead/behind status.
+  # Git status details (Starship-like)
   PROMPT_GIT_STATUS=''
   if [[ -n ${vcs_info_msg_0_} ]]; then
-    local ahead behind
-    local counts=$(git rev-list --left-right --count HEAD...@{upstream} 2>/dev/null)
-    if [[ -n $counts ]]; then
-      read ahead behind <<< "$counts"
+    local status_text=$(git status --porcelain 2>/dev/null)
+    local ahead_behind=$(git rev-list --left-right --count HEAD...@{upstream} 2>/dev/null)
+    local stash_count=$(git stash list 2>/dev/null | wc -l)
+
+    # Ahead/Behind
+    if [[ -n $ahead_behind ]]; then
+      local ahead behind
+      read ahead behind <<< "$ahead_behind"
       (( ahead > 0 )) && PROMPT_GIT_STATUS+=" ${PROMPT_USER_COLOR}⇡${PROMPT_RESET}"
       (( behind > 0 )) && PROMPT_GIT_STATUS+=" ${PROMPT_ERROR_COLOR}⇣${PROMPT_RESET}"
+    fi
+
+    # Unmerged (Conflicts)
+    if echo "$status_text" | grep -q "^UU\|^AA\|^DD\|^AU\|^UA\|^UD\|^DU"; then
+      PROMPT_GIT_STATUS+=" ${PROMPT_ERROR_COLOR}═${PROMPT_RESET}"
+    fi
+
+    # Staged
+    if echo "$status_text" | grep -q "^[MADRC] "; then
+      PROMPT_GIT_STATUS+=" ${PROMPT_USER_COLOR}+${PROMPT_RESET}"
+    fi
+
+    # Modified (Unstaged)
+    if echo "$status_text" | grep -q "^.[MTD]"; then
+      PROMPT_GIT_STATUS+=" ${PROMPT_ERROR_COLOR}!${PROMPT_RESET}"
+    fi
+
+    # Renamed
+    if echo "$status_text" | grep -q "^R "; then
+      PROMPT_GIT_STATUS+=" ${PROMPT_USER_COLOR}»${PROMPT_RESET}"
+    fi
+
+    # Deleted
+    if echo "$status_text" | grep -q "^D \|^.D"; then
+      PROMPT_GIT_STATUS+=" ${PROMPT_ERROR_COLOR}✘${PROMPT_RESET}"
+    fi
+
+    # Untracked
+    if echo "$status_text" | grep -q "^??"; then
+      PROMPT_GIT_STATUS+=" ${PROMPT_DIM_COLOR}?${PROMPT_RESET}"
+    fi
+
+    # Stashed
+    if (( stash_count > 0 )); then
+      PROMPT_GIT_STATUS+=" ${PROMPT_GIT_COLOR}\$${PROMPT_RESET}"
     fi
   fi
 
