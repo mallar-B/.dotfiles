@@ -6,6 +6,7 @@ PopupWindow {
 
     required property var theme
     required property Item anchorItem
+    required property var lockController
 
     anchor.item: anchorItem
     anchor.edges: Edges.Right | Edges.Bottom
@@ -36,6 +37,7 @@ PopupWindow {
 
             Repeater {
                 model: [
+                    { "label": "Lock", "kind": "lock", "danger": false },
                     { "label": "Suspend", "command": ["systemctl", "suspend"], "danger": false },
                     { "label": "Log out", "command": ["niri", "msg", "action", "quit", "--skip-confirmation"], "danger": false },
                     { "label": "Reboot", "command": ["systemctl", "reboot"], "danger": true },
@@ -63,7 +65,14 @@ PopupWindow {
                         id: actionMouse
                         anchors.fill: parent
                         hoverEnabled: true
-                        onClicked: root.run(modelData.command)
+                        onClicked: {
+                            if (modelData.kind === "lock") {
+                                root.visible = false;
+                                root.lockController.lock();
+                            } else {
+                                root.run(modelData.command);
+                            }
+                        }
                     }
                 }
             }

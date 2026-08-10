@@ -19,6 +19,12 @@ ShellRoot {
         id: notificationService
     }
 
+    LockService {
+        id: lockService
+        theme: everforestTheme
+        notifications: notificationService
+    }
+
     AudioService {
         id: audioService
     }
@@ -38,6 +44,7 @@ ShellRoot {
             launcherController: appLauncherController
             notifications: notificationService
             niriWorkspaces: niriWorkspaceService
+            lockController: lockService
         }
     }
 

@@ -12,6 +12,7 @@ PanelWindow {
     required property var launcherController
     required property var notifications
     required property var niriWorkspaces
+    required property var lockController
 
     readonly property var projection: WindowManager.screenProjection(screen)
     implicitWidth: theme.barWidth
@@ -112,5 +113,6 @@ PanelWindow {
         id: powerPopup
         theme: bar.theme
         anchorItem: powerButton
+        lockController: bar.lockController
     }
 }

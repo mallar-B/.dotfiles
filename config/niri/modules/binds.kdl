@@ -13,6 +13,10 @@ binds {
     Mod+Shift+Space repeat=false hotkey-overlay-title="Application Launcher: Fuzzel" {
         spawn "fuzzel"
     }
+    //temp
+    Mod+A {
+        spawn "quickshell" "ipc" "call" "lockscreen" "lock"
+    }
     /////////////////////////////////////
     // Volume:
     // The allow-when-locked=true property makes them work even when the session is locked.
@@ -361,7 +365,7 @@ binds {
     Mod+Alt+P {
         screenshot-window
     }
-    // // Applications such as remote-desktop clients and software KVM switches may
+ // // Applications such as remote-desktop clients and software KVM switches may
     // // request that niri stops processing the keyboard shortcuts defined here
     // // so they may, for example, forward the key presses as-is to a remote machine.
     // // It's a good idea to bind an escape hatch to toggle the inhibitor,
