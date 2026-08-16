@@ -13,6 +13,7 @@ PanelWindow {
     required property var notifications
     required property var niriWorkspaces
     required property var lockController
+    required property var idleService
 
     readonly property var projection: WindowManager.screenProjection(screen)
     implicitWidth: theme.barWidth
@@ -84,6 +85,16 @@ PanelWindow {
             VolumeControl {
                 Layout.alignment: Qt.AlignHCenter
                 theme: bar.theme
+            }
+
+            IdleControl {
+                Layout.alignment: Qt.AlignHCenter
+
+                theme: bar.theme
+                idleService: bar.idleService
+
+                // NOTE: IdleInhibitor associates itself with this PanelWindow.
+                targetWindow: bar
             }
 
             BatteryControl {

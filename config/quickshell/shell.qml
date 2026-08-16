@@ -33,6 +33,12 @@ ShellRoot {
         id: niriWorkspaceService
     }
 
+    IdleService {
+        id: globalIdleService
+        notifications: notificationService
+        lockController: lockService
+    }
+
     Variants {
         model: Quickshell.screens
 
@@ -45,6 +51,7 @@ ShellRoot {
             notifications: notificationService
             niriWorkspaces: niriWorkspaceService
             lockController: lockService
+            idleService: globalIdleService
         }
     }
 
