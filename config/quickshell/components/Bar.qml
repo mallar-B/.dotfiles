@@ -14,6 +14,7 @@ PanelWindow {
     required property var niriWorkspaces
     required property var lockController
     required property var idleService
+    required property var wireless
 
     readonly property var projection: WindowManager.screenProjection(screen)
     implicitWidth: theme.barWidth
@@ -94,6 +95,15 @@ PanelWindow {
                 idleService: bar.idleService
 
                 // NOTE: IdleInhibitor associates itself with this PanelWindow.
+                targetWindow: bar
+            }
+
+            WirelessControl {
+                Layout.alignment: Qt.AlignHCenter
+
+                theme: bar.theme
+                wireless: bar.wireless
+
                 targetWindow: bar
             }
 

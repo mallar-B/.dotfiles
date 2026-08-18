@@ -39,6 +39,11 @@ ShellRoot {
         lockController: lockService
     }
 
+    WirelessService {
+        id: wirelessService
+        notifications: notificationService
+    }
+
     Variants {
         model: Quickshell.screens
 
@@ -52,6 +57,7 @@ ShellRoot {
             niriWorkspaces: niriWorkspaceService
             lockController: lockService
             idleService: globalIdleService
+            wireless: wirelessService
         }
     }
 
