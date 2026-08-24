@@ -124,8 +124,22 @@ Scope {
         target: root.lockController
 
         function onLockedChanged() {
-            if (root.suspendPending && root.locked)
-                root.performSuspend();
+            if (root.suspendPending && root.lockController.locked) {
+                Qt.callLater(root.performSuspend);
+            }
+        }
+    }
+
+    Timer {
+        id: suspendAfterLockTimer
+
+        interval: 500
+
+        onTriggered: {
+            if (!root.suspendPending)
+                return;
+
+            root.performSuspend();
         }
     }
 
@@ -147,9 +161,15 @@ Scope {
     Process {
         id: suspendProcess
 
-        command: ["systemctl", "suspend"]
+        // stderr: StdioCollector {
+        //     onStreamFinished: {
+        //         if (text.length > 0)
+        //             console.warn("systemctl suspend:", text);
+        //     }
+        // }
 
-        onExited: {
+        onExited: function (exitCode, exitStatus) {
+
             root.suspending = false;
             resumeGuard.restart();
         }
@@ -179,14 +199,16 @@ Scope {
         suspendPending = true;
         lockTimeout.restart();
         lockController.lock();
+        suspendAfterLockTimer.restart();
     }
 
     function performSuspend() {
-        if (!locked || blocked) {
+        if (blocked) {
             suspendPending = false;
             return;
         }
 
+        suspendAfterLockTimer.stop();
         lockTimeout.stop();
 
         suspendPending = false;
