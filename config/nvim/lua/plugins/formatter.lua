@@ -69,7 +69,7 @@ return {
         ['_'] = { 'trim_whitespace', 'trim_newlines', 'squeeze_blanks' },
         bash = { 'shfmt' },
         cpp = { 'clang-format' },
-        go = { 'gofmt' },
+        go = { 'goimports' },
         html = { 'prettierd' },
         javascript = { 'prettierd' },
         javascriptreact = { 'prettierd' },
