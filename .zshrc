@@ -204,7 +204,7 @@ export PATH=$PATH:/usr/local/android-studio/bin/
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH="/usr/lib64/qt6/bin:$PATH"
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk/
+export JAVA_HOME=/usr/lib/jvm/java-17-temurin-jdk/
 export QML2_IMPORT_PATH="/usr/lib/qt6/qml/"
 
 # Load pyenv automatically by appending

@@ -4,10 +4,11 @@ output "eDP-1" {
     scale 1.5
     backdrop-color "#000000"
     layout {
-        background-color "#001100"
+        background-color "#000000"
     }
 }
 output "HDMI-A-1" {
+    // off
     mode "2560x1440@120"
     scale 1
     backdrop-color "transparent"
