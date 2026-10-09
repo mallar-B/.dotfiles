@@ -1,3 +1,4 @@
+pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Widgets
@@ -9,6 +10,11 @@ Rectangle {
     required property var context
 
     color: theme.bgDim
+
+    function runPowerAction(command) {
+        if (command && command.length > 0)
+            Quickshell.execDetached(command);
+    }
 
     SystemClock {
         id: clock
@@ -178,6 +184,61 @@ Rectangle {
             wrapMode: Text.Wrap
             font.family: root.theme.fontFamily
             font.pixelSize: root.theme.smallTextSize + 1
+        }
+
+        Item {
+            width: 1
+            height: 6
+        }
+
+        // Session power actions, styled to match the unlock control above.
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 12
+
+            Repeater {
+                model: [
+                    { "icon": "system-reboot-symbolic", "fallback": "\uf021", "command": ["systemctl", "reboot"], "danger": false },
+                    { "icon": "system-shutdown-symbolic", "fallback": "\u23fb", "command": ["systemctl", "poweroff"], "danger": true }
+                ]
+
+                delegate: Rectangle {
+                    id: powerAction
+                    required property var modelData
+                    width: 48
+                    height: 48
+                    radius: root.theme.radius + 2
+                    color: powerMouse.containsMouse ? (modelData.danger ? root.theme.bgRed : root.theme.bg2) : root.theme.bg1
+                    border.width: 1
+                    border.color: powerMouse.containsMouse ? (modelData.danger ? root.theme.red : root.theme.green) : root.theme.bg3
+
+                    IconImage {
+                        id: powerIcon
+                        anchors.centerIn: parent
+                        implicitSize: 22
+                        source: Quickshell.iconPath(powerAction.modelData.icon, true)
+                        visible: source.toString().length > 0
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        visible: !powerIcon.visible
+                        text: powerAction.modelData.fallback
+                        color: powerAction.modelData.danger
+                            ? (powerMouse.containsMouse ? root.theme.red : root.theme.grey1)
+                            : (powerMouse.containsMouse ? root.theme.green : root.theme.fg)
+                        font.family: root.theme.fontFamily
+                        font.pixelSize: 20
+                    }
+
+                    MouseArea {
+                        id: powerMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        onClicked: root.runPowerAction(powerAction.modelData.command)
+                    }
+                }
+            }
         }
     }
 }
