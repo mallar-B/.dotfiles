@@ -198,6 +198,7 @@ Rectangle {
 
             Repeater {
                 model: [
+                    { "icon": "system-suspend-symbolic", "fallback": "\uf186", "command": ["systemctl", "suspend"], "danger": false },
                     { "icon": "system-reboot-symbolic", "fallback": "\uf021", "command": ["systemctl", "reboot"], "danger": false },
                     { "icon": "system-shutdown-symbolic", "fallback": "\u23fb", "command": ["systemctl", "poweroff"], "danger": true }
                 ]

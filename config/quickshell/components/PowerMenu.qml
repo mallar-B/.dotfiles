@@ -1,5 +1,8 @@
+pragma ComponentBehavior: Bound
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
+import Quickshell.Widgets
 
 PopupWindow {
     id: root
@@ -37,28 +40,44 @@ PopupWindow {
 
             Repeater {
                 model: [
-                    { "label": "Lock", "kind": "lock", "danger": false },
-                    { "label": "Suspend", "command": ["systemctl", "suspend"], "danger": false },
-                    { "label": "Log out", "command": ["niri", "msg", "action", "quit", "--skip-confirmation"], "danger": false },
-                    { "label": "Reboot", "command": ["systemctl", "reboot"], "danger": true },
-                    { "label": "Power off", "command": ["systemctl", "poweroff"], "danger": true }
+                    { "label": "Lock", "icon": "system-lock-screen-symbolic", "kind": "lock", "danger": false },
+                    { "label": "Suspend", "icon": "system-suspend-symbolic", "command": ["systemctl", "suspend"], "danger": false },
+                    { "label": "Log out", "icon": "system-log-out-symbolic", "command": ["niri", "msg", "action", "quit", "--skip-confirmation"], "danger": false },
+                    { "label": "Reboot", "icon": "system-reboot-symbolic", "command": ["systemctl", "reboot"], "danger": true },
+                    { "label": "Power off", "icon": "system-shutdown-symbolic", "command": ["systemctl", "poweroff"], "danger": true }
                 ]
 
                 delegate: Rectangle {
+                    id: actionItem
                     required property var modelData
                     width: actionColumn.width
                     height: 38
                     radius: root.theme.radius
                     color: actionMouse.containsMouse ? root.theme.bg2 : "transparent"
 
-                    Text {
-                        anchors.left: parent.left
+                    RowLayout {
+                        anchors.fill: parent
                         anchors.leftMargin: 10
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: modelData.label
-                        color: modelData.danger ? root.theme.red : root.theme.fg
-                        font.family: root.theme.fontFamily
-                        font.pixelSize: root.theme.textSize
+                        anchors.rightMargin: 10
+                        spacing: 10
+
+                        IconImage {
+                            id: actionIcon
+                            Layout.alignment: Qt.AlignVCenter
+                            implicitSize: 16
+                            source: Quickshell.iconPath(actionItem.modelData.icon, true)
+                            visible: source.toString().length > 0
+                        }
+
+                        Text {
+                            Layout.alignment: Qt.AlignVCenter
+                            Layout.fillWidth: true
+                            text: actionItem.modelData.label
+                            color: actionItem.modelData.danger ? root.theme.red : root.theme.fg
+                            font.family: root.theme.fontFamily
+                            font.pixelSize: root.theme.textSize
+                            elide: Text.ElideRight
+                        }
                     }
 
                     MouseArea {
@@ -66,11 +85,11 @@ PopupWindow {
                         anchors.fill: parent
                         hoverEnabled: true
                         onClicked: {
-                            if (modelData.kind === "lock") {
+                            if (actionItem.modelData.kind === "lock") {
                                 root.visible = false;
                                 root.lockController.lock();
                             } else {
-                                root.run(modelData.command);
+                                root.run(actionItem.modelData.command);
                             }
                         }
                     }
