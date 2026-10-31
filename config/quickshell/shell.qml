@@ -29,6 +29,10 @@ ShellRoot {
         id: audioService
     }
 
+    SystemStatsService {
+        id: systemStatsService
+    }
+
     NiriWorkspaceService {
         id: niriWorkspaceService
     }
@@ -75,5 +79,11 @@ ShellRoot {
         theme: everforestTheme
         audio: audioService
     }
+
+    StatsOsd {
+        theme: everforestTheme
+        stats: systemStatsService
+    }
+
     OverviewWorkspaceBlur {}
 }
