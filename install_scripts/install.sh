@@ -22,11 +22,20 @@ echo "========================================"
 
 # Step 1: Create Symlinks
 echo ""
-if prompt_confirm ">> Step 1/1: Create and setup symlinks (configs, scripts, dotfiles)?"; then
+if prompt_confirm ">> Step 1/2: Create and setup symlinks (configs, scripts, dotfiles)?"; then
     echo "Running make_symlinks.sh..."
     "$SCRIPT_DIR/make_symlinks.sh"
 else
     echo "Skipping symlink creation."
+fi
+
+# Step 2: Install Theme
+echo ""
+if prompt_confirm ">> Step 2/2: Install and setup a GTK theme?"; then
+    echo "Running install_theme.sh..."
+    "$SCRIPT_DIR/install_theme.sh"
+else
+    echo "Skipping theme installation."
 fi
 
 echo ""
