@@ -20,3 +20,6 @@ spawn-at-startup "chromium-browser"
 
 // Wallpaper
 spawn-sh-at-startup "swaybg -i ~/Pictures/Wallpapers/fuji.jpg"
+
+// xwayland
+spawn-at-startup "xwayland-satellite"
