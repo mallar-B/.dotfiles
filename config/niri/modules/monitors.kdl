@@ -1,3 +1,4 @@
+// Laptop
 output "eDP-1" {
     off
     mode "1920x1200@60.003"
@@ -7,6 +8,8 @@ output "eDP-1" {
         background-color "#000000"
     }
 }
+
+// Laptop-external
 output "HDMI-A-1" {
     // off
     mode "2560x1440@120"
@@ -17,5 +20,21 @@ output "HDMI-A-1" {
     }
     hot-corners {
         off
+    }
+}
+
+// PC
+output "DP-1" {
+    mode "2560x1440@119.999"
+    scale 1
+
+    backdrop-color "transparent"
+
+    hot-corners {
+        off
+    }
+
+    layout {
+        background-color "transparent"
     }
 }
