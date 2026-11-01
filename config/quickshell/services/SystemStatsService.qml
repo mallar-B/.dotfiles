@@ -22,6 +22,8 @@ Scope {
     property real cpuTemp: -1
     property real gpuUsage: -1
     property real gpuTemp: -1
+    property real gpuVramUsed: -1
+    property real gpuVramTotal: -1
     property real ramUsage: 0
     property real ramTemp: -1
     property real memUsed: 0
@@ -126,6 +128,9 @@ Scope {
             gpuUsage = Math.max(0, Math.min(100, data.gpuUsage));
         else
             gpuUsage = -1;
+
+        gpuVramUsed = typeof data.vramUsed === "number" ? data.vramUsed : -1;
+        gpuVramTotal = typeof data.vramTotal === "number" ? data.vramTotal : -1;
     }
 
     function updateBoost(data) {

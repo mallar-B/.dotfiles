@@ -49,6 +49,16 @@ for c in /sys/class/drm/card*/device/gpu_busy_percent; do
     fi
 done
 
+vram_used_file=""
+vram_total_file=""
+for f in /sys/class/drm/card*/device/mem_info_vram_used; do
+    if [ -r "$f" ]; then
+        vram_used_file="$f"
+        vram_total_file="${f%_used}_total"
+        break
+    fi
+done
+
 # Physical block devices only, with their optional hwmon temperature sensor.
 disks=()
 for b in /sys/block/*; do
@@ -94,6 +104,9 @@ else
     gpu_usage=null
 fi
 
+vram_used=$(read_temp "$vram_used_file")
+vram_total=$(read_temp "$vram_total_file")
+
 boost=null
 if [ "$is_amd" = "1" ] && [ -r /sys/devices/system/cpu/cpufreq/boost ]; then
     boost=$(cat /sys/devices/system/cpu/cpufreq/boost 2>/dev/null)
@@ -115,7 +128,7 @@ for entry in "${disks[@]}"; do
     disk_json="${disk_json}${disk_json:+,}{\"name\":\"$(json_escape "$disk_name")\",\"readSectors\":${r_sectors:-0},\"writeSectors\":${w_sectors:-0},\"temp\":${disk_temp}}"
 done
 
-printf '{"cpuTotal":%s,"cpuIdle":%s,"memTotal":%s,"memAvailable":%s,"cpuTemp":%s,"gpuTemp":%s,"ramTemp":%s,"gpuUsage":%s,"amd":%s,"boost":%s,"disks":[%s]}\n' \
+printf '{"cpuTotal":%s,"cpuIdle":%s,"memTotal":%s,"memAvailable":%s,"cpuTemp":%s,"gpuTemp":%s,"ramTemp":%s,"gpuUsage":%s,"vramUsed":%s,"vramTotal":%s,"amd":%s,"boost":%s,"disks":[%s]}\n' \
     "$cpu_total" \
     "$cpu_idle_total" \
     "$mem_total" \
@@ -124,6 +137,8 @@ printf '{"cpuTotal":%s,"cpuIdle":%s,"memTotal":%s,"memAvailable":%s,"cpuTemp":%s
     "${gpu_temp:-null}" \
     "${ram_temp:-null}" \
     "$gpu_usage" \
+    "${vram_used:-null}" \
+    "${vram_total:-null}" \
     "$([ "$is_amd" = "1" ] && echo true || echo false)" \
     "$boost" \
     "$disk_json"

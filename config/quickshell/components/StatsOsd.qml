@@ -22,6 +22,11 @@ Variants {
             "label": "GPU"
         },
         {
+            "kind": "vram",
+            "label": "VRAM",
+            "showTemp": false
+        },
+        {
             "kind": "ram",
             "label": "RAM"
         }
@@ -47,10 +52,24 @@ Variants {
         return root.stats.ramTemp;
     }
 
-    function usageColor(kind) {
-        const usage = usageFor(kind);
+    function vramRatio() {
+        if (root.stats.gpuVramUsed < 0 || root.stats.gpuVramTotal <= 0)
+            return 0;
 
-        if (usage < 0)
+        return Math.min(100, root.stats.gpuVramUsed / root.stats.gpuVramTotal * 100);
+    }
+
+    function barFractionFor(kind) {
+        if (kind === "vram")
+            return vramRatio() / 100;
+
+        return Math.max(0, Math.min(1, usageFor(kind) / 100));
+    }
+
+    function usageColor(kind) {
+        const usage = kind === "vram" ? vramRatio() : usageFor(kind);
+
+        if (usage < 0 || (kind === "vram" && root.stats.gpuVramUsed < 0))
             return root.theme.grey0;
 
         if (usage >= 90)
@@ -71,6 +90,37 @@ Variants {
 
     function formatUsage(value) {
         return value >= 0 ? Math.round(value) + "%" : "--";
+    }
+
+    function formatBytes(bytes) {
+        if (!isFinite(bytes) || bytes < 1)
+            return "0 B";
+
+        const units = ["B", "KiB", "MiB", "GiB", "TiB"];
+        let index = 0;
+        let value = bytes;
+
+        while (value >= 1024 && index < units.length - 1) {
+            value /= 1024;
+            index++;
+        }
+
+        return (value >= 100 ? Math.round(value) : value.toFixed(1)) + " " + units[index];
+    }
+
+    function usageTextFor(kind) {
+        if (kind !== "vram")
+            return formatUsage(usageFor(kind));
+
+        if (root.stats.gpuVramUsed < 0)
+            return "--";
+
+        let text = formatBytes(root.stats.gpuVramUsed);
+
+        if (root.stats.gpuVramTotal > 0)
+            text += " / " + formatBytes(root.stats.gpuVramTotal);
+
+        return text;
     }
 
     function formatRate(bytesPerSecond) {
@@ -258,7 +308,7 @@ Variants {
 
                                 anchors.right: parent.right
                                 anchors.verticalCenter: parent.verticalCenter
-                                text: root.formatUsage(root.usageFor(modelData.kind))
+                                text: root.usageTextFor(modelData.kind)
                                 color: root.usageColor(modelData.kind)
                                 font.family: root.theme.fontFamily
                                 font.pixelSize: root.theme.smallTextSize + 1
@@ -269,6 +319,7 @@ Variants {
                                 anchors.right: rowUsage.left
                                 anchors.rightMargin: 8
                                 anchors.verticalCenter: parent.verticalCenter
+                                visible: modelData.showTemp !== false
                                 text: root.formatTemp(root.tempFor(modelData.kind))
                                 color: root.theme.grey1
                                 font.family: root.theme.fontFamily
@@ -283,7 +334,7 @@ Variants {
                             color: root.theme.bg2
 
                             Rectangle {
-                                width: parent.width * Math.max(0, Math.min(1, root.usageFor(modelData.kind) / 100))
+                                width: parent.width * root.barFractionFor(modelData.kind)
                                 height: parent.height
                                 radius: parent.radius
                                 color: root.usageColor(modelData.kind)
